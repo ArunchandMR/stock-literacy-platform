@@ -1,1 +1,8 @@
-
+{
+  "sebi_registration": "INHXXXXXX009",
+  "analyst_name": "Biji",
+  "circuit_threshold": 5.0,
+  "volume_spike_multiplier": 3.0,
+  "volatility_threshold": 5.0,
+  "gemini_api_key": ""
+}
