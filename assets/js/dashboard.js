@@ -56,15 +56,29 @@ window.applyStrategyFilter = function(strategy) {
     if (strategy === 'all') {
         filteredStocks = [...dashboardData.stocks];
     } else {
-        filteredStocks = dashboardData.stocks.filter(stock => 
+        filteredStocks = dashboardData.stocks.filter(stock =>
             stock.strategy === strategy
         );
     }
+    
+    // Update active tab styling
+    document.querySelectorAll('.strategy-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    document.getElementById(`tab-${strategy}`).classList.add('active');
     
     // Re-apply other filters if they exist
     applySearchAndFilters();
     
     renderDashboard();
+    
+    // Smooth scroll to table section
+    setTimeout(() => {
+        const tableSection = document.getElementById('table-section');
+        if (tableSection) {
+            tableSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, 100);
 };
 
 /**
