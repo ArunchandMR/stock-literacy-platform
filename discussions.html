@@ -54,7 +54,10 @@
                         <i class="fas fa-home mr-2"></i>Home
                     </a>
                     <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
-                        <i class="fas fa-chart-bar mr-2"></i>Stock Dashboard
+                        <i class="fas fa-chart-bar mr-2"></i>Dashboard
+                    </a>
+                    <a href="https://github.com/ArunchandMR/stock-literacy-platform/issues/new?template=add-stock.yml" target="_blank" class="bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-lg transition font-semibold">
+                        <i class="fas fa-plus-circle mr-2"></i>Add Stock
                     </a>
                     <a href="discussions.html" class="text-blue-600 font-semibold border-b-2 border-blue-600 px-3 py-2">
                         <i class="fas fa-comments mr-2"></i>Discussions
@@ -78,7 +81,10 @@
                     <i class="fas fa-home mr-2"></i>Home
                 </a>
                 <a href="dashboard.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
-                    <i class="fas fa-chart-bar mr-2"></i>Stock Dashboard
+                    <i class="fas fa-chart-bar mr-2"></i>Dashboard
+                </a>
+                <a href="https://github.com/ArunchandMR/stock-literacy-platform/issues/new?template=add-stock.yml" target="_blank" class="block px-3 py-2 text-green-700 bg-green-50 hover:bg-green-100 rounded font-semibold">
+                    <i class="fas fa-plus-circle mr-2"></i>Add Stock
                 </a>
                 <a href="discussions.html" class="block px-3 py-2 text-blue-600 font-semibold bg-blue-50 rounded">
                     <i class="fas fa-comments mr-2"></i>Discussions
@@ -262,6 +268,11 @@
         document.getElementById('view-github-discussions').href = `${GITHUB_REPO}/discussions`;
         document.getElementById('create-discussion').href = `${GITHUB_REPO}/discussions/new`;
         document.getElementById('create-first-discussion').href = `${GITHUB_REPO}/discussions/new`;
+        
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
     </script>
 
 </body>

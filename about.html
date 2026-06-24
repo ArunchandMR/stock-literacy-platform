@@ -18,7 +18,7 @@
 <body class="bg-gray-50">
     
     <!-- Navigation Header -->
-    <nav class="bg-white shadow-lg">
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
@@ -35,7 +35,10 @@
                         <i class="fas fa-home mr-2"></i>Home
                     </a>
                     <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
-                        <i class="fas fa-chart-bar mr-2"></i>Stock Dashboard
+                        <i class="fas fa-chart-bar mr-2"></i>Dashboard
+                    </a>
+                    <a href="https://github.com/ArunchandMR/stock-literacy-platform/issues/new?template=add-stock.yml" target="_blank" class="bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-lg transition font-semibold">
+                        <i class="fas fa-plus-circle mr-2"></i>Add Stock
                     </a>
                     <a href="discussions.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
                         <i class="fas fa-comments mr-2"></i>Discussions
@@ -44,6 +47,32 @@
                         <i class="fas fa-info-circle mr-2"></i>About
                     </a>
                 </div>
+
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-600">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
+                    <i class="fas fa-home mr-2"></i>Home
+                </a>
+                <a href="dashboard.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
+                    <i class="fas fa-chart-bar mr-2"></i>Dashboard
+                </a>
+                <a href="https://github.com/ArunchandMR/stock-literacy-platform/issues/new?template=add-stock.yml" target="_blank" class="block px-3 py-2 text-green-700 bg-green-50 hover:bg-green-100 rounded font-semibold">
+                    <i class="fas fa-plus-circle mr-2"></i>Add Stock
+                </a>
+                <a href="discussions.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
+                    <i class="fas fa-comments mr-2"></i>Discussions
+                </a>
+                <a href="about.html" class="block px-3 py-2 text-blue-600 font-semibold bg-blue-50 rounded">
+                    <i class="fas fa-info-circle mr-2"></i>About
+                </a>
             </div>
         </div>
     </nav>
@@ -143,13 +172,20 @@
             <div class="text-center text-gray-400 text-sm">
                 <p>&copy; 2026 Financial Literacy Platform. Educational purposes only. Not investment advice.</p>
                 <p class="mt-2">
-                    <a href="index.html" class="hover:text-white underline">Home</a> | 
-                    <a href="dashboard.html" class="hover:text-white underline ml-2">Dashboard</a> | 
+                    <a href="index.html" class="hover:text-white underline">Home</a> |
+                    <a href="dashboard.html" class="hover:text-white underline ml-2">Dashboard</a> |
                     <a href="discussions.html" class="hover:text-white underline ml-2">Discussions</a>
                 </p>
             </div>
         </div>
     </footer>
+
+    <!-- JavaScript for mobile menu -->
+    <script>
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+    </script>
 
 </body>
 </html>
