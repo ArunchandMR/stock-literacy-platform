@@ -1,0 +1,186 @@
+name: Process Stock Entry from Issue
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  add-stock:
+    if: github.event.label.name == 'approved'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Parse issue and add stock
+        id: parse
+        run: |
+          python3 << 'EOF'
+          import json
+          import re
+          import os
+          from datetime import datetime
+          
+          # Get issue body from environment
+          issue_body = """${{ github.event.issue.body }}"""
+          issue_number = "${{ github.event.issue.number }}"
+          issue_title = "${{ github.event.issue.title }}"
+          
+          print("Processing issue #" + issue_number)
+          print("Title:", issue_title)
+          
+          # Parse the issue body to extract form data
+          def extract_field(body, field_name):
+              pattern = rf"### {field_name}\s*\n\s*(.+?)(?=\n###|\n\n###|$)"
+              match = re.search(pattern, body, re.DOTALL | re.IGNORECASE)
+              if match:
+                  value = match.group(1).strip()
+                  # Remove markdown formatting
+                  value = value.replace('_No response_', '').strip()
+                  return value if value else None
+              return None
+          
+          # Extract all fields
+          ticker = extract_field(issue_body, "Stock Ticker Symbol")
+          name = extract_field(issue_body, "Company Name")
+          sector = extract_field(issue_body, "Sector")
+          strategy = extract_field(issue_body, "Investment Strategy")
+          entry_date = extract_field(issue_body, "Entry Date")
+          entry_time = extract_field(issue_body, "Entry Time")
+          entry_price = extract_field(issue_body, "Entry Price")
+          target_min = extract_field(issue_body, "Target Exit Price - Minimum")
+          target_max = extract_field(issue_body, "Target Exit Price - Maximum")
+          stop_loss = extract_field(issue_body, "Stop Loss")
+          discussion_url = extract_field(issue_body, "Discussion URL")
+          notes = extract_field(issue_body, "Trading Notes / Rationale")
+          
+          print(f"Parsed data:")
+          print(f"  Ticker: {ticker}")
+          print(f"  Name: {name}")
+          print(f"  Strategy: {strategy}")
+          
+          # Validate required fields
+          if not all([ticker, name, sector, strategy, entry_date, entry_time, entry_price, target_min, target_max, stop_loss]):
+              print("ERROR: Missing required fields")
+              exit(1)
+          
+          # Generate stock ID
+          stock_id = ticker.replace('.NS', '').replace('.BO', '') + '001'
+          
+          # Create stock object
+          new_stock = {
+              "id": stock_id,
+              "ticker": ticker.upper(),
+              "name": name,
+              "sector": sector,
+              "strategy": strategy,
+              "entryDate": entry_date,
+              "entryTime": entry_time,
+              "entryPrice": float(entry_price.replace('₹', '').replace(',', '').strip()),
+              "targetExitMin": float(target_min.replace('₹', '').replace(',', '').strip()),
+              "targetExitMax": float(target_max.replace('₹', '').replace(',', '').strip()),
+              "stopLoss": float(stop_loss.replace('₹', '').replace(',', '').strip()),
+              "discussionUrl": discussion_url if discussion_url else f"https://github.com/${{{{ github.repository }}}}/issues/{issue_number}",
+              "notes": notes if notes else ""
+          }
+          
+          # Read existing stocks.json
+          try:
+              with open('data/stocks.json', 'r', encoding='utf-8') as f:
+                  stocks_data = json.load(f)
+          except FileNotFoundError:
+              stocks_data = {"stocks": []}
+          
+          # Check for duplicates
+          existing_tickers = [s['ticker'] for s in stocks_data.get('stocks', [])]
+          if ticker.upper() in existing_tickers:
+              print(f"WARNING: {ticker} already exists in stocks.json")
+              # Update existing instead of adding duplicate
+              for i, stock in enumerate(stocks_data['stocks']):
+                  if stock['ticker'] == ticker.upper():
+                      stocks_data['stocks'][i] = new_stock
+                      print(f"Updated existing stock: {ticker}")
+                      break
+          else:
+              # Add new stock
+              stocks_data['stocks'].append(new_stock)
+              print(f"Added new stock: {ticker}")
+          
+          # Write back to stocks.json
+          with open('data/stocks.json', 'w', encoding='utf-8') as f:
+              json.dump(stocks_data, f, indent=2, ensure_ascii=False)
+          
+          print(f"✓ Successfully processed stock entry for {ticker}")
+          
+          # Set output for commit message
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"ticker={ticker}\n")
+              f.write(f"name={name}\n")
+              f.write(f"strategy={strategy}\n")
+          
+          EOF
+      
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/stocks.json
+          git commit -m "Add stock: ${{ steps.parse.outputs.ticker }} (${{ steps.parse.outputs.name }}) - ${{ steps.parse.outputs.strategy }}"
+          git push
+      
+      - name: Comment on issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ **Stock Added Successfully!**
+              
+              **${{ steps.parse.outputs.ticker }}** has been added to the tracking dashboard.
+              
+              - **Strategy**: ${{ steps.parse.outputs.strategy }}
+              - **Status**: Active
+              
+              The dashboard will update automatically within 2-3 minutes.
+              
+              View it here: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/dashboard.html
+              
+              This issue will be automatically closed.`
+            })
+      
+      - name: Add success label and close issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['completed']
+            })
+            await github.rest.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed'
+            })
+      
+      - name: Trigger dashboard update
+        run: |
+          echo "Stock added, dashboard will update on next scheduled run or manual trigger"
+
+# Made with Bob
