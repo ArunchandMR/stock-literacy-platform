@@ -1,1 +1,95 @@
+{
+  "stocks": [
+    {
+      "id": "REL001",
+      "ticker": "RELIANCE.NS",
+      "name": "Reliance Industries",
+      "sector": "Energy",
+      "entryDate": "2026-01-10",
+      "entryPrice": 2450.00,
+      "discussionUrl": "https://github.com"
+    },
+    {
+      "id": "TATA001",
+      "ticker": "TATAMOTORS.NS",
+      "name": "Tata Motors",
+      "sector": "Auto",
+      "entryDate": "2026-02-05",
+      "entryPrice": 910.00,
+      "discussionUrl": "https://github.com"
+    },
+    {
+      "id": "INFY001",
+      "ticker": "INFY.NS",
+      "name": "Infosys",
+      "sector": "IT",
+      "entryDate": "2026-03-01",
+      "entryPrice": 1600.00,
+      "discussionUrl": "https://github.com"
+    },
+    {
+      "id": "TCS001",
+      "ticker": "TCS.NS",
+      "name": "Tata Consultancy Services",
+      "sector": "IT",
+      "entryDate": "2026-03-15",
+      "entryPrice": 4100.00,
+      "discussionUrl": "https://github.com"
+    },
+    {
+      "id": "HDFC001",
+      "ticker": "HDFCBANK.NS",
+      "name": "HDFC Bank",
+      "sector": "Banking",
+      "entryDate": "2026-04-01",
+      "entryPrice": 1450.00,
+      "discussionUrl": "https://github.com"
+    },
+    {
+      "id": "ICICI001",
+      "ticker": "ICICIBANK.NS",
+      "name": "ICICI Bank",
+      "sector": "Banking",
+      "entryDate": "2026-04-10",
+      "entryPrice": 1080.00,
+      "discussionUrl": "https://github.com"
+    },
+    {
+      "id": "BHARTI001",
+      "ticker": "BHARTIARTL.NS",
+      "name": "Bharti Airtel",
+      "sector": "Telecom",
+      "entryDate": "2026-04-22",
+      "entryPrice": 1200.00,
+      "discussionUrl": "https://github.com"
+    },
+    {
+      "id": "ITC001",
+      "ticker": "ITC.NS",
+      "name": "ITC Limited",
+      "sector": "FMCG",
+      "entryDate": "2026-05-02",
+      "entryPrice": 430.00,
+      "discussionUrl": "https://github.com"
+    },
+    {
+      "id": "LT001",
+      "ticker": "LT.NS",
+      "name": "Larsen & Toubro",
+      "sector": "Infrastructure",
+      "entryDate": "2026-05-18",
+      "entryPrice": 3500.00,
+      "discussionUrl": "https://github.com"
+    },
+    {
+      "id": "SBIN001",
+      "ticker": "SBIN.NS",
+      "name": "State Bank of India",
+      "sector": "Banking",
+      "entryDate": "2026-06-01",
+      "entryPrice": 820.00,
+      "discussionUrl": "https://github.com"
+    }
+  ]
+}
 
