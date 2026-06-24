@@ -1,10 +1,11 @@
 /**
  * Stock Performance Dashboard - Main Logic
- * Handles data loading, rendering, and real-time updates
+ * Handles data loading, rendering, and real-time updates with strategy filtering
  */
 
 let dashboardData = null;
 let filteredStocks = [];
+let currentStrategy = 'all'; // Track current strategy filter
 
 // Initialize dashboard on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -30,6 +31,11 @@ async function loadDashboardData() {
         dashboardData = await response.json();
         filteredStocks = [...dashboardData.stocks];
         
+        // Apply current strategy filter if set
+        if (currentStrategy !== 'all') {
+            applyStrategyFilter(currentStrategy);
+        }
+        
         renderDashboard();
         hideLoadingState();
         
@@ -38,6 +44,28 @@ async function loadDashboardData() {
         showErrorState();
     }
 }
+
+/**
+ * Apply strategy filter
+ */
+window.applyStrategyFilter = function(strategy) {
+    currentStrategy = strategy;
+    
+    if (!dashboardData || !dashboardData.stocks) return;
+    
+    if (strategy === 'all') {
+        filteredStocks = [...dashboardData.stocks];
+    } else {
+        filteredStocks = dashboardData.stocks.filter(stock => 
+            stock.strategy === strategy
+        );
+    }
+    
+    // Re-apply other filters if they exist
+    applySearchAndFilters();
+    
+    renderDashboard();
+};
 
 /**
  * Render complete dashboard
@@ -53,18 +81,24 @@ function renderDashboard() {
  * Render summary metric cards
  */
 function renderSummaryCards() {
-    if (!dashboardData || !dashboardData.summary) return;
+    if (!dashboardData || !dashboardData.stocks) return;
     
-    const summary = dashboardData.summary;
+    const allStocks = dashboardData.stocks;
+    const swingStocks = allStocks.filter(s => s.strategy === 'swing');
+    const longTermStocks = allStocks.filter(s => s.strategy === 'long-term');
     
-    document.getElementById('total-stocks').textContent = summary.totalStocks || 0;
+    // Total stocks
+    document.getElementById('total-stocks').textContent = allStocks.length || 0;
     
-    const avgPerf = summary.avgPerformance || 0;
-    const avgPerfElement = document.getElementById('avg-performance');
-    avgPerfElement.textContent = formatPercentage(avgPerf);
-    avgPerfElement.className = avgPerf >= 0 ? 'text-4xl font-bold mt-2' : 'text-4xl font-bold mt-2 text-red-200';
+    // Swing count
+    document.getElementById('swing-count').textContent = swingStocks.length || 0;
     
-    document.getElementById('active-flags').textContent = summary.activeFlags || 0;
+    // Long-term count
+    document.getElementById('longterm-count').textContent = longTermStocks.length || 0;
+    
+    // Active flags
+    const activeFlags = allStocks.filter(s => s.riskLevel === 'high' || s.riskLevel === 'medium').length;
+    document.getElementById('active-flags').textContent = activeFlags || 0;
 }
 
 /**
@@ -117,35 +151,62 @@ function createTableRow(stock) {
         tr.className += ' bg-yellow-50';
     }
     
+    // Calculate days held
+    const daysHeld = calculateDaysHeld(stock.entryDate);
+    
+    // Get strategy badge
+    const strategyBadge = getStrategyBadge(stock.strategy);
+    
+    // Format entry date/time
+    const entryDateTime = formatDateTime(stock.entryDate, stock.entryTime);
+    
+    // Format target range
+    const targetRange = formatTargetRange(stock.targetExitMin, stock.targetExitMax);
+    
     tr.innerHTML = `
-        <td class="px-6 py-4 whitespace-nowrap">
+        <td class="px-4 py-4 whitespace-nowrap">
             <div class="text-sm font-bold text-gray-900">${escapeHtml(stock.name)}</div>
             <div class="text-xs text-gray-500">${escapeHtml(stock.ticker)}</div>
             <div class="text-xs text-blue-600 mt-1">
                 <i class="fas fa-tag mr-1"></i>${escapeHtml(stock.sector || 'N/A')}
             </div>
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-            ${formatDate(stock.entryDate)}
+        <td class="px-4 py-4 whitespace-nowrap text-center">
+            ${strategyBadge}
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 text-right font-semibold">
+        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
+            <div class="font-semibold">${formatDate(stock.entryDate)}</div>
+            <div class="text-xs text-gray-500">${escapeHtml(stock.entryTime || 'N/A')}</div>
+        </td>
+        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700 text-right font-semibold">
             ${formatCurrency(stock.entryPrice)}
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-bold">
+        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-bold">
             ${formatCurrency(stock.currentPrice)}
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-center">
+        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700 text-right">
+            <div class="font-semibold text-green-700">${targetRange}</div>
+        </td>
+        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700 text-right">
+            <div class="font-semibold text-red-700">${formatCurrency(stock.stopLoss)}</div>
+        </td>
+        <td class="px-4 py-4 whitespace-nowrap text-center">
             ${getDevianceBadge(stock.deviance, stock.deviancePercent)}
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-center">
+        <td class="px-4 py-4 whitespace-nowrap text-center">
+            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+                <i class="fas fa-calendar-alt mr-1"></i>${daysHeld} days
+            </span>
+        </td>
+        <td class="px-4 py-4 whitespace-nowrap text-center">
             ${getRiskFlagBadge(stock.riskFlag, stock.riskLevel)}
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-center">
+        <td class="px-4 py-4 whitespace-nowrap text-center">
             <a href="${escapeHtml(stock.discussionUrl)}" 
                target="_blank" 
                class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold hover:bg-blue-200 transition">
                 <i class="fas fa-external-link-alt mr-1"></i>
-                View Discussion
+                View
             </a>
         </td>
     `;
@@ -166,6 +227,10 @@ function createMobileCard(stock) {
         card.className += ' bg-yellow-50';
     }
     
+    const daysHeld = calculateDaysHeld(stock.entryDate);
+    const strategyBadge = getStrategyBadge(stock.strategy);
+    const targetRange = formatTargetRange(stock.targetExitMin, stock.targetExitMax);
+    
     card.innerHTML = `
         <div class="flex justify-between items-start mb-3">
             <div>
@@ -173,6 +238,10 @@ function createMobileCard(stock) {
                 <p class="text-xs text-gray-500">${escapeHtml(stock.ticker)} • ${escapeHtml(stock.sector || 'N/A')}</p>
             </div>
             ${getDevianceBadge(stock.deviance, stock.deviancePercent)}
+        </div>
+        
+        <div class="mb-2">
+            ${strategyBadge}
         </div>
         
         <div class="grid grid-cols-2 gap-3 mb-3 text-sm">
@@ -185,10 +254,22 @@ function createMobileCard(stock) {
                 <p class="font-bold">${formatCurrency(stock.currentPrice)}</p>
             </div>
             <div>
-                <p class="text-gray-500 text-xs">Date Mentioned</p>
+                <p class="text-gray-500 text-xs">Target Range</p>
+                <p class="font-semibold text-green-700">${targetRange}</p>
+            </div>
+            <div>
+                <p class="text-gray-500 text-xs">Stop Loss</p>
+                <p class="font-semibold text-red-700">${formatCurrency(stock.stopLoss)}</p>
+            </div>
+            <div>
+                <p class="text-gray-500 text-xs">Entry Date</p>
                 <p class="font-semibold">${formatDate(stock.entryDate)}</p>
             </div>
             <div>
+                <p class="text-gray-500 text-xs">Days Held</p>
+                <p class="font-semibold">${daysHeld} days</p>
+            </div>
+            <div class="col-span-2">
                 <p class="text-gray-500 text-xs">Risk Flag</p>
                 ${getRiskFlagBadge(stock.riskFlag, stock.riskLevel)}
             </div>
@@ -202,6 +283,54 @@ function createMobileCard(stock) {
     `;
     
     return card;
+}
+
+/**
+ * Get strategy badge HTML
+ */
+function getStrategyBadge(strategy) {
+    if (strategy === 'swing') {
+        return `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700">
+            <i class="fas fa-bolt mr-1"></i>Swing
+        </span>`;
+    } else if (strategy === 'long-term') {
+        return `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">
+            <i class="fas fa-chart-line mr-1"></i>Long Term
+        </span>`;
+    }
+    return '<span class="text-xs text-gray-500">N/A</span>';
+}
+
+/**
+ * Calculate days held
+ */
+function calculateDaysHeld(entryDate) {
+    if (!entryDate) return 0;
+    const entry = new Date(entryDate);
+    const today = new Date();
+    const diffTime = Math.abs(today - entry);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+}
+
+/**
+ * Format date and time
+ */
+function formatDateTime(dateString, timeString) {
+    if (!dateString) return 'N/A';
+    const formatted = formatDate(dateString);
+    if (timeString) {
+        return `${formatted} ${timeString}`;
+    }
+    return formatted;
+}
+
+/**
+ * Format target range
+ */
+function formatTargetRange(min, max) {
+    if (!min || !max) return 'N/A';
+    return `₹${parseFloat(min).toFixed(2)} - ₹${parseFloat(max).toFixed(2)}`;
 }
 
 /**
@@ -288,6 +417,85 @@ function updateFilteredCount() {
 }
 
 /**
+ * Apply search and filters (called from filters.js)
+ */
+function applySearchAndFilters() {
+    if (!dashboardData || !dashboardData.stocks) return;
+    
+    // Start with strategy-filtered stocks
+    let stocks = dashboardData.stocks;
+    if (currentStrategy !== 'all') {
+        stocks = stocks.filter(stock => stock.strategy === currentStrategy);
+    }
+    
+    // Apply search
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    if (searchTerm) {
+        stocks = stocks.filter(stock => 
+            stock.name.toLowerCase().includes(searchTerm) ||
+            stock.ticker.toLowerCase().includes(searchTerm)
+        );
+    }
+    
+    // Apply sector filter
+    const sectorFilter = document.getElementById('sector-filter').value;
+    if (sectorFilter !== 'all') {
+        stocks = stocks.filter(stock => stock.sector === sectorFilter);
+    }
+    
+    // Apply sorting
+    const sortBy = document.getElementById('sort-select').value;
+    stocks = sortStocks(stocks, sortBy);
+    
+    filteredStocks = stocks;
+    renderStockTable();
+    updateFilteredCount();
+}
+
+/**
+ * Sort stocks based on criteria
+ */
+function sortStocks(stocks, sortBy) {
+    const sorted = [...stocks];
+    
+    switch (sortBy) {
+        case 'deviance-desc':
+            sorted.sort((a, b) => b.deviance - a.deviance);
+            break;
+        case 'deviance-asc':
+            sorted.sort((a, b) => a.deviance - b.deviance);
+            break;
+        case 'date-desc':
+            sorted.sort((a, b) => new Date(b.entryDate) - new Date(a.entryDate));
+            break;
+        case 'date-asc':
+            sorted.sort((a, b) => new Date(a.entryDate) - new Date(b.entryDate));
+            break;
+        case 'name-asc':
+            sorted.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+    }
+    
+    return sorted;
+}
+
+/**
+ * Clear all filters
+ */
+function clearAllFilters() {
+    document.getElementById('search-input').value = '';
+    document.getElementById('sector-filter').value = 'all';
+    document.getElementById('sort-select').value = 'deviance-desc';
+    
+    // Reset to all stocks strategy
+    currentStrategy = 'all';
+    document.querySelectorAll('.strategy-tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById('tab-all').classList.add('active');
+    
+    applySearchAndFilters();
+}
+
+/**
  * Setup event listeners
  */
 function setupEventListeners() {
@@ -299,6 +507,11 @@ function setupEventListeners() {
             this.innerHTML = '<i class="fas fa-sync-alt mr-1"></i>Refresh';
         }, 1000);
     });
+    
+    // Search and filters
+    document.getElementById('search-input').addEventListener('input', applySearchAndFilters);
+    document.getElementById('sector-filter').addEventListener('change', applySearchAndFilters);
+    document.getElementById('sort-select').addEventListener('change', applySearchAndFilters);
     
     // Export CSV
     document.getElementById('export-csv').addEventListener('click', exportToCSV);
@@ -322,15 +535,21 @@ function exportToCSV() {
         return;
     }
     
-    const headers = ['Stock Name', 'Ticker', 'Sector', 'Entry Date', 'Entry Price', 'Current Price', 'Deviance %', 'Risk Flag'];
+    const headers = ['Stock Name', 'Ticker', 'Sector', 'Strategy', 'Entry Date', 'Entry Time', 'Entry Price', 'Current Price', 'Target Min', 'Target Max', 'Stop Loss', 'Deviance %', 'Days Held', 'Risk Flag'];
     const rows = filteredStocks.map(stock => [
         stock.name,
         stock.ticker,
         stock.sector || 'N/A',
+        stock.strategy || 'N/A',
         stock.entryDate,
+        stock.entryTime || 'N/A',
         stock.entryPrice,
         stock.currentPrice,
+        stock.targetExitMin || 'N/A',
+        stock.targetExitMax || 'N/A',
+        stock.stopLoss || 'N/A',
         stock.deviancePercent,
+        calculateDaysHeld(stock.entryDate),
         stock.riskFlag
     ]);
     
