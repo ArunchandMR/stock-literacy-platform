@@ -18,8 +18,19 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/styles.css">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    <style>
+        .strategy-tab {
+            background-color: #f3f4f6;
+            color: #4b5563;
+        }
+        .strategy-tab.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .strategy-tab:hover:not(.active) {
+            background-color: #e5e7eb;
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     
@@ -58,7 +69,10 @@
                         <i class="fas fa-home mr-2"></i>Home
                     </a>
                     <a href="dashboard.html" class="text-blue-600 font-semibold border-b-2 border-blue-600 px-3 py-2">
-                        <i class="fas fa-chart-bar mr-2"></i>Stock Dashboard
+                        <i class="fas fa-chart-bar mr-2"></i>Dashboard
+                    </a>
+                    <a href="add-stock.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
+                        <i class="fas fa-plus-circle mr-2"></i>Add Stock
                     </a>
                     <a href="discussions.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
                         <i class="fas fa-comments mr-2"></i>Discussions
@@ -82,7 +96,10 @@
                     <i class="fas fa-home mr-2"></i>Home
                 </a>
                 <a href="dashboard.html" class="block px-3 py-2 text-blue-600 font-semibold bg-blue-50 rounded">
-                    <i class="fas fa-chart-bar mr-2"></i>Stock Dashboard
+                    <i class="fas fa-chart-bar mr-2"></i>Dashboard
+                </a>
+                <a href="add-stock.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
+                    <i class="fas fa-plus-circle mr-2"></i>Add Stock
                 </a>
                 <a href="discussions.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
                     <i class="fas fa-comments mr-2"></i>Discussions
@@ -97,17 +114,50 @@
     <!-- Page Header -->
     <section class="bg-gradient-to-r from-blue-600 to-green-500 text-white py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl md:text-4xl font-bold mb-2">
-                <i class="fas fa-chart-line mr-3"></i>Stock Performance Dashboard
-            </h1>
-            <p class="text-blue-100">
-                Historical tracking of educational case studies with automated deviance metrics
-            </p>
-            <div class="mt-4 flex items-center text-sm">
-                <i class="fas fa-clock mr-2"></i>
-                <span>Last Updated: <span id="last-updated" class="font-semibold">Loading...</span></span>
-                <button id="refresh-btn" class="ml-4 bg-white text-blue-600 px-4 py-1 rounded hover:bg-blue-50 transition text-sm font-semibold">
-                    <i class="fas fa-sync-alt mr-1"></i>Refresh
+            <div class="flex justify-between items-center flex-wrap gap-4">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold mb-2">
+                        <i class="fas fa-chart-line mr-3"></i>Stock Performance Dashboard
+                    </h1>
+                    <p class="text-blue-100">
+                        Historical tracking of educational case studies with automated deviance metrics
+                    </p>
+                    <div class="mt-4 flex items-center text-sm">
+                        <i class="fas fa-clock mr-2"></i>
+                        <span>Last Updated: <span id="last-updated" class="font-semibold">Loading...</span></span>
+                        <button id="refresh-btn" class="ml-4 bg-white text-blue-600 px-4 py-1 rounded hover:bg-blue-50 transition text-sm font-semibold">
+                            <i class="fas fa-sync-alt mr-1"></i>Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategy Tabs -->
+    <section class="py-6 bg-white border-b sticky top-16 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap gap-3">
+                <button 
+                    id="tab-all" 
+                    class="strategy-tab active px-6 py-3 rounded-lg font-semibold transition"
+                    onclick="filterByStrategy('all')"
+                >
+                    <i class="fas fa-list mr-2"></i>All Stocks
+                </button>
+                <button 
+                    id="tab-swing" 
+                    class="strategy-tab px-6 py-3 rounded-lg font-semibold transition"
+                    onclick="filterByStrategy('swing')"
+                >
+                    <i class="fas fa-bolt mr-2"></i>Swing Trading
+                </button>
+                <button 
+                    id="tab-long-term" 
+                    class="strategy-tab px-6 py-3 rounded-lg font-semibold transition"
+                    onclick="filterByStrategy('long-term')"
+                >
+                    <i class="fas fa-chart-line mr-2"></i>Long Term
                 </button>
             </div>
         </div>
@@ -116,12 +166,12 @@
     <!-- Summary Metric Cards -->
     <section class="py-8 bg-white border-b">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <!-- Card 1: Total Studies -->
                 <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-blue-100 text-sm font-semibold uppercase">Total Studies Tracked</p>
+                            <p class="text-blue-100 text-sm font-semibold uppercase">Total Studies</p>
                             <p id="total-stocks" class="text-4xl font-bold mt-2">--</p>
                             <p class="text-blue-100 text-xs mt-1">Stocks</p>
                         </div>
@@ -131,13 +181,27 @@
                     </div>
                 </div>
 
-                <!-- Card 2: Avg Performance -->
+                <!-- Card 2: Swing Trades -->
+                <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-purple-100 text-sm font-semibold uppercase">Swing Trades</p>
+                            <p id="swing-count" class="text-4xl font-bold mt-2">--</p>
+                            <p class="text-purple-100 text-xs mt-1">Active</p>
+                        </div>
+                        <div class="text-5xl opacity-20">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Long Term -->
                 <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-green-100 text-sm font-semibold uppercase">Avg. Study Performance</p>
-                            <p id="avg-performance" class="text-4xl font-bold mt-2">--</p>
-                            <p class="text-green-100 text-xs mt-1">Average Deviance</p>
+                            <p class="text-green-100 text-sm font-semibold uppercase">Long Term</p>
+                            <p id="longterm-count" class="text-4xl font-bold mt-2">--</p>
+                            <p class="text-green-100 text-xs mt-1">Holdings</p>
                         </div>
                         <div class="text-5xl opacity-20">
                             <i class="fas fa-chart-line"></i>
@@ -145,13 +209,13 @@
                     </div>
                 </div>
 
-                <!-- Card 3: Active Flags -->
+                <!-- Card 4: Active Flags -->
                 <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-lg shadow-lg p-6 text-white">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-orange-100 text-sm font-semibold uppercase">Active Market Flags</p>
+                            <p class="text-orange-100 text-sm font-semibold uppercase">Market Flags</p>
                             <p id="active-flags" class="text-4xl font-bold mt-2">--</p>
-                            <p class="text-orange-100 text-xs mt-1">Action Required</p>
+                            <p class="text-orange-100 text-xs mt-1">Alerts</p>
                         </div>
                         <div class="text-5xl opacity-20">
                             <i class="fas fa-flag"></i>
@@ -261,26 +325,38 @@
                     <table class="w-full">
                         <thead class="bg-gray-50 border-b-2 border-gray-200">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">
                                     Stock Name<br><span class="text-gray-500 font-normal">(Ticker)</span>
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                    Date Mentioned
+                                <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase">
+                                    Strategy
                                 </th>
-                                <th class="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                    Entry Price<br><span class="text-gray-500 font-normal">(At Study)</span>
+                                <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">
+                                    Entry Date/Time
                                 </th>
-                                <th class="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                    Current Price<br><span class="text-gray-500 font-normal">(Live/CMP)</span>
+                                <th class="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase">
+                                    Entry Price
                                 </th>
-                                <th class="px-6 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                    Deviance (%)<br><span class="text-gray-500 font-normal">(Perf. Tracker)</span>
+                                <th class="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase">
+                                    Current Price
                                 </th>
-                                <th class="px-6 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                    Risk Flag<br><span class="text-gray-500 font-normal">(Automated Alert)</span>
+                                <th class="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase">
+                                    Target Range
                                 </th>
-                                <th class="px-6 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                    Chat Source<br><span class="text-gray-500 font-normal">(Audit Trail)</span>
+                                <th class="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase">
+                                    Stop Loss
+                                </th>
+                                <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase">
+                                    Deviance (%)
+                                </th>
+                                <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase">
+                                    Days Held
+                                </th>
+                                <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase">
+                                    Risk Flag
+                                </th>
+                                <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase">
+                                    Discussion
                                 </th>
                             </tr>
                         </thead>
@@ -351,6 +427,20 @@
         document.getElementById('mobile-menu-btn').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
+        
+        // Strategy filter function
+        window.filterByStrategy = function(strategy) {
+            // Update active tab
+            document.querySelectorAll('.strategy-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(`tab-${strategy}`).classList.add('active');
+            
+            // Trigger filter in dashboard.js
+            if (window.applyStrategyFilter) {
+                window.applyStrategyFilter(strategy);
+            }
+        };
     </script>
 
 </body>

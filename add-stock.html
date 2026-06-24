@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add new stock to tracking dashboard">
+    <title>Add New Stock - Financial Literacy Platform</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Navigation Header -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="logo-placeholder w-12 h-12 bg-gradient-to-br from-blue-600 to-green-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-line text-white text-2xl"></i>
+                        </div>
+                        <span class="ml-3 text-xl font-bold text-gray-800">Financial Literacy Hub</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
+                        <i class="fas fa-chart-bar mr-2"></i>Dashboard
+                    </a>
+                    <a href="add-stock.html" class="text-blue-600 font-semibold border-b-2 border-blue-600 px-3 py-2">
+                        <i class="fas fa-plus-circle mr-2"></i>Add Stock
+                    </a>
+                    <a href="discussions.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
+                        <i class="fas fa-comments mr-2"></i>Discussions
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="bg-gradient-to-r from-blue-600 to-green-500 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">
+                <i class="fas fa-plus-circle mr-3"></i>Add New Stock
+            </h1>
+            <p class="text-blue-100">
+                Add a new stock to your tracking dashboard with complete details
+            </p>
+        </div>
+    </section>
+
+    <!-- Info Banner -->
+    <section class="py-4 bg-blue-50 border-b">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-start">
+                <i class="fas fa-info-circle text-blue-600 text-xl mr-3 mt-1"></i>
+                <div class="text-sm text-gray-700">
+                    <p class="font-semibold mb-1">How to Add a Stock:</p>
+                    <p>Fill in all the required fields below. After submission, you'll get a JSON code that you need to add to your <code class="bg-blue-100 px-2 py-1 rounded">stocks.json</code> file on GitHub.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add Stock Form -->
+    <section class="py-12 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <form id="add-stock-form" class="bg-white rounded-lg shadow-md p-8">
+                
+                <!-- Basic Information -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-info-circle text-blue-600 mr-3"></i>
+                        Basic Information
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Stock Ticker -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Stock Ticker Symbol <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="ticker" 
+                                name="ticker"
+                                placeholder="e.g., RELIANCE.NS"
+                                required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent uppercase"
+                            >
+                            <p class="text-xs text-gray-500 mt-1">Use .NS for NSE, .BO for BSE</p>
+                        </div>
+
+                        <!-- Stock Name -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Company Name <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                name="name"
+                                placeholder="e.g., Reliance Industries"
+                                required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                        </div>
+
+                        <!-- Sector -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Sector <span class="text-red-500">*</span>
+                            </label>
+                            <select 
+                                id="sector" 
+                                name="sector"
+                                required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                                <option value="">Select Sector</option>
+                                <option value="Energy">Energy</option>
+                                <option value="Banking">Banking</option>
+                                <option value="IT">IT</option>
+                                <option value="Auto">Auto</option>
+                                <option value="Pharma">Pharma</option>
+                                <option value="FMCG">FMCG</option>
+                                <option value="Telecom">Telecom</option>
+                                <option value="Infrastructure">Infrastructure</option>
+                                <option value="Metals">Metals</option>
+                                <option value="Realty">Realty</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Strategy -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Investment Strategy <span class="text-red-500">*</span>
+                            </label>
+                            <select 
+                                id="strategy" 
+                                name="strategy"
+                                required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                                <option value="">Select Strategy</option>
+                                <option value="swing">⚡ Swing Trading (Days to Weeks)</option>
+                                <option value="long-term">🎯 Long Term (Months to Years)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Entry Details -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-sign-in-alt text-green-600 mr-3"></i>
+                        Entry Details
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Entry Date -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Entry Date <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="date" 
+                                id="entryDate" 
+                                name="entryDate"
+                                required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                        </div>
+
+                        <!-- Entry Time -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Entry Time <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="time" 
+                                id="entryTime" 
+                                name="entryTime"
+                                required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                        </div>
+
+                        <!-- Entry Price -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Entry Price (₹) <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="number" 
+                                id="entryPrice" 
+                                name="entryPrice"
+                                placeholder="e.g., 2450.00"
+                                step="0.01"
+                                min="0"
+                                required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Target & Stop Loss -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-bullseye text-orange-600 mr-3"></i>
+                        Target & Risk Management
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Target Min -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Target Exit (Min) ₹ <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="number" 
+                                id="targetExitMin" 
+                                name="targetExitMin"
+                                placeholder="e.g., 2700.00"
+                                step="0.01"
+                                min="0"
+                                required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                        </div>
+
+                        <!-- Target Max -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Target Exit (Max) ₹ <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="number" 
+                                id="targetExitMax" 
+                                name="targetExitMax"
+                                placeholder="e.g., 2900.00"
+                                step="0.01"
+                                min="0"
+                                required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                        </div>
+
+                        <!-- Stop Loss -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Stop Loss ₹ <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                type="number" 
+                                id="stopLoss" 
+                                name="stopLoss"
+                                placeholder="e.g., 2300.00"
+                                step="0.01"
+                                min="0"
+                                required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-sticky-note text-purple-600 mr-3"></i>
+                        Additional Information
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <!-- Discussion URL -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Discussion URL
+                            </label>
+                            <input 
+                                type="url" 
+                                id="discussionUrl" 
+                                name="discussionUrl"
+                                placeholder="https://github.com/ArunchandMR/stock-literacy-platform/discussions/1"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                            <p class="text-xs text-gray-500 mt-1">Link to GitHub Discussion for this stock</p>
+                        </div>
+
+                        <!-- Trading Notes -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Trading Notes / Rationale
+                            </label>
+                            <textarea 
+                                id="notes" 
+                                name="notes"
+                                rows="4"
+                                placeholder="Why are you entering this trade? Technical setup? Fundamental reasons?"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end space-x-4">
+                    <button 
+                        type="button"
+                        onclick="window.location.href='dashboard.html'"
+                        class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition font-semibold"
+                    >
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </button>
+                    <button 
+                        type="submit"
+                        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
+                    >
+                        <i class="fas fa-check mr-2"></i>Generate JSON Code
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Output Section (Hidden Initially) -->
+    <section id="output-section" class="hidden py-12 bg-white border-t">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-green-50 border-l-4 border-green-500 p-6 rounded-lg mb-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center">
+                    <i class="fas fa-check-circle text-green-600 mr-3"></i>
+                    JSON Code Generated Successfully!
+                </h3>
+                <p class="text-gray-700 mb-4">
+                    Copy the code below and add it to your <code class="bg-green-100 px-2 py-1 rounded">data/stocks.json</code> file on GitHub.
+                </p>
+            </div>
+
+            <div class="bg-gray-900 rounded-lg p-6 relative">
+                <button 
+                    id="copy-btn"
+                    class="absolute top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition text-sm font-semibold"
+                >
+                    <i class="fas fa-copy mr-2"></i>Copy Code
+                </button>
+                <pre id="json-output" class="text-green-400 text-sm overflow-x-auto pt-12"></pre>
+            </div>
+
+            <div class="mt-6 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
+                <h4 class="font-bold text-gray-800 mb-2">Next Steps:</h4>
+                <ol class="list-decimal list-inside space-y-2 text-gray-700 text-sm">
+                    <li>Copy the JSON code above</li>
+                    <li>Go to your GitHub repository</li>
+                    <li>Open <code class="bg-blue-100 px-2 py-1 rounded">data/stocks.json</code></li>
+                    <li>Click the pencil icon to edit</li>
+                    <li>Add the code to the "stocks" array (before the closing bracket)</li>
+                    <li>Don't forget to add a comma after the previous stock entry!</li>
+                    <li>Click "Commit changes"</li>
+                    <li>Your dashboard will update automatically!</li>
+                </ol>
+            </div>
+
+            <div class="mt-6 flex justify-center space-x-4">
+                <button 
+                    onclick="window.location.reload()"
+                    class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold"
+                >
+                    <i class="fas fa-plus mr-2"></i>Add Another Stock
+                </button>
+                <a 
+                    href="dashboard.html"
+                    class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold inline-block"
+                >
+                    <i class="fas fa-chart-bar mr-2"></i>View Dashboard
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center text-gray-400 text-sm">
+                <p>&copy; 2026 Financial Literacy Platform. Educational purposes only.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.getElementById('add-stock-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const formData = {
+                id: document.getElementById('ticker').value.replace('.NS', '').replace('.BO', '') + '001',
+                ticker: document.getElementById('ticker').value.toUpperCase(),
+                name: document.getElementById('name').value,
+                sector: document.getElementById('sector').value,
+                strategy: document.getElementById('strategy').value,
+                entryDate: document.getElementById('entryDate').value,
+                entryTime: document.getElementById('entryTime').value,
+                entryPrice: parseFloat(document.getElementById('entryPrice').value),
+                targetExitMin: parseFloat(document.getElementById('targetExitMin').value),
+                targetExitMax: parseFloat(document.getElementById('targetExitMax').value),
+                stopLoss: parseFloat(document.getElementById('stopLoss').value),
+                discussionUrl: document.getElementById('discussionUrl').value || "https://github.com/ArunchandMR/stock-literacy-platform/discussions",
+                notes: document.getElementById('notes').value || ""
+            };
+            
+            // Generate JSON
+            const jsonOutput = JSON.stringify(formData, null, 2);
+            
+            // Display output
+            document.getElementById('json-output').textContent = jsonOutput;
+            document.getElementById('output-section').classList.remove('hidden');
+            
+            // Scroll to output
+            document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Copy to clipboard
+        document.getElementById('copy-btn').addEventListener('click', function() {
+            const jsonText = document.getElementById('json-output').textContent;
+            navigator.clipboard.writeText(jsonText).then(() => {
+                this.innerHTML = '<i class="fas fa-check mr-2"></i>Copied!';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-copy mr-2"></i>Copy Code';
+                }, 2000);
+            });
+        });
+        
+        // Set default date to today
+        document.getElementById('entryDate').valueAsDate = new Date();
+        
+        // Set default time to current time
+        const now = new Date();
+        document.getElementById('entryTime').value = now.toTimeString().slice(0,5);
+    </script>
+
+</body>
+</html>
