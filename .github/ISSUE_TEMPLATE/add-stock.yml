@@ -1,1 +1,142 @@
+name: 📈 Add New Stock
+description: Add a new stock to the tracking dashboard
+title: "[STOCK] Add: "
+labels: ["stock-entry", "pending-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Add a New Stock to Dashboard
+        Fill in the details below to add a new stock to the tracking system.
+        
+  - type: input
+    id: ticker
+    attributes:
+      label: Stock Ticker Symbol
+      description: Enter the stock ticker (e.g., RELIANCE.NS for NSE, RELIANCE.BO for BSE)
+      placeholder: "RELIANCE.NS"
+    validations:
+      required: true
+      
+  - type: input
+    id: name
+    attributes:
+      label: Company Name
+      description: Full name of the company
+      placeholder: "Reliance Industries Limited"
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: sector
+    attributes:
+      label: Sector
+      description: Select the sector
+      options:
+        - Energy
+        - Banking
+        - IT
+        - Auto
+        - Pharma
+        - FMCG
+        - Telecom
+        - Infrastructure
+        - Metals
+        - Realty
+        - Other
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: strategy
+    attributes:
+      label: Investment Strategy
+      description: Is this a swing trade or long-term investment?
+      options:
+        - swing
+        - long-term
+    validations:
+      required: true
+      
+  - type: input
+    id: entry_date
+    attributes:
+      label: Entry Date
+      description: Date of entry (YYYY-MM-DD format)
+      placeholder: "2026-06-24"
+    validations:
+      required: true
+      
+  - type: input
+    id: entry_time
+    attributes:
+      label: Entry Time
+      description: Time of entry (HH:MM:SS format, 24-hour)
+      placeholder: "10:15:00"
+    validations:
+      required: true
+      
+  - type: input
+    id: entry_price
+    attributes:
+      label: Entry Price (₹)
+      description: Price at which you're recommending entry
+      placeholder: "2450.00"
+    validations:
+      required: true
+      
+  - type: input
+    id: target_min
+    attributes:
+      label: Target Exit Price - Minimum (₹)
+      description: Minimum target price
+      placeholder: "2700.00"
+    validations:
+      required: true
+      
+  - type: input
+    id: target_max
+    attributes:
+      label: Target Exit Price - Maximum (₹)
+      description: Maximum target price
+      placeholder: "2900.00"
+    validations:
+      required: true
+      
+  - type: input
+    id: stop_loss
+    attributes:
+      label: Stop Loss (₹)
+      description: Stop loss price
+      placeholder: "2300.00"
+    validations:
+      required: true
+      
+  - type: input
+    id: discussion_url
+    attributes:
+      label: Discussion URL (Optional)
+      description: Link to GitHub Discussion with detailed analysis
+      placeholder: "https://github.com/ArunchandMR/stock-literacy-platform/discussions/1"
+    validations:
+      required: false
+      
+  - type: textarea
+    id: notes
+    attributes:
+      label: Trading Notes / Rationale
+      description: Why are you entering this trade? Technical setup? Fundamental reasons?
+      placeholder: "Breakout above resistance with strong volume. RSI showing bullish divergence."
+    validations:
+      required: false
+      
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Confirmation
+      description: Please confirm you understand this is for educational purposes only
+      options:
+        - label: I understand this is for educational purposes and not investment advice
+          required: true
 
+# Made with Bob
