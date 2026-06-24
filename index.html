@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free financial literacy platform for stock market education and safe investing guidelines">
+    <meta name="keywords" content="financial literacy, stock market education, SEBI, investing, trading">
+    <title>Financial Literacy Platform - Empowering Common Investors</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+</head>
+<body class="bg-gray-50">
+    
+    <!-- SEBI Disclaimer Banner (Top) -->
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-triangle text-yellow-400 text-xl"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-yellow-700">
+                        <strong>IMPORTANT EDUCATIONAL DISCLAIMER:</strong> This platform is purely for financial literacy and investor education. 
+                        It does not constitute investment advice. Please read the <a href="disclaimer.html" class="underline font-semibold">full disclaimer</a> before proceeding.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="logo-placeholder w-12 h-12 bg-gradient-to-br from-blue-600 to-green-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-line text-white text-2xl"></i>
+                        </div>
+                        <span class="ml-3 text-xl font-bold text-gray-800">Financial Literacy Hub</span>
+                    </div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-blue-600 font-semibold border-b-2 border-blue-600 px-3 py-2">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
+                        <i class="fas fa-chart-bar mr-2"></i>Stock Dashboard
+                    </a>
+                    <a href="discussions.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
+                        <i class="fas fa-comments mr-2"></i>Discussions
+                    </a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
+                        <i class="fas fa-info-circle mr-2"></i>About
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-600">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-blue-600 font-semibold bg-blue-50 rounded">
+                    <i class="fas fa-home mr-2"></i>Home
+                </a>
+                <a href="dashboard.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
+                    <i class="fas fa-chart-bar mr-2"></i>Stock Dashboard
+                </a>
+                <a href="discussions.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
+                    <i class="fas fa-comments mr-2"></i>Discussions
+                </a>
+                <a href="about.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
+                    <i class="fas fa-info-circle mr-2"></i>About
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-600 to-green-500 text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                Empowering Financial Freedom for Every Indian
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 text-blue-100">
+                Learn, Analyze, and Invest Wisely with Community-Driven Education
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="dashboard.html" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition shadow-lg">
+                    <i class="fas fa-chart-line mr-2"></i>View Stock Dashboard
+                </a>
+                <a href="#mission" class="bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition border-2 border-white">
+                    <i class="fas fa-book-reader mr-2"></i>Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Statement -->
+    <section id="mission" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Our Mission</h2>
+                <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Mission Card 1 -->
+                <div class="bg-blue-50 p-8 rounded-lg shadow-md hover:shadow-xl transition">
+                    <div class="text-blue-600 text-4xl mb-4">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Financial Literacy</h3>
+                    <p class="text-gray-600">
+                        Democratizing stock market education for the common man through free, accessible resources and community-driven learning.
+                    </p>
+                </div>
+
+                <!-- Mission Card 2 -->
+                <div class="bg-green-50 p-8 rounded-lg shadow-md hover:shadow-xl transition">
+                    <div class="text-green-600 text-4xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Safe Investing</h3>
+                    <p class="text-gray-600">
+                        Promoting disciplined, research-backed investing strategies while highlighting the risks of speculative trading.
+                    </p>
+                </div>
+
+                <!-- Mission Card 3 -->
+                <div class="bg-purple-50 p-8 rounded-lg shadow-md hover:shadow-xl transition">
+                    <div class="text-purple-600 text-4xl mb-4">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Community Power</h3>
+                    <p class="text-gray-600">
+                        Building a transparent, collaborative platform where investors learn from shared experiences and collective wisdom.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safe Investing Guidelines -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Safe Investing Guidelines</h2>
+                <div class="w-24 h-1 bg-green-600 mx-auto"></div>
+                <p class="text-gray-600 mt-4 max-w-3xl mx-auto">
+                    Follow these fundamental principles to build long-term wealth safely
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Guideline 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-green-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">Invest Only Surplus Funds</h3>
+                            <p class="text-gray-600">Never invest money you need for daily expenses, emergencies, or short-term goals. Only invest surplus funds you can afford to lock away for 3-5 years.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guideline 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-green-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">Diversify Your Portfolio</h3>
+                            <p class="text-gray-600">Don't put all eggs in one basket. Spread investments across sectors, market caps, and asset classes to reduce risk.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guideline 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-green-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">Do Your Own Research</h3>
+                            <p class="text-gray-600">Never blindly follow tips. Understand the business, read annual reports, analyze financials, and make informed decisions.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guideline 4 -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-green-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">Think Long-Term</h3>
+                            <p class="text-gray-600">Wealth creation takes time. Avoid the temptation of quick profits. Stay invested for at least 3-5 years to ride out market volatility.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guideline 5 -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-green-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">Avoid Leverage & Margin</h3>
+                            <p class="text-gray-600">Never borrow money to invest. Leverage amplifies losses and can wipe out your capital. Invest only your own money.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guideline 6 -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-green-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">Review Regularly</h3>
+                            <p class="text-gray-600">Monitor your portfolio quarterly. Rebalance if needed, but avoid frequent trading based on short-term market movements.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trading Pitfalls to Avoid -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Trading Pitfalls to Avoid</h2>
+                <div class="w-24 h-1 bg-red-600 mx-auto"></div>
+                <p class="text-gray-600 mt-4 max-w-3xl mx-auto">
+                    Common mistakes that lead to losses - learn from others' experiences
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Pitfall 1 -->
+                <div class="bg-red-50 p-6 rounded-lg shadow-md border-l-4 border-red-500">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-times text-red-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">Intraday Trading / F&O</h3>
+                            <p class="text-gray-600">95% of intraday traders lose money. Derivatives (F&O) are high-risk instruments designed for hedging, not speculation. Avoid unless you're an expert.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pitfall 2 -->
+                <div class="bg-red-50 p-6 rounded-lg shadow-md border-l-4 border-red-500">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-times text-red-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">Following Unverified Tips</h3>
+                            <p class="text-gray-600">WhatsApp groups, Telegram channels, and social media "gurus" often promote pump-and-dump schemes. Always verify sources and do your own analysis.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pitfall 3 -->
+                <div class="bg-red-50 p-6 rounded-lg shadow-md border-l-4 border-red-500">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-times text-red-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">Emotional Trading</h3>
+                            <p class="text-gray-600">Fear and greed drive poor decisions. Panic selling during crashes and FOMO buying during rallies destroy wealth. Stick to your investment plan.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pitfall 4 -->
+                <div class="bg-red-50 p-6 rounded-lg shadow-md border-l-4 border-red-500">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-times text-red-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">Ignoring Risk Management</h3>
+                            <p class="text-gray-600">Not setting stop-losses, over-concentrating in one stock, or investing borrowed money can lead to catastrophic losses.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pitfall 5 -->
+                <div class="bg-red-50 p-6 rounded-lg shadow-md border-l-4 border-red-500">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-times text-red-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">Chasing Penny Stocks</h3>
+                            <p class="text-gray-600">Low-priced stocks (<₹10) are often illiquid, manipulated, and fundamentally weak. Focus on quality businesses, not cheap prices.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pitfall 6 -->
+                <div class="bg-red-50 p-6 rounded-lg shadow-md border-l-4 border-red-500">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-times text-red-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2">Overtrading</h3>
+                            <p class="text-gray-600">Frequent buying and selling erodes returns through brokerage, taxes, and poor timing. Less is more - trade less, invest more.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-16 bg-gradient-to-r from-blue-600 to-green-500 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Start Your Learning Journey?</h2>
+            <p class="text-xl mb-8 text-blue-100">
+                Explore our stock performance dashboard and join community discussions
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="dashboard.html" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition shadow-lg">
+                    <i class="fas fa-chart-line mr-2"></i>View Dashboard
+                </a>
+                <a href="discussions.html" class="bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition border-2 border-white">
+                    <i class="fas fa-comments mr-2"></i>Join Discussions
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEBI Disclaimer (Bottom - Full) -->
+    <section class="bg-yellow-50 border-t-4 border-yellow-400 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-exclamation-circle text-yellow-500 mr-3"></i>
+                    IMPORTANT EDUCATIONAL DISCLAIMER
+                </h3>
+                
+                <div class="space-y-3 text-gray-700 text-sm">
+                    <p>
+                        <strong>Registration Details:</strong> This platform is an educational initiative managed by community volunteers under the guidance of 
+                        <span class="font-semibold">[Insert Analyst/Firm Name]</span>, a SEBI Registered Research Analyst 
+                        (Registration No: <span class="font-semibold">INHXXXXXXXXX</span>).
+                    </p>
+                    
+                    <p>
+                        <strong>Purpose:</strong> This website is purely for financial literacy, investor education, and awareness purposes only. 
+                        It does not constitute an offer, solicitation, or recommendation to buy, sell, or hold any security, stock, or financial instrument.
+                    </p>
+                    
+                    <p>
+                        <strong>Nature of Data:</strong> The stock analytics, performance tracking, "deviance metrics," and risk flags displayed on this dashboard 
+                        represent historical logs of past studies and case studies discussed within our educational community. They are automated using open-source 
+                        market data and do not constitute real-time trading signals, investment advice, or guaranteed returns.
+                    </p>
+                    
+                    <p class="text-red-600 font-semibold">
+                        <strong>Risk Warning:</strong> Equity investments are subject to market risks. Past performance is not indicative of future results. 
+                        Trading in derivatives (F&O) involves high risk and may result in a loss of capital. Common citizens are strongly advised to read all 
+                        related documents carefully and consult a certified financial advisor before investing.
+                    </p>
+                    
+                    <p>
+                        <strong>Liability:</strong> The administrators and the SEBI Registered Analyst accept no liability for any financial losses incurred 
+                        from actions taken based on data presented here.
+                    </p>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                    <a href="disclaimer.html" class="text-blue-600 hover:text-blue-800 font-semibold">
+                        <i class="fas fa-file-alt mr-2"></i>Read Full Disclaimer & Terms
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h4 class="text-lg font-bold mb-4">About Us</h4>
+                    <p class="text-gray-400 text-sm">
+                        A volunteer-driven initiative to democratize financial literacy and empower common investors with knowledge and transparency.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="dashboard.html" class="text-gray-400 hover:text-white">Stock Dashboard</a></li>
+                        <li><a href="discussions.html" class="text-gray-400 hover:text-white">Discussions</a></li>
+                        <li><a href="disclaimer.html" class="text-gray-400 hover:text-white">Disclaimer</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.sebi.gov.in/" target="_blank" class="text-gray-400 hover:text-white">SEBI Official Website</a></li>
+                        <li><a href="https://www.nseindia.com/" target="_blank" class="text-gray-400 hover:text-white">NSE India</a></li>
+                        <li><a href="https://www.bseindia.com/" target="_blank" class="text-gray-400 hover:text-white">BSE India</a></li>
+                        <li><a href="https://github.com" target="_blank" class="text-gray-400 hover:text-white">GitHub Repository</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
+                <p>&copy; 2026 Financial Literacy Platform. Built with ❤️ by volunteers. Hosted on GitHub Pages.</p>
+                <p class="mt-2">This is an open-source educational project. Not affiliated with any commercial entity.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu Toggle Script -->
+    <script>
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
+
+</body>
+</html>
