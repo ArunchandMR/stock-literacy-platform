@@ -1,0 +1,64 @@
+name: Update Stock Dashboard (Hourly)
+
+on:
+  # Run every hour during market hours (9 AM to 4 PM IST = 3:30 AM to 10:30 AM UTC)
+  schedule:
+    - cron: '30 3,4,5,6,7,8,9,10 * * 1-5'  # Mon-Fri, every hour from 9 AM to 4 PM IST
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r scripts/requirements.txt
+      
+      - name: Fetch stock data (No Gemini API)
+        run: |
+          cd scripts
+          python fetch_stock_data.py
+      
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code data/dashboard.json || echo "changed=true" >> $GITHUB_OUTPUT
+      
+      - name: Commit and push if changed
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/dashboard.json
+          git commit -m "🤖 Hourly update: Stock dashboard data ($(date +'%Y-%m-%d %H:%M IST'))"
+          git push
+      
+      - name: No changes detected
+        if: steps.git-check.outputs.changed != 'true'
+        run: |
+          echo "No changes in dashboard data. Skipping commit."
+      
+      - name: Deployment status
+        run: |
+          echo "✓ Hourly dashboard update completed!"
+          echo "GitHub Pages will auto-deploy within 1-2 minutes."
+
+# Made with Bob - Hourly updates during market hours
