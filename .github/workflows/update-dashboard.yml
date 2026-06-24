@@ -1,1 +1,66 @@
+name: Update Stock Dashboard
 
+on:
+  # Run daily at 6:30 PM IST (13:00 UTC)
+  schedule:
+    - cron: '0 13 * * *'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r scripts/requirements.txt
+      
+      - name: Fetch stock data
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          cd scripts
+          python fetch_stock_data.py
+      
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code data/dashboard.json || echo "changed=true" >> $GITHUB_OUTPUT
+      
+      - name: Commit and push if changed
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/dashboard.json
+          git commit -m "🤖 Auto-update: Stock dashboard data ($(date +'%Y-%m-%d %H:%M IST'))"
+          git push
+      
+      - name: No changes detected
+        if: steps.git-check.outputs.changed != 'true'
+        run: |
+          echo "No changes in dashboard data. Skipping commit."
+      
+      - name: Deployment status
+        run: |
+          echo "✓ Dashboard update completed successfully!"
+          echo "GitHub Pages will auto-deploy within 1-2 minutes."
+
+# Made with Bob
