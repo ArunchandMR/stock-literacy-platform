@@ -175,20 +175,26 @@ class StockDataFetcher:
             if risk_level in ['medium', 'high']:
                 active_flags += 1
             
-            # Build processed stock data
+            # Build processed stock data with enhanced fields
             processed_stock = {
                 'id': stock.get('id', f"STK{i:03d}"),
                 'ticker': stock['ticker'],
                 'name': stock['name'],
                 'sector': stock.get('sector', 'N/A'),
+                'strategy': stock.get('strategy', 'long-term'),
                 'entryDate': stock['entryDate'],
+                'entryTime': stock.get('entryTime', ''),
                 'entryPrice': stock['entryPrice'],
                 'currentPrice': round(current_price, 2),
+                'targetExitMin': stock.get('targetExitMin'),
+                'targetExitMax': stock.get('targetExitMax'),
+                'stopLoss': stock.get('stopLoss'),
                 'deviance': round(deviance, 2),
                 'deviancePercent': deviance_percent,
                 'riskFlag': risk_flag,
                 'riskLevel': risk_level,
                 'discussionUrl': stock.get('discussionUrl', '#'),
+                'notes': stock.get('notes', ''),
                 'lastChecked': datetime.now(timezone.utc).isoformat()
             }
             
