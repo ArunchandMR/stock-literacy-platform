@@ -1,1 +1,9 @@
+# Python Dependencies for Stock Data Fetcher
+# Zero-cost, no API keys required
 
+yfinance==0.2.40
+pandas==2.2.0
+requests==2.31.0
+
+# Optional: For sentiment analysis (requires free Gemini API key)
+# google-generativeai==0.3.2
