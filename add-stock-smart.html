@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Stock - Smart Entry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .autocomplete-item {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .autocomplete-item:hover {
+            background-color: #f3f4f6;
+        }
+        .loading-spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="text-3xl">📊</div>
+                    <span class="text-xl font-bold text-gray-800">Financial Literacy Hub</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-600 hover:text-blue-600 transition">🏠 Home</a>
+                    <a href="dashboard.html" class="text-gray-600 hover:text-blue-600 transition">📊 Dashboard</a>
+                    <a href="discussions.html" class="text-gray-600 hover:text-blue-600 transition">💬 Discussions</a>
+                    <a href="about.html" class="text-gray-600 hover:text-blue-600 transition">ℹ️ About</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-3xl">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">
+                <i class="fas fa-plus-circle text-green-600 mr-2"></i>
+                Add New Stock (Smart Entry)
+            </h1>
+            <p class="text-gray-600 mb-6">Type stock ticker to auto-fetch details</p>
+
+            <!-- Smart Stock Entry Form -->
+            <form id="smart-stock-form" class="space-y-6">
+                <!-- Stock Ticker with Autocomplete -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        Stock Ticker Symbol *
+                    </label>
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="ticker-input"
+                            placeholder="Type ticker (e.g., RELIANCE, INFY, TCS)..."
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none text-lg"
+                            required
+                        >
+                        <div id="loading-indicator" class="hidden absolute right-3 top-4">
+                            <div class="loading-spinner"></div>
+                        </div>
+                        <!-- Autocomplete Dropdown -->
+                        <div id="autocomplete-list" class="hidden absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Start typing - suggestions will appear after 3 characters</p>
+                </div>
+
+                <!-- Auto-populated Fields -->
+                <div id="auto-fields" class="hidden space-y-4 p-4 bg-green-50 border-2 border-green-200 rounded-lg">
+                    <div class="flex items-center text-green-700 font-semibold mb-2">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        Stock Details Auto-Fetched!
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Company Name</label>
+                        <input type="text" id="company-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50" readonly>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Sector</label>
+                        <input type="text" id="sector" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50" readonly>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Current Market Price</label>
+                        <input type="text" id="current-price" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50" readonly>
+                    </div>
+                </div>
+
+                <!-- Manual Entry Fields -->
+                <div id="manual-fields" class="hidden space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Strategy *</label>
+                            <select id="strategy" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" required>
+                                <option value="">Select Strategy</option>
+                                <option value="swing">Swing Trading</option>
+                                <option value="long-term">Long Term</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Entry Price *</label>
+                            <input type="number" id="entry-price" step="0.01" placeholder="₹ 0.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Entry Date *</label>
+                            <input type="date" id="entry-date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Entry Time</label>
+                            <input type="time" id="entry-time" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Target Min</label>
+                            <input type="number" id="target-min" step="0.01" placeholder="₹ 0.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Target Max</label>
+                            <input type="number" id="target-max" step="0.01" placeholder="₹ 0.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Stop Loss</label>
+                            <input type="number" id="stop-loss" step="0.01" placeholder="₹ 0.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Analysis Notes</label>
+                        <textarea id="notes" rows="3" placeholder="Technical/fundamental analysis notes..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"></textarea>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-4 pt-4">
+                    <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition">
+                        <i class="fas fa-check mr-2"></i>Add Stock
+                    </button>
+                    <button type="button" onclick="window.location.href='dashboard.html'" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </button>
+                </div>
+            </form>
+
+            <!-- Result Display -->
+            <div id="result" class="hidden mt-6 p-4 rounded-lg"></div>
+        </div>
+    </main>
+
+    <script>
+        // Popular Indian stocks database (for autocomplete)
+        const POPULAR_STOCKS = [
+            { ticker: 'RELIANCE.NS', name: 'Reliance Industries', sector: 'Energy' },
+            { ticker: 'TCS.NS', name: 'Tata Consultancy Services', sector: 'IT' },
+            { ticker: 'HDFCBANK.NS', name: 'HDFC Bank', sector: 'Banking' },
+            { ticker: 'INFY.NS', name: 'Infosys', sector: 'IT' },
+            { ticker: 'ICICIBANK.NS', name: 'ICICI Bank', sector: 'Banking' },
+            { ticker: 'HINDUNILVR.NS', name: 'Hindustan Unilever', sector: 'FMCG' },
+            { ticker: 'ITC.NS', name: 'ITC Limited', sector: 'FMCG' },
+            { ticker: 'SBIN.NS', name: 'State Bank of India', sector: 'Banking' },
+            { ticker: 'BHARTIARTL.NS', name: 'Bharti Airtel', sector: 'Telecom' },
+            { ticker: 'KOTAKBANK.NS', name: 'Kotak Mahindra Bank', sector: 'Banking' },
+            { ticker: 'LT.NS', name: 'Larsen & Toubro', sector: 'Infrastructure' },
+            { ticker: 'AXISBANK.NS', name: 'Axis Bank', sector: 'Banking' },
+            { ticker: 'ASIANPAINT.NS', name: 'Asian Paints', sector: 'Consumer' },
+            { ticker: 'MARUTI.NS', name: 'Maruti Suzuki', sector: 'Auto' },
+            { ticker: 'SUNPHARMA.NS', name: 'Sun Pharmaceutical', sector: 'Pharma' },
+            { ticker: 'TITAN.NS', name: 'Titan Company', sector: 'Consumer' },
+            { ticker: 'TATAMOTORS.NS', name: 'Tata Motors', sector: 'Auto' },
+            { ticker: 'WIPRO.NS', name: 'Wipro', sector: 'IT' },
+            { ticker: 'ULTRACEMCO.NS', name: 'UltraTech Cement', sector: 'Cement' },
+            { ticker: 'BAJFINANCE.NS', name: 'Bajaj Finance', sector: 'Finance' },
+            { ticker: 'NTPC.NS', name: 'NTPC', sector: 'Power' },
+            { ticker: 'POWERGRID.NS', name: 'Power Grid Corporation', sector: 'Power' },
+            { ticker: 'NESTLEIND.NS', name: 'Nestle India', sector: 'FMCG' },
+            { ticker: 'COALINDIA.NS', name: 'Coal India', sector: 'Mining' },
+            { ticker: 'ONGC.NS', name: 'Oil and Natural Gas Corporation', sector: 'Energy' },
+            { ticker: 'TECHM.NS', name: 'Tech Mahindra', sector: 'IT' },
+            { ticker: 'HCLTECH.NS', name: 'HCL Technologies', sector: 'IT' },
+            { ticker: 'ADANIENT.NS', name: 'Adani Enterprises', sector: 'Conglomerate' },
+            { ticker: 'JSWSTEEL.NS', name: 'JSW Steel', sector: 'Steel' },
+            { ticker: 'TATASTEEL.NS', name: 'Tata Steel', sector: 'Steel' }
+        ];
+
+        const tickerInput = document.getElementById('ticker-input');
+        const autocompleteList = document.getElementById('autocomplete-list');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const autoFields = document.getElementById('auto-fields');
+        const manualFields = document.getElementById('manual-fields');
+        let selectedStock = null;
+
+        // Autocomplete functionality
+        tickerInput.addEventListener('input', function() {
+            const value = this.value.toUpperCase().trim();
+            
+            if (value.length < 3) {
+                autocompleteList.classList.add('hidden');
+                return;
+            }
+
+            // Filter stocks
+            const matches = POPULAR_STOCKS.filter(stock => 
+                stock.ticker.includes(value) || 
+                stock.name.toUpperCase().includes(value)
+            );
+
+            if (matches.length > 0) {
+                showAutocomplete(matches);
+            } else {
+                autocompleteList.classList.add('hidden');
+            }
+        });
+
+        function showAutocomplete(stocks) {
+            autocompleteList.innerHTML = stocks.map(stock => `
+                <div class="autocomplete-item p-3 border-b hover:bg-gray-50" onclick="selectStock('${stock.ticker}')">
+                    <div class="font-bold text-gray-800">${stock.ticker.replace('.NS', '')}</div>
+                    <div class="text-sm text-gray-600">${stock.name} - ${stock.sector}</div>
+                </div>
+            `).join('');
+            autocompleteList.classList.remove('hidden');
+        }
+
+        window.selectStock = async function(ticker) {
+            selectedStock = POPULAR_STOCKS.find(s => s.ticker === ticker);
+            if (!selectedStock) return;
+
+            tickerInput.value = ticker.replace('.NS', '');
+            autocompleteList.classList.add('hidden');
+            
+            // Show loading
+            loadingIndicator.classList.remove('hidden');
+            
+            // Simulate API call (in real scenario, fetch from yfinance API)
+            setTimeout(() => {
+                loadingIndicator.classList.add('hidden');
+                
+                // Populate fields
+                document.getElementById('company-name').value = selectedStock.name;
+                document.getElementById('sector').value = selectedStock.sector;
+                document.getElementById('current-price').value = '₹ Fetching...';
+                
+                // Show auto-populated fields
+                autoFields.classList.remove('hidden');
+                manualFields.classList.remove('hidden');
+                
+                // Set today's date as default
+                document.getElementById('entry-date').valueAsDate = new Date();
+            }, 500);
+        };
+
+        // Form submission
+        document.getElementById('smart-stock-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!selectedStock) {
+                alert('Please select a stock from the suggestions');
+                return;
+            }
+
+            const formData = {
+                ticker: selectedStock.ticker,
+                name: selectedStock.name,
+                sector: selectedStock.sector,
+                strategy: document.getElementById('strategy').value,
+                entryDate: document.getElementById('entry-date').value,
+                entryTime: document.getElementById('entry-time').value || 'N/A',
+                entryPrice: parseFloat(document.getElementById('entry-price').value),
+                targetExitMin: parseFloat(document.getElementById('target-min').value) || null,
+                targetExitMax: parseFloat(document.getElementById('target-max').value) || null,
+                stopLoss: parseFloat(document.getElementById('stop-loss').value) || null,
+                notes: document.getElementById('notes').value || ''
+            };
+
+            // Generate JSON for manual addition
+            const jsonOutput = JSON.stringify({
+                id: `${selectedStock.ticker.replace('.NS', '')}${Date.now()}`,
+                ...formData,
+                discussionUrl: `https://github.com/ArunchandMR/stock-literacy-platform/discussions/new`
+            }, null, 2);
+
+            // Show result
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'mt-6 p-4 rounded-lg bg-green-50 border-2 border-green-500';
+            resultDiv.innerHTML = `
+                <h3 class="font-bold text-green-800 mb-2">
+                    <i class="fas fa-check-circle mr-2"></i>Stock Entry Ready!
+                </h3>
+                <p class="text-sm text-gray-700 mb-3">Copy this JSON and add it to <code class="bg-gray-200 px-2 py-1 rounded">data/stocks.json</code></p>
+                <pre class="bg-white p-4 rounded border overflow-x-auto text-xs">${jsonOutput}</pre>
+                <button onclick="copyToClipboard()" class="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                    <i class="fas fa-copy mr-2"></i>Copy JSON
+                </button>
+            `;
+            resultDiv.classList.remove('hidden');
+            
+            // Scroll to result
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        window.copyToClipboard = function() {
+            const pre = document.querySelector('pre');
+            navigator.clipboard.writeText(pre.textContent);
+            alert('JSON copied to clipboard!');
+        };
+
+        // Close autocomplete when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!tickerInput.contains(e.target) && !autocompleteList.contains(e.target)) {
+                autocompleteList.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
