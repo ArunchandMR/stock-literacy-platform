@@ -8,544 +8,853 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/styles.css">
     <style>
-        #ticker-suggestions {
-            position: absolute;
-            z-index: 100;
+        /* ── Search dropdown ─────────────────────────────────── */
+        .search-wrap { position: relative; }
+        #suggestions {
+            position: absolute; z-index: 200;
             background: #fff;
-            border: 1px solid #d1d5db;
+            border: 1.5px solid #3b82f6;
             border-top: none;
-            border-radius: 0 0 8px 8px;
-            max-height: 260px;
-            overflow-y: auto;
+            border-radius: 0 0 10px 10px;
             width: 100%;
-            box-shadow: 0 4px 12px rgba(0,0,0,.10);
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 8px 24px rgba(0,0,0,.12);
         }
-        .suggestion-item {
-            padding: 10px 14px;
-            cursor: pointer;
+        .sug-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 11px 16px; cursor: pointer;
             border-bottom: 1px solid #f3f4f6;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            transition: background .12s;
         }
-        .suggestion-item:hover { background: #eff6ff; }
-        .suggestion-item:last-child { border-bottom: none; }
-        .sug-ticker { font-weight: 700; font-size: 13px; color: #1d4ed8; }
-        .sug-name   { font-size: 12px; color: #374151; }
-        .sug-exch   { font-size: 11px; color: #9ca3af; background: #f3f4f6; padding: 1px 6px; border-radius: 10px; }
-        #price-preview {
+        .sug-item:last-child { border-bottom: none; }
+        .sug-item:hover { background: #eff6ff; }
+        .sug-symbol {
+            font-weight: 800; font-size: 13px;
+            color: #1d4ed8; white-space: nowrap;
+            min-width: 90px;
+        }
+        .sug-name   { font-size: 13px; color: #1f2937; flex: 1; }
+        .sug-meta   {
+            display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+        }
+        .sug-sector {
+            font-size: 11px; color: #6b7280;
+            background: #f3f4f6; padding: 1px 7px; border-radius: 10px;
+            white-space: nowrap;
+        }
+        .sug-exch {
+            font-size: 10px; color: #9ca3af;
+        }
+        /* ── Selected company card ───────────────────────────── */
+        #selected-card {
             background: #f0fdf4;
-            border: 1px solid #bbf7d0;
+            border: 1.5px solid #86efac;
+            border-radius: 10px;
+            padding: 14px 18px;
+            display: none;
+            align-items: center;
+            gap: 14px;
+        }
+        #selected-card .sc-icon {
+            background: #dcfce7; color: #16a34a;
+            width: 42px; height: 42px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; flex-shrink: 0;
+        }
+        /* ── Live price badge ────────────────────────────────── */
+        #price-badge {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
             border-radius: 8px;
-            padding: 10px 14px;
-            margin-top: 8px;
+            padding: 8px 14px;
             font-size: 13px;
             display: none;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
         }
-        .price-live { color: #15803d; font-weight: 700; font-size: 16px; }
-        .ticker-wrap { position: relative; }
-        .spinner { display: none; }
-        .spinner.visible { display: inline-block; }
+        .live-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #16a34a;
+            box-shadow: 0 0 0 3px #bbf7d0;
+            flex-shrink: 0;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%,100% { box-shadow: 0 0 0 3px #bbf7d0; }
+            50%      { box-shadow: 0 0 0 6px #dcfce7; }
+        }
+        /* ── Step indicators ────────────────────────────────── */
+        .step-wrap {
+            display: flex; gap: 0; margin-bottom: 28px;
+            counter-reset: step;
+        }
+        .step {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; position: relative;
+        }
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute; top: 15px; left: 50%; width: 100%;
+            height: 2px; background: #e5e7eb; z-index: 0;
+        }
+        .step.done:not(:last-child)::after { background: #86efac; }
+        .step-num {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: #e5e7eb; color: #9ca3af;
+            font-weight: 800; font-size: 13px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; z-index: 1; transition: all .2s;
+        }
+        .step.active .step-num { background: #3b82f6; color: #fff; }
+        .step.done   .step-num { background: #16a34a; color: #fff; }
+        .step-label { font-size: 11px; color: #9ca3af; margin-top: 4px; text-align: center; }
+        .step.active .step-label { color: #3b82f6; font-weight: 600; }
+        .step.done   .step-label { color: #16a34a; font-weight: 600; }
+
+        /* spinner */
+        .spin-icon { display: none; }
+        .spin-icon.on { display: inline-block; }
+
+        /* Strategy tiles */
+        .strat-tile {
+            flex: 1; cursor: pointer;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px; padding: 16px 12px;
+            text-align: center; transition: all .15s;
+            position: relative;
+        }
+        .strat-tile:hover { border-color: #93c5fd; }
+        .strat-tile.selected-swing  { border-color: #7c3aed; background: #f5f3ff; }
+        .strat-tile.selected-long   { border-color: #16a34a; background: #f0fdf4; }
+        .strat-tile input[type=radio] { position: absolute; opacity: 0; }
     </style>
 </head>
 <body class="bg-gray-50">
 
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-green-500 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-chart-line text-white text-2xl"></i>
+<!-- ─── Navigation ──────────────────────────────────────────── -->
+<nav class="bg-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 bg-gradient-to-br from-blue-600 to-green-500 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-chart-line text-white text-xl"></i>
+                </div>
+                <span class="text-xl font-bold text-gray-800">Financial Literacy Hub</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="index.html"      class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm transition"><i class="fas fa-home mr-1"></i>Home</a>
+                <a href="dashboard.html"  class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm transition"><i class="fas fa-chart-bar mr-1"></i>Dashboard</a>
+                <a href="add-stock.html"  class="bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-lg text-sm font-semibold transition"><i class="fas fa-plus-circle mr-1"></i>Add Stock</a>
+                <a href="discussions.html" class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm transition"><i class="fas fa-comments mr-1"></i>Discussions</a>
+                <a href="about.html"      class="text-gray-600 hover:text-blue-600 px-3 py-2 text-sm transition"><i class="fas fa-info-circle mr-1"></i>About</a>
+            </div>
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="text-gray-600 hover:text-blue-600"><i class="fas fa-bars text-2xl"></i></button>
+            </div>
+        </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+            <a href="index.html"       class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-home mr-2"></i>Home</a>
+            <a href="dashboard.html"   class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-chart-bar mr-2"></i>Dashboard</a>
+            <a href="discussions.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-comments mr-2"></i>Discussions</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ─── Header ──────────────────────────────────────────────── -->
+<section class="bg-gradient-to-r from-blue-600 to-green-500 text-white py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl md:text-4xl font-bold mb-1"><i class="fas fa-plus-circle mr-3"></i>Add New Stock</h1>
+        <p class="text-blue-100 text-sm">Search any Indian stock → set your targets → get the JSON in 3 steps</p>
+    </div>
+</section>
+
+<!-- ─── Form ─────────────────────────────────────────────────── -->
+<section class="py-10 bg-gray-50">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Step indicators -->
+    <div class="step-wrap" id="step-indicators">
+        <div class="step active" id="step-ind-1">
+            <div class="step-num">1</div>
+            <div class="step-label">Find Stock</div>
+        </div>
+        <div class="step" id="step-ind-2">
+            <div class="step-num">2</div>
+            <div class="step-label">Set Targets</div>
+        </div>
+        <div class="step" id="step-ind-3">
+            <div class="step-num">3</div>
+            <div class="step-label">Get JSON</div>
+        </div>
+    </div>
+
+    <form id="add-stock-form" class="bg-white rounded-xl shadow-md p-8" novalidate>
+
+        <!-- ══════════════════════════════════════════════════
+             STEP 1 — Search Company
+        ══════════════════════════════════════════════════════ -->
+        <div id="step1">
+            <h2 class="text-lg font-bold text-gray-800 mb-1">
+                <span class="text-blue-600 mr-2">①</span>Search Company Name or Ticker
+            </h2>
+            <p class="text-sm text-gray-500 mb-5">
+                Type at least 2 characters — e.g. <kbd class="bg-gray-100 px-1 rounded text-xs">Blackbuck</kbd>,
+                <kbd class="bg-gray-100 px-1 rounded text-xs">Reliance</kbd>,
+                <kbd class="bg-gray-100 px-1 rounded text-xs">INFY.NS</kbd>
+            </p>
+
+            <!-- Search input -->
+            <div class="search-wrap mb-3">
+                <div class="relative">
+                    <span class="absolute left-3 top-3 text-gray-400"><i class="fas fa-search"></i></span>
+                    <input
+                        id="company-search"
+                        type="text"
+                        autocomplete="off"
+                        spellcheck="false"
+                        placeholder="Search Company Name or Ticker Symbol…"
+                        class="w-full pl-10 pr-10 py-3 border-2 border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                    >
+                    <span id="search-spinner" class="spin-icon absolute right-3 top-3 text-blue-500">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </span>
+                </div>
+                <div id="suggestions" class="hidden"></div>
+            </div>
+
+            <!-- Selected company card (shown after selection) -->
+            <div id="selected-card" class="mb-4">
+                <div class="sc-icon"><i class="fas fa-check"></i></div>
+                <div class="flex-1 min-w-0">
+                    <p id="sc-name"   class="font-bold text-gray-900 text-sm truncate"></p>
+                    <p id="sc-detail" class="text-xs text-gray-500 mt-0.5"></p>
+                </div>
+                <button type="button" id="change-stock-btn"
+                    class="text-xs text-blue-600 hover:text-blue-800 font-semibold whitespace-nowrap">
+                    <i class="fas fa-pen mr-1"></i>Change
+                </button>
+            </div>
+
+            <!-- Live price badge (shown after selection) -->
+            <div id="price-badge" class="mb-4">
+                <span class="live-dot"></span>
+                <span class="text-gray-600 text-sm font-medium">Live Price:</span>
+                <span id="live-price-val" class="text-green-700 font-bold text-base">—</span>
+                <span id="live-price-src" class="text-gray-400 text-xs"></span>
+                <button type="button" id="use-live-btn"
+                    class="ml-auto text-xs bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-700 hidden whitespace-nowrap">
+                    <i class="fas fa-arrow-down mr-1"></i>Use as Entry Price
+                </button>
+            </div>
+
+            <!-- Strategy — only manual field in Step 1 -->
+            <div class="mt-6">
+                <label class="block text-sm font-semibold text-gray-700 mb-3">
+                    <span class="text-blue-600 mr-1">②</span>Investment Strategy <span class="text-red-500">*</span>
+                </label>
+                <div class="flex gap-4" id="strategy-tiles">
+                    <div class="strat-tile" id="tile-swing" onclick="selectStrategy('swing')">
+                        <input type="radio" name="_strat_radio" value="swing">
+                        <i class="fas fa-bolt text-purple-600 text-2xl mb-2"></i>
+                        <p class="font-bold text-sm text-gray-800">⚡ Swing</p>
+                        <p class="text-xs text-gray-500 mt-1">Days to Weeks</p>
                     </div>
-                    <span class="ml-3 text-xl font-bold text-gray-800">Financial Literacy Hub</span>
+                    <div class="strat-tile" id="tile-long" onclick="selectStrategy('long-term')">
+                        <input type="radio" name="_strat_radio" value="long-term">
+                        <i class="fas fa-chart-line text-green-600 text-2xl mb-2"></i>
+                        <p class="font-bold text-sm text-gray-800">🎯 Long Term</p>
+                        <p class="text-xs text-gray-500 mt-1">Months to Years</p>
+                    </div>
                 </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition"><i class="fas fa-home mr-2"></i>Home</a>
-                    <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition"><i class="fas fa-chart-bar mr-2"></i>Dashboard</a>
-                    <a href="add-stock.html" class="bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-lg transition font-semibold"><i class="fas fa-plus-circle mr-2"></i>Add Stock</a>
-                    <a href="discussions.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition"><i class="fas fa-comments mr-2"></i>Discussions</a>
-                    <a href="about.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition"><i class="fas fa-info-circle mr-2"></i>About</a>
-                </div>
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-600">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
+                <input type="hidden" id="strategy" name="strategy">
+            </div>
+
+            <!-- Continue button -->
+            <div class="mt-6 flex justify-end">
+                <button type="button" id="to-step2-btn"
+                    class="bg-blue-600 text-white px-7 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-40"
+                    disabled>
+                    Continue to Targets <i class="fas fa-arrow-right ml-2"></i>
+                </button>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
-            <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-home mr-2"></i>Home</a>
-                <a href="dashboard.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-chart-bar mr-2"></i>Dashboard</a>
-                <a href="discussions.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-comments mr-2"></i>Discussions</a>
+
+        <!-- ══════════════════════════════════════════════════
+             STEP 2 — Set Targets & Entry
+        ══════════════════════════════════════════════════════ -->
+        <div id="step2" class="hidden">
+
+            <!-- Mini company chip -->
+            <div class="flex items-center gap-3 mb-6 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <i class="fas fa-building text-blue-500"></i>
+                <div class="flex-1 min-w-0">
+                    <p id="s2-name"   class="font-bold text-sm text-gray-800 truncate"></p>
+                    <p id="s2-detail" class="text-xs text-gray-500"></p>
+                </div>
+                <button type="button" id="back-btn"
+                    class="text-xs text-blue-600 hover:text-blue-800 font-semibold">
+                    <i class="fas fa-arrow-left mr-1"></i>Back
+                </button>
+            </div>
+
+            <h2 class="text-lg font-bold text-gray-800 mb-1">
+                <span class="text-blue-600 mr-2">②</span>Entry Details &amp; Price Targets
+            </h2>
+            <p class="text-sm text-gray-500 mb-5">
+                These values are <strong>locked at the time of entry</strong> — Current Price and Deviance are computed live by the dashboard.
+            </p>
+
+            <!-- Entry row -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Entry Date <span class="text-red-500">*</span></label>
+                    <input type="date" id="entryDate" name="entryDate" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Entry Time <span class="text-red-500">*</span></label>
+                    <input type="time" id="entryTime" name="entryTime" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+                        Entry Price ₹ <span class="text-red-500">*</span>
+                        <span id="live-hint" class="hidden text-green-600 ml-1 normal-case font-normal">● Live</span>
+                    </label>
+                    <input type="number" id="entryPrice" name="entryPrice"
+                        placeholder="e.g. 278.50" step="0.01" min="0.01" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+            </div>
+
+            <!-- Targets row -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Target Min ₹ <span class="text-red-500">*</span></label>
+                    <input type="number" id="targetExitMin" name="targetExitMin"
+                        placeholder="e.g. 310.00" step="0.01" min="0.01" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Target Max ₹ <span class="text-red-500">*</span></label>
+                    <input type="number" id="targetExitMax" name="targetExitMax"
+                        placeholder="e.g. 340.00" step="0.01" min="0.01" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Stop Loss ₹ <span class="text-red-500">*</span></label>
+                    <input type="number" id="stopLoss" name="stopLoss"
+                        placeholder="e.g. 255.00" step="0.01" min="0.01" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+            </div>
+
+            <!-- Optional notes -->
+            <div class="mb-5">
+                <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">Trading Notes <span class="text-gray-400 font-normal normal-case">(optional)</span></label>
+                <textarea id="notes" name="notes" rows="2"
+                    placeholder="Why are you entering this trade?"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+            </div>
+
+            <!-- Error msg -->
+            <div id="form-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                <i class="fas fa-exclamation-circle mr-2"></i><span id="form-error-msg"></span>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <button type="button" id="back-btn2"
+                    class="text-sm text-gray-500 hover:text-gray-700 font-semibold">
+                    <i class="fas fa-arrow-left mr-1"></i>Back
+                </button>
+                <button type="submit"
+                    class="bg-blue-600 text-white px-7 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition">
+                    <i class="fas fa-code mr-2"></i>Generate JSON
+                </button>
             </div>
         </div>
-    </nav>
 
-    <!-- Page Header -->
-    <section class="bg-gradient-to-r from-blue-600 to-green-500 text-white py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl md:text-4xl font-bold mb-2"><i class="fas fa-plus-circle mr-3"></i>Add New Stock</h1>
-            <p class="text-blue-100">Search by ticker or company name — entry price and live price auto-fill instantly</p>
+    </form>
+</div>
+</section>
+
+<!-- ─── Output (Step 3) ─────────────────────────────────────── -->
+<section id="step3" class="hidden py-10 bg-white border-t">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="flex items-start gap-4 mb-5 p-4 bg-green-50 border border-green-200 rounded-xl">
+        <div class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center text-lg flex-shrink-0">
+            <i class="fas fa-check"></i>
         </div>
-    </section>
-
-    <!-- How it works banner -->
-    <section class="py-3 bg-blue-50 border-b">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p class="text-sm text-gray-700">
-                <i class="fas fa-info-circle text-blue-600 mr-2"></i>
-                <strong>How it works:</strong> Type a company name or NSE ticker below → select from the live dropdown → fill in your targets → click <em>Generate JSON</em> → paste the code into <code class="bg-blue-100 px-1 rounded">data/stocks.json</code> on GitHub.
+        <div>
+            <h3 class="font-bold text-gray-900 mb-1">
+                <span class="text-blue-600 mr-1">③</span>JSON Generated — Copy &amp; Paste into GitHub
+            </h3>
+            <p class="text-sm text-gray-600">
+                Open <code class="bg-green-100 px-1 rounded">data/stocks.json</code> on GitHub → click ✏️ Edit → add this block inside the <code>"stocks":[...]</code> array → add a comma after the previous entry → click <strong>Commit changes</strong>.
             </p>
         </div>
-    </section>
+    </div>
 
-    <!-- Form -->
-    <section class="py-10 bg-gray-50">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <form id="add-stock-form" class="bg-white rounded-lg shadow-md p-8">
+    <div class="bg-gray-900 rounded-xl p-5 relative mb-5">
+        <button id="copy-btn"
+            class="absolute top-4 right-4 bg-blue-600 text-white px-4 py-1.5 rounded-lg text-xs font-semibold hover:bg-blue-700 transition">
+            <i class="fas fa-copy mr-1"></i>Copy
+        </button>
+        <pre id="json-output" class="text-green-400 text-sm overflow-x-auto pt-8 whitespace-pre-wrap font-mono leading-relaxed"></pre>
+    </div>
 
-                <!-- ── Section 1: Basic Information ── -->
-                <h2 class="text-xl font-bold text-gray-800 mb-5 flex items-center border-b pb-3">
-                    <i class="fas fa-search text-blue-600 mr-3"></i>Search &amp; Basic Information
-                </h2>
+    <div class="flex flex-wrap justify-center gap-3">
+        <button onclick="resetForm()"
+            class="px-5 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-semibold">
+            <i class="fas fa-plus mr-2"></i>Add Another Stock
+        </button>
+        <a href="dashboard.html"
+            class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-semibold inline-block">
+            <i class="fas fa-chart-bar mr-2"></i>View Dashboard
+        </a>
+    </div>
+</div>
+</section>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+<!-- ─── Footer ──────────────────────────────────────────────── -->
+<footer class="bg-gray-800 text-white py-6 mt-8">
+    <div class="max-w-7xl mx-auto px-4 text-center text-gray-400 text-sm">
+        <p>&copy; 2026 Financial Literacy Platform. Educational purposes only. Not investment advice.</p>
+    </div>
+</footer>
 
-                    <!-- Ticker with autocomplete -->
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            Stock Ticker / Company Name <span class="text-red-500">*</span>
-                            <span class="text-gray-400 font-normal ml-1">(start typing — e.g. "Reliance" or "RELIANCE.NS")</span>
-                        </label>
-                        <div class="ticker-wrap">
-                            <div class="relative">
-                                <input
-                                    type="text"
-                                    id="ticker-search"
-                                    placeholder="Type company name or ticker symbol…"
-                                    autocomplete="off"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-10"
-                                >
-                                <span id="ticker-spinner" class="spinner absolute right-3 top-3 text-blue-500">
-                                    <i class="fas fa-spinner fa-spin"></i>
-                                </span>
-                            </div>
-                            <div id="ticker-suggestions" class="hidden"></div>
-                        </div>
-                        <!-- Hidden actual ticker value sent to form -->
-                        <input type="hidden" id="ticker" name="ticker" required>
-                        <p class="text-xs text-gray-500 mt-1">Select from dropdown to auto-fill name, sector &amp; live price.</p>
+<!-- ─── JavaScript ──────────────────────────────────────────── -->
+<script>
+'use strict';
 
-                        <!-- Live price preview strip -->
-                        <div id="price-preview">
-                            <span class="text-gray-600 text-sm">Live Market Price: </span>
-                            <span id="live-price-display" class="price-live">—</span>
-                            <span class="text-gray-500 text-xs ml-2" id="price-source"></span>
-                            <button type="button" id="use-live-price" class="ml-3 text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 hidden">
-                                Use as Entry Price
-                            </button>
-                        </div>
-                    </div>
+// ── Sector keyword map (NSE industry → our sector label) ─────────────────────
+// Yahoo Finance returns an "industry" string for Indian stocks.
+// This map normalises it to our 17-sector vocabulary.
+const INDUSTRY_TO_SECTOR = {
+    // Auto & Transport
+    'auto':              'Auto', 'automobile':       'Auto', 'automotive':      'Auto',
+    'commercial vehicle':'Auto', 'two wheeler':       'Auto', 'logistics':       'Auto',
+    'transportation':    'Auto',
+    // Banking & Finance
+    'bank':              'Banking', 'banking':         'Banking',
+    'nbfc':              'Finance', 'financial service':'Finance', 'insurance':   'Finance',
+    'asset management':  'Finance', 'brokerage':       'Finance', 'microfinance': 'Finance',
+    'diversified financials':'Finance',
+    // IT / Tech
+    'information technology': 'IT', 'software':         'IT', 'it service':      'IT',
+    'technology':        'IT', 'internet':          'IT', 'data':            'IT',
+    'semiconductor':     'IT',
+    // Pharma
+    'pharmaceutical':    'Pharma', 'pharma':           'Pharma', 'drug':           'Pharma',
+    'healthcare':        'Pharma', 'hospital':         'Pharma', 'biotech':        'Pharma',
+    'diagnostic':        'Pharma',
+    // FMCG
+    'fmcg':              'FMCG', 'consumer goods':    'FMCG', 'food':           'FMCG',
+    'beverage':          'FMCG', 'household':         'FMCG', 'personal care':  'FMCG',
+    'tobacco':           'FMCG', 'packaged food':     'FMCG',
+    // Energy & Oil
+    'energy':            'Energy', 'oil':              'Energy', 'gas':           'Energy',
+    'petroleum':         'Energy', 'refin':            'Energy',
+    // Power
+    'power':             'Power', 'utility':          'Power', 'electric':       'Power',
+    'renewable':         'Power', 'solar':            'Power',
+    // Telecom
+    'telecom':           'Telecom', 'telecommunication':'Telecom', 'media':        'Telecom',
+    // Cement
+    'cement':            'Cement', 'building material':'Cement',
+    // Metals & Mining
+    'metal':             'Metals', 'steel':           'Metals', 'aluminium':     'Metals',
+    'copper':            'Metals', 'zinc':            'Metals', 'mining':        'Mining',
+    'coal':              'Mining',
+    // Consumer / Retail
+    'retail':            'Consumer', 'consumer durables':'Consumer', 'jewel':    'Consumer',
+    'textile':           'Consumer', 'apparel':        'Consumer', 'fashion':    'Consumer',
+    'leisure':           'Consumer', 'hotel':          'Consumer', 'restaurant': 'Consumer',
+    // Real Estate
+    'real estate':       'Realty', 'realt':           'Realty', 'housing':       'Realty',
+    // Infrastructure & Construction
+    'infrastructure':    'Infrastructure', 'construction':  'Infrastructure',
+    'engineering':       'Infrastructure', 'capital goods': 'Infrastructure',
+    // Conglomerate
+    'conglomerate':      'Conglomerate', 'diversified':   'Conglomerate',
+};
 
-                    <!-- Company Name (auto-filled) -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Company Name <span class="text-red-500">*</span></label>
-                        <input type="text" id="name" name="name" placeholder="Auto-filled from search" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-
-                    <!-- Sector (auto-filled or selectable) -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Sector <span class="text-red-500">*</span></label>
-                        <select id="sector" name="sector" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="">Select Sector</option>
-                            <option value="Auto">Auto</option>
-                            <option value="Banking">Banking</option>
-                            <option value="Cement">Cement</option>
-                            <option value="Conglomerate">Conglomerate</option>
-                            <option value="Consumer">Consumer</option>
-                            <option value="Energy">Energy</option>
-                            <option value="Finance">Finance</option>
-                            <option value="FMCG">FMCG</option>
-                            <option value="IT">IT</option>
-                            <option value="Mining">Mining</option>
-                            <option value="Pharma">Pharma</option>
-                            <option value="Power">Power</option>
-                            <option value="Telecom">Telecom</option>
-                            <option value="Infrastructure">Infrastructure</option>
-                            <option value="Metals">Metals</option>
-                            <option value="Realty">Realty</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-
-                    <!-- Strategy -->
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Investment Strategy <span class="text-red-500">*</span></label>
-                        <div class="flex gap-4">
-                            <label class="flex-1 cursor-pointer">
-                                <input type="radio" name="strategy" id="strategy-swing" value="swing" class="sr-only peer">
-                                <div class="peer-checked:bg-purple-100 peer-checked:border-purple-500 border-2 border-gray-200 rounded-lg p-4 text-center transition hover:border-purple-300">
-                                    <i class="fas fa-bolt text-purple-600 text-xl mb-1"></i>
-                                    <p class="font-bold text-sm">⚡ Swing Trading</p>
-                                    <p class="text-xs text-gray-500">Days to Weeks</p>
-                                </div>
-                            </label>
-                            <label class="flex-1 cursor-pointer">
-                                <input type="radio" name="strategy" id="strategy-longterm" value="long-term" class="sr-only peer">
-                                <div class="peer-checked:bg-green-100 peer-checked:border-green-500 border-2 border-gray-200 rounded-lg p-4 text-center transition hover:border-green-300">
-                                    <i class="fas fa-chart-line text-green-600 text-xl mb-1"></i>
-                                    <p class="font-bold text-sm">🎯 Long Term</p>
-                                    <p class="text-xs text-gray-500">Months to Years</p>
-                                </div>
-                            </label>
-                        </div>
-                        <!-- Hidden select for form submission compatibility -->
-                        <select id="strategy" name="strategy" required class="sr-only">
-                            <option value="">Select</option>
-                            <option value="swing">swing</option>
-                            <option value="long-term">long-term</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- ── Section 2: Entry Details ── -->
-                <h2 class="text-xl font-bold text-gray-800 mb-5 flex items-center border-b pb-3">
-                    <i class="fas fa-sign-in-alt text-green-600 mr-3"></i>Entry Details
-                    <span class="ml-2 text-sm font-normal text-gray-500">(these are fixed at time of entry — never change)</span>
-                </h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Entry Date <span class="text-red-500">*</span></label>
-                        <input type="date" id="entryDate" name="entryDate" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Entry Time <span class="text-red-500">*</span></label>
-                        <input type="time" id="entryTime" name="entryTime" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            Entry Price ₹ <span class="text-red-500">*</span>
-                            <span class="text-xs text-gray-400 font-normal">(price you actually bought/recommend at)</span>
-                        </label>
-                        <input type="number" id="entryPrice" name="entryPrice" placeholder="e.g., 1323.50"
-                            step="0.01" min="0" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                </div>
-
-                <!-- ── Section 3: Target & Risk ── -->
-                <h2 class="text-xl font-bold text-gray-800 mb-5 flex items-center border-b pb-3">
-                    <i class="fas fa-bullseye text-orange-600 mr-3"></i>Target &amp; Risk Management
-                    <span class="ml-2 text-sm font-normal text-gray-500">(fixed at entry — Current Price &amp; Deviance are computed live)</span>
-                </h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Target Exit Min ₹ <span class="text-red-500">*</span></label>
-                        <input type="number" id="targetExitMin" name="targetExitMin" placeholder="e.g., 1500.00"
-                            step="0.01" min="0" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Target Exit Max ₹ <span class="text-red-500">*</span></label>
-                        <input type="number" id="targetExitMax" name="targetExitMax" placeholder="e.g., 1700.00"
-                            step="0.01" min="0" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Stop Loss ₹ <span class="text-red-500">*</span></label>
-                        <input type="number" id="stopLoss" name="stopLoss" placeholder="e.g., 1200.00"
-                            step="0.01" min="0" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                </div>
-
-                <!-- ── Section 4: Notes ── -->
-                <h2 class="text-xl font-bold text-gray-800 mb-5 flex items-center border-b pb-3">
-                    <i class="fas fa-sticky-note text-purple-600 mr-3"></i>Notes (Optional)
-                </h2>
-
-                <div class="space-y-4 mb-8">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Discussion URL</label>
-                        <input type="url" id="discussionUrl" name="discussionUrl"
-                            placeholder="https://github.com/ArunchandMR/stock-literacy-platform/discussions/…"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Trading Rationale</label>
-                        <textarea id="notes" name="notes" rows="3"
-                            placeholder="Why are you entering this trade? Technical setup, fundamental reasons…"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
-                    </div>
-                </div>
-
-                <!-- Buttons -->
-                <div class="flex justify-end gap-3">
-                    <button type="button" onclick="window.location.href='dashboard.html'"
-                        class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition font-semibold">
-                        <i class="fas fa-times mr-2"></i>Cancel
-                    </button>
-                    <button type="submit"
-                        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold">
-                        <i class="fas fa-code mr-2"></i>Generate JSON Code
-                    </button>
-                </div>
-
-            </form>
-        </div>
-    </section>
-
-    <!-- Output Section -->
-    <section id="output-section" class="hidden py-10 bg-white border-t">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-green-50 border-l-4 border-green-500 p-5 rounded-lg mb-5">
-                <h3 class="text-lg font-bold text-gray-800 flex items-center">
-                    <i class="fas fa-check-circle text-green-600 mr-3"></i>JSON Generated! Copy and paste into <code class="mx-1 bg-green-100 px-2 rounded">data/stocks.json</code>
-                </h3>
-                <p class="text-sm text-gray-600 mt-1">Add this block inside the <code>"stocks": [...]</code> array. Don't forget to add a comma after the previous stock entry!</p>
-            </div>
-            <div class="bg-gray-900 rounded-lg p-6 relative">
-                <button id="copy-btn"
-                    class="absolute top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-semibold">
-                    <i class="fas fa-copy mr-2"></i>Copy Code
-                </button>
-                <pre id="json-output" class="text-green-400 text-sm overflow-x-auto pt-10 whitespace-pre-wrap"></pre>
-            </div>
-            <div class="mt-5 flex justify-center gap-3">
-                <button onclick="window.location.reload()"
-                    class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold">
-                    <i class="fas fa-plus mr-2"></i>Add Another Stock
-                </button>
-                <a href="dashboard.html"
-                    class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold inline-block">
-                    <i class="fas fa-chart-bar mr-2"></i>View Dashboard
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-gray-800 text-white py-6">
-        <div class="max-w-7xl mx-auto px-4 text-center text-gray-400 text-sm">
-            <p>&copy; 2026 Financial Literacy Platform. Educational purposes only.</p>
-        </div>
-    </footer>
-
-    <script>
-    // ── Mobile menu ────────────────────────────────────────────────
-    document.getElementById('mobile-menu-btn').addEventListener('click', function () {
-        document.getElementById('mobile-menu').classList.toggle('hidden');
-    });
-
-    // ── Strategy radio → hidden select sync ──────────────────────
-    document.querySelectorAll('input[name="strategy"]').forEach(radio => {
-        radio.addEventListener('change', () => {
-            document.getElementById('strategy').value = radio.value;
-        });
-    });
-
-    // ── Defaults ──────────────────────────────────────────────────
-    document.getElementById('entryDate').valueAsDate = new Date();
-    const now = new Date();
-    document.getElementById('entryTime').value = now.toTimeString().slice(0, 5);
-
-    // ── Ticker Autocomplete ────────────────────────────────────────
-    let suggestTimeout = null;
-    let currentLivePrice = null;
-
-    const tickerSearch  = document.getElementById('ticker-search');
-    const tickerHidden  = document.getElementById('ticker');
-    const suggList      = document.getElementById('ticker-suggestions');
-    const spinner       = document.getElementById('ticker-spinner');
-    const pricePreview  = document.getElementById('price-preview');
-    const livePriceEl   = document.getElementById('live-price-display');
-    const priceSourceEl = document.getElementById('price-source');
-    const useLivePriceBtn = document.getElementById('use-live-price');
-
-    tickerSearch.addEventListener('input', function () {
-        clearTimeout(suggestTimeout);
-        const q = this.value.trim();
-        if (q.length < 2) { hideSuggestions(); return; }
-
-        suggestTimeout = setTimeout(() => searchTickers(q), 300);
-    });
-
-    tickerSearch.addEventListener('blur', () => {
-        setTimeout(hideSuggestions, 200);
-    });
-
-    function hideSuggestions() {
-        suggList.classList.add('hidden');
-        suggList.innerHTML = '';
+function mapSector(industry = '') {
+    if (!industry) return 'Other';
+    const low = industry.toLowerCase();
+    for (const [kw, sector] of Object.entries(INDUSTRY_TO_SECTOR)) {
+        if (low.includes(kw)) return sector;
     }
+    return 'Other';
+}
 
-    async function searchTickers(query) {
-        spinner.classList.add('visible');
-        suggList.classList.add('hidden');
+// ── State ─────────────────────────────────────────────────────────────────────
+let selectedStock = null;   // { ticker, name, sector, exchange }
+let currentStrategy = '';
+let currentLivePrice = null;
+let searchDebounce = null;
 
+// ── DOM refs ──────────────────────────────────────────────────────────────────
+const companySearch  = document.getElementById('company-search');
+const suggBox        = document.getElementById('suggestions');
+const searchSpinner  = document.getElementById('search-spinner');
+const selectedCard   = document.getElementById('selected-card');
+const scName         = document.getElementById('sc-name');
+const scDetail       = document.getElementById('sc-detail');
+const priceBadge     = document.getElementById('price-badge');
+const livePriceVal   = document.getElementById('live-price-val');
+const livePriceSrc   = document.getElementById('live-price-src');
+const useLiveBtn     = document.getElementById('use-live-btn');
+const toStep2Btn     = document.getElementById('to-step2-btn');
+
+// ── Defaults ──────────────────────────────────────────────────────────────────
+document.getElementById('entryDate').valueAsDate = new Date();
+document.getElementById('entryTime').value = new Date().toTimeString().slice(0, 5);
+
+// ── Mobile menu ───────────────────────────────────────────────────────────────
+document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+});
+
+// ═════════════════════════════════════════════════════════════════════════════
+// SEARCH + AUTOCOMPLETE
+// ═════════════════════════════════════════════════════════════════════════════
+
+companySearch.addEventListener('input', () => {
+    clearTimeout(searchDebounce);
+    const q = companySearch.value.trim();
+    if (q.length < 2) { hideSuggestions(); return; }
+    searchDebounce = setTimeout(() => fetchSuggestions(q), 280);
+});
+
+companySearch.addEventListener('blur', () => {
+    setTimeout(hideSuggestions, 200);
+});
+
+function hideSuggestions() {
+    suggBox.classList.add('hidden');
+    suggBox.innerHTML = '';
+}
+
+/**
+ * Query Yahoo Finance v1/finance/search
+ * Tries direct → then allorigins CORS proxy as fallback.
+ * Filters to EQUITY type and prefers NSE (.NS) symbols.
+ */
+async function fetchSuggestions(query) {
+    searchSpinner.classList.add('on');
+
+    const yUrl = `https://query2.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&lang=en-IN&region=IN&quotesCount=10&newsCount=0&enableFuzzyQuery=true&quotesQueryId=tss_match_phrase_query`;
+    let data = null;
+
+    // Try direct
+    try {
+        const r = await fetch(yUrl, { cache: 'no-store' });
+        if (r.ok) data = await r.json();
+    } catch (_) {}
+
+    // Try query1 subdomain
+    if (!data) {
         try {
-            // Yahoo Finance auto-suggest API (CORS-safe via allorigins proxy)
-            const yahooUrl = `https://query2.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&lang=en-IN&region=IN&quotesCount=8&enableFuzzyQuery=false&quotesQueryId=tss_match_phrase_query`;
-            let data = null;
-
-            // Try direct first, fallback to proxy
-            try {
-                const r = await fetch(yahooUrl, { cache: 'no-store' });
-                if (r.ok) data = await r.json();
-            } catch (_) {}
-
-            if (!data) {
-                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`;
-                const r2 = await fetch(proxyUrl, { cache: 'no-store' });
-                if (r2.ok) data = await r2.json();
-            }
-
-            const quotes = data?.quotes?.filter(q => q.quoteType === 'EQUITY') || [];
-            renderSuggestions(quotes);
-
-        } catch (err) {
-            console.warn('Autocomplete error:', err);
-            suggList.innerHTML = '<div class="suggestion-item text-gray-500 text-sm">Search unavailable — type ticker manually</div>';
-            suggList.classList.remove('hidden');
-        } finally {
-            spinner.classList.remove('visible');
-        }
+            const r2 = await fetch(yUrl.replace('query2', 'query1'), { cache: 'no-store' });
+            if (r2.ok) data = await r2.json();
+        } catch (_) {}
     }
 
-    function renderSuggestions(quotes) {
-        if (!quotes.length) {
-            suggList.innerHTML = '<div class="suggestion-item text-gray-500 text-sm">No results — type the full ticker (e.g. RELIANCE.NS)</div>';
-            suggList.classList.remove('hidden');
-            return;
-        }
-
-        suggList.innerHTML = quotes.map(q => `
-            <div class="suggestion-item"
-                 data-ticker="${q.symbol}"
-                 data-name="${(q.shortname || q.longname || '').replace(/"/g, '')}"
-                 data-exchange="${q.exchange || ''}">
-                <div>
-                    <span class="sug-ticker">${q.symbol}</span>
-                    <span class="sug-name ml-2">${q.shortname || q.longname || ''}</span>
-                </div>
-                <span class="sug-exch">${q.exchange || ''}</span>
-            </div>
-        `).join('');
-
-        suggList.querySelectorAll('.suggestion-item').forEach(item => {
-            item.addEventListener('mousedown', function () {
-                selectTicker(
-                    this.dataset.ticker,
-                    this.dataset.name,
-                    this.dataset.exchange
-                );
-            });
-        });
-
-        suggList.classList.remove('hidden');
+    // CORS proxy fallback
+    if (!data) {
+        try {
+            const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(yUrl)}`;
+            const r3 = await fetch(proxy, { cache: 'no-store' });
+            if (r3.ok) data = await r3.json();
+        } catch (_) {}
     }
 
-    function selectTicker(ticker, name, exchange) {
-        tickerSearch.value = `${ticker} — ${name}`;
-        tickerHidden.value = ticker;
-        document.getElementById('name').value = name;
-        hideSuggestions();
-        fetchAndShowLivePrice(ticker);
+    searchSpinner.classList.remove('on');
+
+    if (!data) {
+        renderSuggestions([], query);
+        return;
     }
 
-    // ── Live Price Preview ─────────────────────────────────────────
-    async function fetchAndShowLivePrice(ticker) {
-        livePriceEl.textContent = 'Fetching…';
-        pricePreview.style.display = 'block';
-        useLivePriceBtn.classList.add('hidden');
-        priceSourceEl.textContent = '';
-
-        const params = 'interval=1d&range=1d';
-        const encodedTicker = encodeURIComponent(ticker);
-        const endpoints = [
-            `https://query2.finance.yahoo.com/v8/finance/chart/${encodedTicker}?${params}`,
-            `https://query1.finance.yahoo.com/v8/finance/chart/${encodedTicker}?${params}`,
-            `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://query2.finance.yahoo.com/v8/finance/chart/${encodedTicker}?${params}`)}`
-        ];
-
-        for (const url of endpoints) {
-            try {
-                const res = await fetch(url, { cache: 'no-store' });
-                if (!res.ok) continue;
-                const data = await res.json();
-                const meta = data?.chart?.result?.[0]?.meta;
-                if (!meta) continue;
-                const price = meta.regularMarketPrice || meta.previousClose;
-                if (price && price > 0) {
-                    currentLivePrice = parseFloat(price.toFixed(2));
-                    livePriceEl.textContent = '₹' + currentLivePrice.toLocaleString('en-IN', { minimumFractionDigits: 2 });
-                    priceSourceEl.textContent = '(Yahoo Finance, ~15 min delayed)';
-                    useLivePriceBtn.classList.remove('hidden');
-                    return;
-                }
-            } catch (_) {}
-        }
-
-        livePriceEl.textContent = 'Price unavailable';
-        priceSourceEl.textContent = '(enter manually below)';
-        currentLivePrice = null;
-    }
-
-    useLivePriceBtn.addEventListener('click', () => {
-        if (currentLivePrice) {
-            document.getElementById('entryPrice').value = currentLivePrice;
-        }
+    // Filter to equities only; sort so .NS (NSE) results come first
+    let quotes = (data.quotes || []).filter(q => q.quoteType === 'EQUITY');
+    quotes.sort((a, b) => {
+        const aIsNS = a.symbol?.endsWith('.NS') ? 0 : 1;
+        const bIsNS = b.symbol?.endsWith('.NS') ? 0 : 1;
+        return aIsNS - bIsNS;
     });
 
-    // ── Form Submit → Generate JSON ────────────────────────────────
-    document.getElementById('add-stock-form').addEventListener('submit', function (e) {
-        e.preventDefault();
+    renderSuggestions(quotes.slice(0, 8), query);
+}
 
-        const ticker = document.getElementById('ticker').value.trim();
-        const strategy = document.getElementById('strategy').value;
+function renderSuggestions(quotes, query) {
+    if (!quotes.length) {
+        suggBox.innerHTML = `
+            <div class="sug-item text-gray-500 text-sm italic">
+                No results for "<strong>${escH(query)}</strong>" — try full ticker e.g. <strong>BLACKBUCK.NS</strong>
+            </div>`;
+        suggBox.classList.remove('hidden');
+        return;
+    }
 
-        if (!ticker) { alert('Please search and select a stock ticker.'); return; }
-        if (!strategy) { alert('Please select a strategy (Swing or Long Term).'); return; }
+    suggBox.innerHTML = quotes.map(q => {
+        const sym  = q.symbol || '';
+        const name = q.shortname || q.longname || sym;
+        const exch = sym.endsWith('.NS') ? 'NSE' : sym.endsWith('.BO') ? 'BSE' : (q.exchange || '');
+        const ind  = q.industry || q.sector || '';
+        const sec  = mapSector(ind);
+        return `
+        <div class="sug-item"
+             data-symbol="${escH(sym)}"
+             data-name="${escH(name)}"
+             data-sector="${escH(sec)}"
+             data-exchange="${escH(exch)}">
+            <span class="sug-symbol">${escH(sym)}</span>
+            <span class="sug-name">${escH(name)}</span>
+            <span class="sug-meta">
+                <span class="sug-sector">${escH(sec)}</span>
+                <span class="sug-exch">${escH(exch)}</span>
+            </span>
+        </div>`;
+    }).join('');
 
-        const tickerBase = ticker.replace(/\.(NS|BO|BSE|NSE)$/i, '');
-
-        const formData = {
-            id: tickerBase.replace(/[^A-Z0-9]/gi, '') + '001',
-            ticker: ticker.toUpperCase(),
-            name: document.getElementById('name').value,
-            sector: document.getElementById('sector').value,
-            strategy: strategy,
-            entryDate: document.getElementById('entryDate').value,
-            entryTime: document.getElementById('entryTime').value,
-            entryPrice: parseFloat(document.getElementById('entryPrice').value),
-            targetExitMin: parseFloat(document.getElementById('targetExitMin').value),
-            targetExitMax: parseFloat(document.getElementById('targetExitMax').value),
-            stopLoss: parseFloat(document.getElementById('stopLoss').value),
-            discussionUrl: document.getElementById('discussionUrl').value ||
-                'https://github.com/ArunchandMR/stock-literacy-platform/discussions',
-            notes: document.getElementById('notes').value || ''
-        };
-
-        document.getElementById('json-output').textContent = JSON.stringify(formData, null, 2);
-        document.getElementById('output-section').classList.remove('hidden');
-        document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // ── Copy to clipboard ──────────────────────────────────────────
-    document.getElementById('copy-btn').addEventListener('click', function () {
-        navigator.clipboard.writeText(document.getElementById('json-output').textContent).then(() => {
-            this.innerHTML = '<i class="fas fa-check mr-2"></i>Copied!';
-            setTimeout(() => { this.innerHTML = '<i class="fas fa-copy mr-2"></i>Copy Code'; }, 2000);
+    suggBox.querySelectorAll('.sug-item').forEach(el => {
+        el.addEventListener('mousedown', () => {
+            onStockSelected(
+                el.dataset.symbol,
+                el.dataset.name,
+                el.dataset.sector,
+                el.dataset.exchange
+            );
         });
     });
-    </script>
+
+    suggBox.classList.remove('hidden');
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// STOCK SELECTION
+// ═════════════════════════════════════════════════════════════════════════════
+
+async function onStockSelected(symbol, name, sector, exchange) {
+    hideSuggestions();
+    selectedStock = { ticker: symbol, name, sector, exchange };
+
+    // Show the selected card
+    scName.textContent   = name;
+    scDetail.textContent = `${symbol}  ·  ${sector}  ·  ${exchange}`;
+    selectedCard.style.display = 'flex';
+    companySearch.value  = `${name}  (${symbol})`;
+
+    // Show price badge in loading state
+    livePriceVal.textContent = 'Fetching…';
+    livePriceSrc.textContent = '';
+    useLiveBtn.classList.add('hidden');
+    priceBadge.style.display = 'flex';
+
+    checkStep1Complete();
+
+    // Fetch live price
+    const price = await fetchLivePrice(symbol);
+    if (price) {
+        currentLivePrice = price;
+        livePriceVal.textContent = '₹' + price.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        livePriceSrc.textContent = '(~15 min delayed, NSE)';
+        useLiveBtn.classList.remove('hidden');
+    } else {
+        livePriceVal.textContent = 'Unavailable — enter manually';
+        livePriceSrc.textContent = '';
+    }
+}
+
+useLiveBtn.addEventListener('click', () => {
+    if (currentLivePrice) {
+        document.getElementById('entryPrice').value = currentLivePrice;
+        document.getElementById('live-hint').classList.remove('hidden');
+    }
+});
+
+document.getElementById('change-stock-btn').addEventListener('click', resetSearchOnly);
+
+function resetSearchOnly() {
+    selectedStock     = null;
+    currentLivePrice  = null;
+    companySearch.value = '';
+    companySearch.focus();
+    selectedCard.style.display = 'none';
+    priceBadge.style.display = 'none';
+    useLiveBtn.classList.add('hidden');
+    checkStep1Complete();
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// STRATEGY SELECTION
+// ═════════════════════════════════════════════════════════════════════════════
+
+window.selectStrategy = function(val) {
+    currentStrategy = val;
+    document.getElementById('strategy').value = val;
+    document.getElementById('tile-swing').className =
+        'strat-tile' + (val === 'swing'     ? ' selected-swing' : '');
+    document.getElementById('tile-long').className  =
+        'strat-tile' + (val === 'long-term' ? ' selected-long'  : '');
+    checkStep1Complete();
+};
+
+function checkStep1Complete() {
+    const ok = selectedStock && currentStrategy;
+    toStep2Btn.disabled = !ok;
+    if (ok) {
+        document.getElementById('step-ind-1').classList.add('done');
+        document.getElementById('step-ind-1').classList.remove('active');
+    }
+}
+
+// ── Continue to Step 2 ────────────────────────────────────────
+toStep2Btn.addEventListener('click', () => {
+    if (!selectedStock || !currentStrategy) return;
+    // Populate Step 2 mini chip
+    document.getElementById('s2-name').textContent   = selectedStock.name;
+    document.getElementById('s2-detail').textContent = `${selectedStock.ticker} · ${selectedStock.sector} · ${currentStrategy === 'swing' ? '⚡ Swing' : '🎯 Long Term'}`;
+    // Activate step 2
+    document.getElementById('step1').classList.add('hidden');
+    document.getElementById('step2').classList.remove('hidden');
+    setStepActive(2);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Back buttons
+document.getElementById('back-btn').addEventListener('click',  goBackToStep1);
+document.getElementById('back-btn2').addEventListener('click', goBackToStep1);
+function goBackToStep1() {
+    document.getElementById('step2').classList.add('hidden');
+    document.getElementById('step1').classList.remove('hidden');
+    document.getElementById('form-error').classList.add('hidden');
+    setStepActive(1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// LIVE PRICE FETCHER  (query2 → query1 → allorigins)
+// ═════════════════════════════════════════════════════════════════════════════
+
+async function fetchLivePrice(ticker) {
+    const enc    = encodeURIComponent(ticker);
+    const params = 'interval=1d&range=1d';
+    const urls   = [
+        `https://query2.finance.yahoo.com/v8/finance/chart/${enc}?${params}`,
+        `https://query1.finance.yahoo.com/v8/finance/chart/${enc}?${params}`,
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://query2.finance.yahoo.com/v8/finance/chart/${enc}?${params}`)}`
+    ];
+    for (const url of urls) {
+        try {
+            const r = await fetch(url, { cache: 'no-store' });
+            if (!r.ok) continue;
+            const d = await r.json();
+            const m = d?.chart?.result?.[0]?.meta;
+            if (!m) continue;
+            const p = m.regularMarketPrice || m.previousClose;
+            if (p > 0) return parseFloat(p.toFixed(2));
+        } catch (_) {}
+    }
+    return null;
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// FORM SUBMIT → GENERATE JSON
+// ═════════════════════════════════════════════════════════════════════════════
+
+document.getElementById('add-stock-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const errEl  = document.getElementById('form-error');
+    const errMsg = document.getElementById('form-error-msg');
+    errEl.classList.add('hidden');
+
+    if (!selectedStock) { showErr('Please search and select a stock first.'); return; }
+    if (!currentStrategy) { showErr('Please select a strategy.'); return; }
+
+    const ep  = parseFloat(document.getElementById('entryPrice').value);
+    const tmi = parseFloat(document.getElementById('targetExitMin').value);
+    const tma = parseFloat(document.getElementById('targetExitMax').value);
+    const sl  = parseFloat(document.getElementById('stopLoss').value);
+
+    if (!ep  || ep  <= 0)  { showErr('Entry Price must be a positive number.');     return; }
+    if (!tmi || tmi <= 0)  { showErr('Target Min must be a positive number.');      return; }
+    if (!tma || tma <= 0)  { showErr('Target Max must be a positive number.');      return; }
+    if (!sl  || sl  <= 0)  { showErr('Stop Loss must be a positive number.');       return; }
+    if (tmi >= tma)        { showErr('Target Max must be greater than Target Min.'); return; }
+    if (sl  >= ep)         { showErr('Stop Loss must be less than Entry Price.');    return; }
+
+    const baseId = selectedStock.ticker.replace(/\.(NS|BO)$/i, '').replace(/[^A-Z0-9]/gi, '');
+
+    const payload = {
+        id:           baseId + '001',
+        ticker:       selectedStock.ticker.toUpperCase(),
+        name:         selectedStock.name,
+        sector:       selectedStock.sector,
+        strategy:     currentStrategy,
+        entryDate:    document.getElementById('entryDate').value,
+        entryTime:    document.getElementById('entryTime').value,
+        entryPrice:   ep,
+        targetExitMin: tmi,
+        targetExitMax: tma,
+        stopLoss:     sl,
+        discussionUrl: 'https://github.com/ArunchandMR/stock-literacy-platform/discussions',
+        notes:        document.getElementById('notes').value.trim()
+    };
+
+    document.getElementById('json-output').textContent = JSON.stringify(payload, null, 2);
+
+    // Show Step 3
+    document.getElementById('step2').classList.add('hidden');
+    document.getElementById('add-stock-form').closest('section').classList.add('hidden');
+    document.getElementById('step3').classList.remove('hidden');
+    setStepActive(3);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    function showErr(msg) {
+        errMsg.textContent = msg;
+        errEl.classList.remove('hidden');
+        errEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+});
+
+// ─── Copy button ──────────────────────────────────────────────
+document.getElementById('copy-btn').addEventListener('click', function() {
+    navigator.clipboard.writeText(document.getElementById('json-output').textContent).then(() => {
+        this.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
+        setTimeout(() => { this.innerHTML = '<i class="fas fa-copy mr-1"></i>Copy'; }, 2000);
+    });
+});
+
+// ─── Step indicator helper ────────────────────────────────────
+function setStepActive(n) {
+    [1,2,3].forEach(i => {
+        const el = document.getElementById(`step-ind-${i}`);
+        el.classList.remove('active', 'done');
+        if (i < n) el.classList.add('done');
+        if (i === n) el.classList.add('active');
+    });
+}
+
+// ─── Reset ────────────────────────────────────────────────────
+window.resetForm = function() {
+    location.reload();
+};
+
+// ─── Util ─────────────────────────────────────────────────────
+function escH(s) {
+    return String(s || '').replace(/[&<>"']/g, c =>
+        ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;' }[c])
+    );
+}
+</script>
 
 </body>
 </html>
