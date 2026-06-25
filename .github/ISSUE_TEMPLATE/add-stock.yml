@@ -33,12 +33,18 @@ body:
       label: Sector
       description: Select the sector
       options:
-        - Energy
-        - Banking
-        - IT
         - Auto
-        - Pharma
+        - Banking
+        - Cement
+        - Conglomerate
+        - Consumer
+        - Energy
+        - Finance
         - FMCG
+        - IT
+        - Mining
+        - Pharma
+        - Power
         - Telecom
         - Infrastructure
         - Metals
