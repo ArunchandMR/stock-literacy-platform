@@ -3,51 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Add new stock to tracking dashboard">
     <title>Add New Stock - Financial Literacy Platform</title>
-    
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        #ticker-suggestions {
+            position: absolute;
+            z-index: 100;
+            background: #fff;
+            border: 1px solid #d1d5db;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 260px;
+            overflow-y: auto;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0,0,0,.10);
+        }
+        .suggestion-item {
+            padding: 10px 14px;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .suggestion-item:hover { background: #eff6ff; }
+        .suggestion-item:last-child { border-bottom: none; }
+        .sug-ticker { font-weight: 700; font-size: 13px; color: #1d4ed8; }
+        .sug-name   { font-size: 12px; color: #374151; }
+        .sug-exch   { font-size: 11px; color: #9ca3af; background: #f3f4f6; padding: 1px 6px; border-radius: 10px; }
+        #price-preview {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 8px;
+            font-size: 13px;
+            display: none;
+        }
+        .price-live { color: #15803d; font-weight: 700; font-size: 16px; }
+        .ticker-wrap { position: relative; }
+        .spinner { display: none; }
+        .spinner.visible { display: inline-block; }
+    </style>
 </head>
 <body class="bg-gray-50">
-    
-    <!-- Navigation Header -->
+
+    <!-- Navigation -->
     <nav class="bg-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <div class="logo-placeholder w-12 h-12 bg-gradient-to-br from-blue-600 to-green-500 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-chart-line text-white text-2xl"></i>
-                        </div>
-                        <span class="ml-3 text-xl font-bold text-gray-800">Financial Literacy Hub</span>
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-green-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-chart-line text-white text-2xl"></i>
                     </div>
+                    <span class="ml-3 text-xl font-bold text-gray-800">Financial Literacy Hub</span>
                 </div>
-                
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
-                        <i class="fas fa-home mr-2"></i>Home
-                    </a>
-                    <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
-                        <i class="fas fa-chart-bar mr-2"></i>Dashboard
-                    </a>
-                    <a href="https://github.com/ArunchandMR/stock-literacy-platform/issues/new?template=add-stock.yml" target="_blank" class="bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-lg transition font-semibold">
-                        <i class="fas fa-plus-circle mr-2"></i>Add Stock
-                    </a>
-                    <a href="discussions.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
-                        <i class="fas fa-comments mr-2"></i>Discussions
-                    </a>
-                    <a href="about.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
-                        <i class="fas fa-info-circle mr-2"></i>About
-                    </a>
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition"><i class="fas fa-home mr-2"></i>Home</a>
+                    <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition"><i class="fas fa-chart-bar mr-2"></i>Dashboard</a>
+                    <a href="add-stock.html" class="bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-lg transition font-semibold"><i class="fas fa-plus-circle mr-2"></i>Add Stock</a>
+                    <a href="discussions.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition"><i class="fas fa-comments mr-2"></i>Discussions</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition"><i class="fas fa-info-circle mr-2"></i>About</a>
                 </div>
-
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-600">
                         <i class="fas fa-bars text-2xl"></i>
@@ -55,24 +74,11 @@
                 </div>
             </div>
         </div>
-
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
             <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
-                    <i class="fas fa-home mr-2"></i>Home
-                </a>
-                <a href="dashboard.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
-                    <i class="fas fa-chart-bar mr-2"></i>Dashboard
-                </a>
-                <a href="https://github.com/ArunchandMR/stock-literacy-platform/issues/new?template=add-stock.yml" target="_blank" class="block px-3 py-2 text-green-700 bg-green-50 hover:bg-green-100 rounded font-semibold">
-                    <i class="fas fa-plus-circle mr-2"></i>Add Stock (Recommended)
-                </a>
-                <a href="discussions.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
-                    <i class="fas fa-comments mr-2"></i>Discussions
-                </a>
-                <a href="about.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
-                    <i class="fas fa-info-circle mr-2"></i>About
-                </a>
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-home mr-2"></i>Home</a>
+                <a href="dashboard.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-chart-bar mr-2"></i>Dashboard</a>
+                <a href="discussions.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-comments mr-2"></i>Discussions</a>
             </div>
         </div>
     </nav>
@@ -80,412 +86,466 @@
     <!-- Page Header -->
     <section class="bg-gradient-to-r from-blue-600 to-green-500 text-white py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl md:text-4xl font-bold mb-2">
-                <i class="fas fa-plus-circle mr-3"></i>Add New Stock
-            </h1>
-            <p class="text-blue-100">
-                Add a new stock to your tracking dashboard with complete details
+            <h1 class="text-3xl md:text-4xl font-bold mb-2"><i class="fas fa-plus-circle mr-3"></i>Add New Stock</h1>
+            <p class="text-blue-100">Search by ticker or company name — entry price and live price auto-fill instantly</p>
+        </div>
+    </section>
+
+    <!-- How it works banner -->
+    <section class="py-3 bg-blue-50 border-b">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-sm text-gray-700">
+                <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                <strong>How it works:</strong> Type a company name or NSE ticker below → select from the live dropdown → fill in your targets → click <em>Generate JSON</em> → paste the code into <code class="bg-blue-100 px-1 rounded">data/stocks.json</code> on GitHub.
             </p>
         </div>
     </section>
 
-    <!-- Info Banner -->
-    <section class="py-4 bg-blue-50 border-b">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-start">
-                <i class="fas fa-info-circle text-blue-600 text-xl mr-3 mt-1"></i>
-                <div class="text-sm text-gray-700">
-                    <p class="font-semibold mb-1">How to Add a Stock:</p>
-                    <p>Fill in all the required fields below. After submission, you'll get a JSON code that you need to add to your <code class="bg-blue-100 px-2 py-1 rounded">stocks.json</code> file on GitHub.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Add Stock Form -->
-    <section class="py-12 bg-gray-50">
+    <!-- Form -->
+    <section class="py-10 bg-gray-50">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <form id="add-stock-form" class="bg-white rounded-lg shadow-md p-8">
-                
-                <!-- Basic Information -->
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-info-circle text-blue-600 mr-3"></i>
-                        Basic Information
-                    </h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Stock Ticker -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Stock Ticker Symbol <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="text" 
-                                id="ticker" 
-                                name="ticker"
-                                placeholder="e.g., RELIANCE.NS"
-                                required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent uppercase"
-                            >
-                            <p class="text-xs text-gray-500 mt-1">Use .NS for NSE, .BO for BSE</p>
-                        </div>
 
-                        <!-- Stock Name -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Company Name <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="text" 
-                                id="name" 
-                                name="name"
-                                placeholder="e.g., Reliance Industries"
-                                required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                        </div>
+                <!-- ── Section 1: Basic Information ── -->
+                <h2 class="text-xl font-bold text-gray-800 mb-5 flex items-center border-b pb-3">
+                    <i class="fas fa-search text-blue-600 mr-3"></i>Search &amp; Basic Information
+                </h2>
 
-                        <!-- Sector -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Sector <span class="text-red-500">*</span>
-                            </label>
-                            <select 
-                                id="sector" 
-                                name="sector"
-                                required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                                <option value="">Select Sector</option>
-                                <option value="Energy">Energy</option>
-                                <option value="Banking">Banking</option>
-                                <option value="IT">IT</option>
-                                <option value="Auto">Auto</option>
-                                <option value="Pharma">Pharma</option>
-                                <option value="FMCG">FMCG</option>
-                                <option value="Telecom">Telecom</option>
-                                <option value="Infrastructure">Infrastructure</option>
-                                <option value="Metals">Metals</option>
-                                <option value="Realty">Realty</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 
-                        <!-- Strategy -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Investment Strategy <span class="text-red-500">*</span>
-                            </label>
-                            <select 
-                                id="strategy" 
-                                name="strategy"
-                                required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                                <option value="">Select Strategy</option>
-                                <option value="swing">⚡ Swing Trading (Days to Weeks)</option>
-                                <option value="long-term">🎯 Long Term (Months to Years)</option>
-                            </select>
+                    <!-- Ticker with autocomplete -->
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Stock Ticker / Company Name <span class="text-red-500">*</span>
+                            <span class="text-gray-400 font-normal ml-1">(start typing — e.g. "Reliance" or "RELIANCE.NS")</span>
+                        </label>
+                        <div class="ticker-wrap">
+                            <div class="relative">
+                                <input
+                                    type="text"
+                                    id="ticker-search"
+                                    placeholder="Type company name or ticker symbol…"
+                                    autocomplete="off"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-10"
+                                >
+                                <span id="ticker-spinner" class="spinner absolute right-3 top-3 text-blue-500">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </span>
+                            </div>
+                            <div id="ticker-suggestions" class="hidden"></div>
                         </div>
+                        <!-- Hidden actual ticker value sent to form -->
+                        <input type="hidden" id="ticker" name="ticker" required>
+                        <p class="text-xs text-gray-500 mt-1">Select from dropdown to auto-fill name, sector &amp; live price.</p>
+
+                        <!-- Live price preview strip -->
+                        <div id="price-preview">
+                            <span class="text-gray-600 text-sm">Live Market Price: </span>
+                            <span id="live-price-display" class="price-live">—</span>
+                            <span class="text-gray-500 text-xs ml-2" id="price-source"></span>
+                            <button type="button" id="use-live-price" class="ml-3 text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 hidden">
+                                Use as Entry Price
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Company Name (auto-filled) -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Company Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="name" name="name" placeholder="Auto-filled from search" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <!-- Sector (auto-filled or selectable) -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Sector <span class="text-red-500">*</span></label>
+                        <select id="sector" name="sector" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Select Sector</option>
+                            <option value="Auto">Auto</option>
+                            <option value="Banking">Banking</option>
+                            <option value="Cement">Cement</option>
+                            <option value="Conglomerate">Conglomerate</option>
+                            <option value="Consumer">Consumer</option>
+                            <option value="Energy">Energy</option>
+                            <option value="Finance">Finance</option>
+                            <option value="FMCG">FMCG</option>
+                            <option value="IT">IT</option>
+                            <option value="Mining">Mining</option>
+                            <option value="Pharma">Pharma</option>
+                            <option value="Power">Power</option>
+                            <option value="Telecom">Telecom</option>
+                            <option value="Infrastructure">Infrastructure</option>
+                            <option value="Metals">Metals</option>
+                            <option value="Realty">Realty</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Strategy -->
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Investment Strategy <span class="text-red-500">*</span></label>
+                        <div class="flex gap-4">
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="strategy" id="strategy-swing" value="swing" class="sr-only peer">
+                                <div class="peer-checked:bg-purple-100 peer-checked:border-purple-500 border-2 border-gray-200 rounded-lg p-4 text-center transition hover:border-purple-300">
+                                    <i class="fas fa-bolt text-purple-600 text-xl mb-1"></i>
+                                    <p class="font-bold text-sm">⚡ Swing Trading</p>
+                                    <p class="text-xs text-gray-500">Days to Weeks</p>
+                                </div>
+                            </label>
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="strategy" id="strategy-longterm" value="long-term" class="sr-only peer">
+                                <div class="peer-checked:bg-green-100 peer-checked:border-green-500 border-2 border-gray-200 rounded-lg p-4 text-center transition hover:border-green-300">
+                                    <i class="fas fa-chart-line text-green-600 text-xl mb-1"></i>
+                                    <p class="font-bold text-sm">🎯 Long Term</p>
+                                    <p class="text-xs text-gray-500">Months to Years</p>
+                                </div>
+                            </label>
+                        </div>
+                        <!-- Hidden select for form submission compatibility -->
+                        <select id="strategy" name="strategy" required class="sr-only">
+                            <option value="">Select</option>
+                            <option value="swing">swing</option>
+                            <option value="long-term">long-term</option>
+                        </select>
                     </div>
                 </div>
 
-                <!-- Entry Details -->
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-sign-in-alt text-green-600 mr-3"></i>
-                        Entry Details
-                    </h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Entry Date -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Entry Date <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="date" 
-                                id="entryDate" 
-                                name="entryDate"
-                                required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                        </div>
+                <!-- ── Section 2: Entry Details ── -->
+                <h2 class="text-xl font-bold text-gray-800 mb-5 flex items-center border-b pb-3">
+                    <i class="fas fa-sign-in-alt text-green-600 mr-3"></i>Entry Details
+                    <span class="ml-2 text-sm font-normal text-gray-500">(these are fixed at time of entry — never change)</span>
+                </h2>
 
-                        <!-- Entry Time -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Entry Time <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="time" 
-                                id="entryTime" 
-                                name="entryTime"
-                                required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                        </div>
-
-                        <!-- Entry Price -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Entry Price (₹) <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="number" 
-                                id="entryPrice" 
-                                name="entryPrice"
-                                placeholder="e.g., 2450.00"
-                                step="0.01"
-                                min="0"
-                                required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Entry Date <span class="text-red-500">*</span></label>
+                        <input type="date" id="entryDate" name="entryDate" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Entry Time <span class="text-red-500">*</span></label>
+                        <input type="time" id="entryTime" name="entryTime" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Entry Price ₹ <span class="text-red-500">*</span>
+                            <span class="text-xs text-gray-400 font-normal">(price you actually bought/recommend at)</span>
+                        </label>
+                        <input type="number" id="entryPrice" name="entryPrice" placeholder="e.g., 1323.50"
+                            step="0.01" min="0" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
                 </div>
 
-                <!-- Target & Stop Loss -->
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-bullseye text-orange-600 mr-3"></i>
-                        Target & Risk Management
-                    </h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Target Min -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Target Exit (Min) ₹ <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="number" 
-                                id="targetExitMin" 
-                                name="targetExitMin"
-                                placeholder="e.g., 2700.00"
-                                step="0.01"
-                                min="0"
-                                required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                        </div>
+                <!-- ── Section 3: Target & Risk ── -->
+                <h2 class="text-xl font-bold text-gray-800 mb-5 flex items-center border-b pb-3">
+                    <i class="fas fa-bullseye text-orange-600 mr-3"></i>Target &amp; Risk Management
+                    <span class="ml-2 text-sm font-normal text-gray-500">(fixed at entry — Current Price &amp; Deviance are computed live)</span>
+                </h2>
 
-                        <!-- Target Max -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Target Exit (Max) ₹ <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="number" 
-                                id="targetExitMax" 
-                                name="targetExitMax"
-                                placeholder="e.g., 2900.00"
-                                step="0.01"
-                                min="0"
-                                required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                        </div>
-
-                        <!-- Stop Loss -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Stop Loss ₹ <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="number" 
-                                id="stopLoss" 
-                                name="stopLoss"
-                                placeholder="e.g., 2300.00"
-                                step="0.01"
-                                min="0"
-                                required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Target Exit Min ₹ <span class="text-red-500">*</span></label>
+                        <input type="number" id="targetExitMin" name="targetExitMin" placeholder="e.g., 1500.00"
+                            step="0.01" min="0" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Target Exit Max ₹ <span class="text-red-500">*</span></label>
+                        <input type="number" id="targetExitMax" name="targetExitMax" placeholder="e.g., 1700.00"
+                            step="0.01" min="0" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Stop Loss ₹ <span class="text-red-500">*</span></label>
+                        <input type="number" id="stopLoss" name="stopLoss" placeholder="e.g., 1200.00"
+                            step="0.01" min="0" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
                 </div>
 
-                <!-- Additional Information -->
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-sticky-note text-purple-600 mr-3"></i>
-                        Additional Information
-                    </h2>
-                    
-                    <div class="space-y-6">
-                        <!-- Discussion URL -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Discussion URL
-                            </label>
-                            <input 
-                                type="url" 
-                                id="discussionUrl" 
-                                name="discussionUrl"
-                                placeholder="https://github.com/ArunchandMR/stock-literacy-platform/discussions/1"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                            <p class="text-xs text-gray-500 mt-1">Link to GitHub Discussion for this stock</p>
-                        </div>
+                <!-- ── Section 4: Notes ── -->
+                <h2 class="text-xl font-bold text-gray-800 mb-5 flex items-center border-b pb-3">
+                    <i class="fas fa-sticky-note text-purple-600 mr-3"></i>Notes (Optional)
+                </h2>
 
-                        <!-- Trading Notes -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Trading Notes / Rationale
-                            </label>
-                            <textarea 
-                                id="notes" 
-                                name="notes"
-                                rows="4"
-                                placeholder="Why are you entering this trade? Technical setup? Fundamental reasons?"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            ></textarea>
-                        </div>
+                <div class="space-y-4 mb-8">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Discussion URL</label>
+                        <input type="url" id="discussionUrl" name="discussionUrl"
+                            placeholder="https://github.com/ArunchandMR/stock-literacy-platform/discussions/…"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Trading Rationale</label>
+                        <textarea id="notes" name="notes" rows="3"
+                            placeholder="Why are you entering this trade? Technical setup, fundamental reasons…"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
                     </div>
                 </div>
 
-                <!-- Submit Button -->
-                <div class="flex justify-end space-x-4">
-                    <button 
-                        type="button"
-                        onclick="window.location.href='dashboard.html'"
-                        class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition font-semibold"
-                    >
+                <!-- Buttons -->
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="window.location.href='dashboard.html'"
+                        class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition font-semibold">
                         <i class="fas fa-times mr-2"></i>Cancel
                     </button>
-                    <button 
-                        type="submit"
-                        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
-                    >
-                        <i class="fas fa-check mr-2"></i>Generate JSON Code
+                    <button type="submit"
+                        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold">
+                        <i class="fas fa-code mr-2"></i>Generate JSON Code
                     </button>
                 </div>
+
             </form>
         </div>
     </section>
 
-    <!-- Output Section (Hidden Initially) -->
-    <section id="output-section" class="hidden py-12 bg-white border-t">
+    <!-- Output Section -->
+    <section id="output-section" class="hidden py-10 bg-white border-t">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-green-50 border-l-4 border-green-500 p-6 rounded-lg mb-6">
-                <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center">
-                    <i class="fas fa-check-circle text-green-600 mr-3"></i>
-                    JSON Code Generated Successfully!
+            <div class="bg-green-50 border-l-4 border-green-500 p-5 rounded-lg mb-5">
+                <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                    <i class="fas fa-check-circle text-green-600 mr-3"></i>JSON Generated! Copy and paste into <code class="mx-1 bg-green-100 px-2 rounded">data/stocks.json</code>
                 </h3>
-                <p class="text-gray-700 mb-4">
-                    Copy the code below and add it to your <code class="bg-green-100 px-2 py-1 rounded">data/stocks.json</code> file on GitHub.
-                </p>
+                <p class="text-sm text-gray-600 mt-1">Add this block inside the <code>"stocks": [...]</code> array. Don't forget to add a comma after the previous stock entry!</p>
             </div>
-
             <div class="bg-gray-900 rounded-lg p-6 relative">
-                <button 
-                    id="copy-btn"
-                    class="absolute top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition text-sm font-semibold"
-                >
+                <button id="copy-btn"
+                    class="absolute top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-semibold">
                     <i class="fas fa-copy mr-2"></i>Copy Code
                 </button>
-                <pre id="json-output" class="text-green-400 text-sm overflow-x-auto pt-12"></pre>
+                <pre id="json-output" class="text-green-400 text-sm overflow-x-auto pt-10 whitespace-pre-wrap"></pre>
             </div>
-
-            <div class="mt-6 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
-                <h4 class="font-bold text-gray-800 mb-2">Next Steps:</h4>
-                <ol class="list-decimal list-inside space-y-2 text-gray-700 text-sm">
-                    <li>Copy the JSON code above</li>
-                    <li>Go to your GitHub repository</li>
-                    <li>Open <code class="bg-blue-100 px-2 py-1 rounded">data/stocks.json</code></li>
-                    <li>Click the pencil icon to edit</li>
-                    <li>Add the code to the "stocks" array (before the closing bracket)</li>
-                    <li>Don't forget to add a comma after the previous stock entry!</li>
-                    <li>Click "Commit changes"</li>
-                    <li>Your dashboard will update automatically!</li>
-                </ol>
-            </div>
-
-            <div class="mt-6 flex justify-center space-x-4">
-                <button 
-                    onclick="window.location.reload()"
-                    class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold"
-                >
+            <div class="mt-5 flex justify-center gap-3">
+                <button onclick="window.location.reload()"
+                    class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold">
                     <i class="fas fa-plus mr-2"></i>Add Another Stock
                 </button>
-                <a 
-                    href="dashboard.html"
-                    class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold inline-block"
-                >
+                <a href="dashboard.html"
+                    class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold inline-block">
                     <i class="fas fa-chart-bar mr-2"></i>View Dashboard
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center text-gray-400 text-sm">
-                <p>&copy; 2026 Financial Literacy Platform. Educational purposes only.</p>
-            </div>
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-400 text-sm">
+            <p>&copy; 2026 Financial Literacy Platform. Educational purposes only.</p>
         </div>
     </footer>
 
-    <!-- JavaScript -->
     <script>
-        document.getElementById('add-stock-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form values
-            const formData = {
-                id: document.getElementById('ticker').value.replace('.NS', '').replace('.BO', '') + '001',
-                ticker: document.getElementById('ticker').value.toUpperCase(),
-                name: document.getElementById('name').value,
-                sector: document.getElementById('sector').value,
-                strategy: document.getElementById('strategy').value,
-                entryDate: document.getElementById('entryDate').value,
-                entryTime: document.getElementById('entryTime').value,
-                entryPrice: parseFloat(document.getElementById('entryPrice').value),
-                targetExitMin: parseFloat(document.getElementById('targetExitMin').value),
-                targetExitMax: parseFloat(document.getElementById('targetExitMax').value),
-                stopLoss: parseFloat(document.getElementById('stopLoss').value),
-                discussionUrl: document.getElementById('discussionUrl').value || "https://github.com/ArunchandMR/stock-literacy-platform/discussions",
-                notes: document.getElementById('notes').value || ""
-            };
-            
-            // Generate JSON
-            const jsonOutput = JSON.stringify(formData, null, 2);
-            
-            // Display output
-            document.getElementById('json-output').textContent = jsonOutput;
-            document.getElementById('output-section').classList.remove('hidden');
-            
-            // Scroll to output
-            document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+    // ── Mobile menu ────────────────────────────────────────────────
+    document.getElementById('mobile-menu-btn').addEventListener('click', function () {
+        document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // ── Strategy radio → hidden select sync ──────────────────────
+    document.querySelectorAll('input[name="strategy"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            document.getElementById('strategy').value = radio.value;
         });
-        
-        // Copy to clipboard
-        document.getElementById('copy-btn').addEventListener('click', function() {
-            const jsonText = document.getElementById('json-output').textContent;
-            navigator.clipboard.writeText(jsonText).then(() => {
-                this.innerHTML = '<i class="fas fa-check mr-2"></i>Copied!';
-                setTimeout(() => {
-                    this.innerHTML = '<i class="fas fa-copy mr-2"></i>Copy Code';
-                }, 2000);
+    });
+
+    // ── Defaults ──────────────────────────────────────────────────
+    document.getElementById('entryDate').valueAsDate = new Date();
+    const now = new Date();
+    document.getElementById('entryTime').value = now.toTimeString().slice(0, 5);
+
+    // ── Ticker Autocomplete ────────────────────────────────────────
+    let suggestTimeout = null;
+    let currentLivePrice = null;
+
+    const tickerSearch  = document.getElementById('ticker-search');
+    const tickerHidden  = document.getElementById('ticker');
+    const suggList      = document.getElementById('ticker-suggestions');
+    const spinner       = document.getElementById('ticker-spinner');
+    const pricePreview  = document.getElementById('price-preview');
+    const livePriceEl   = document.getElementById('live-price-display');
+    const priceSourceEl = document.getElementById('price-source');
+    const useLivePriceBtn = document.getElementById('use-live-price');
+
+    tickerSearch.addEventListener('input', function () {
+        clearTimeout(suggestTimeout);
+        const q = this.value.trim();
+        if (q.length < 2) { hideSuggestions(); return; }
+
+        suggestTimeout = setTimeout(() => searchTickers(q), 300);
+    });
+
+    tickerSearch.addEventListener('blur', () => {
+        setTimeout(hideSuggestions, 200);
+    });
+
+    function hideSuggestions() {
+        suggList.classList.add('hidden');
+        suggList.innerHTML = '';
+    }
+
+    async function searchTickers(query) {
+        spinner.classList.add('visible');
+        suggList.classList.add('hidden');
+
+        try {
+            // Yahoo Finance auto-suggest API (CORS-safe via allorigins proxy)
+            const yahooUrl = `https://query2.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&lang=en-IN&region=IN&quotesCount=8&enableFuzzyQuery=false&quotesQueryId=tss_match_phrase_query`;
+            let data = null;
+
+            // Try direct first, fallback to proxy
+            try {
+                const r = await fetch(yahooUrl, { cache: 'no-store' });
+                if (r.ok) data = await r.json();
+            } catch (_) {}
+
+            if (!data) {
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`;
+                const r2 = await fetch(proxyUrl, { cache: 'no-store' });
+                if (r2.ok) data = await r2.json();
+            }
+
+            const quotes = data?.quotes?.filter(q => q.quoteType === 'EQUITY') || [];
+            renderSuggestions(quotes);
+
+        } catch (err) {
+            console.warn('Autocomplete error:', err);
+            suggList.innerHTML = '<div class="suggestion-item text-gray-500 text-sm">Search unavailable — type ticker manually</div>';
+            suggList.classList.remove('hidden');
+        } finally {
+            spinner.classList.remove('visible');
+        }
+    }
+
+    function renderSuggestions(quotes) {
+        if (!quotes.length) {
+            suggList.innerHTML = '<div class="suggestion-item text-gray-500 text-sm">No results — type the full ticker (e.g. RELIANCE.NS)</div>';
+            suggList.classList.remove('hidden');
+            return;
+        }
+
+        suggList.innerHTML = quotes.map(q => `
+            <div class="suggestion-item"
+                 data-ticker="${q.symbol}"
+                 data-name="${(q.shortname || q.longname || '').replace(/"/g, '')}"
+                 data-exchange="${q.exchange || ''}">
+                <div>
+                    <span class="sug-ticker">${q.symbol}</span>
+                    <span class="sug-name ml-2">${q.shortname || q.longname || ''}</span>
+                </div>
+                <span class="sug-exch">${q.exchange || ''}</span>
+            </div>
+        `).join('');
+
+        suggList.querySelectorAll('.suggestion-item').forEach(item => {
+            item.addEventListener('mousedown', function () {
+                selectTicker(
+                    this.dataset.ticker,
+                    this.dataset.name,
+                    this.dataset.exchange
+                );
             });
         });
-        
-        // Set default date to today
-        document.getElementById('entryDate').valueAsDate = new Date();
-        
-        // Set default time to current time
-        const now = new Date();
-        document.getElementById('entryTime').value = now.toTimeString().slice(0,5);
+
+        suggList.classList.remove('hidden');
+    }
+
+    function selectTicker(ticker, name, exchange) {
+        tickerSearch.value = `${ticker} — ${name}`;
+        tickerHidden.value = ticker;
+        document.getElementById('name').value = name;
+        hideSuggestions();
+        fetchAndShowLivePrice(ticker);
+    }
+
+    // ── Live Price Preview ─────────────────────────────────────────
+    async function fetchAndShowLivePrice(ticker) {
+        livePriceEl.textContent = 'Fetching…';
+        pricePreview.style.display = 'block';
+        useLivePriceBtn.classList.add('hidden');
+        priceSourceEl.textContent = '';
+
+        const params = 'interval=1d&range=1d';
+        const encodedTicker = encodeURIComponent(ticker);
+        const endpoints = [
+            `https://query2.finance.yahoo.com/v8/finance/chart/${encodedTicker}?${params}`,
+            `https://query1.finance.yahoo.com/v8/finance/chart/${encodedTicker}?${params}`,
+            `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://query2.finance.yahoo.com/v8/finance/chart/${encodedTicker}?${params}`)}`
+        ];
+
+        for (const url of endpoints) {
+            try {
+                const res = await fetch(url, { cache: 'no-store' });
+                if (!res.ok) continue;
+                const data = await res.json();
+                const meta = data?.chart?.result?.[0]?.meta;
+                if (!meta) continue;
+                const price = meta.regularMarketPrice || meta.previousClose;
+                if (price && price > 0) {
+                    currentLivePrice = parseFloat(price.toFixed(2));
+                    livePriceEl.textContent = '₹' + currentLivePrice.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                    priceSourceEl.textContent = '(Yahoo Finance, ~15 min delayed)';
+                    useLivePriceBtn.classList.remove('hidden');
+                    return;
+                }
+            } catch (_) {}
+        }
+
+        livePriceEl.textContent = 'Price unavailable';
+        priceSourceEl.textContent = '(enter manually below)';
+        currentLivePrice = null;
+    }
+
+    useLivePriceBtn.addEventListener('click', () => {
+        if (currentLivePrice) {
+            document.getElementById('entryPrice').value = currentLivePrice;
+        }
+    });
+
+    // ── Form Submit → Generate JSON ────────────────────────────────
+    document.getElementById('add-stock-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const ticker = document.getElementById('ticker').value.trim();
+        const strategy = document.getElementById('strategy').value;
+
+        if (!ticker) { alert('Please search and select a stock ticker.'); return; }
+        if (!strategy) { alert('Please select a strategy (Swing or Long Term).'); return; }
+
+        const tickerBase = ticker.replace(/\.(NS|BO|BSE|NSE)$/i, '');
+
+        const formData = {
+            id: tickerBase.replace(/[^A-Z0-9]/gi, '') + '001',
+            ticker: ticker.toUpperCase(),
+            name: document.getElementById('name').value,
+            sector: document.getElementById('sector').value,
+            strategy: strategy,
+            entryDate: document.getElementById('entryDate').value,
+            entryTime: document.getElementById('entryTime').value,
+            entryPrice: parseFloat(document.getElementById('entryPrice').value),
+            targetExitMin: parseFloat(document.getElementById('targetExitMin').value),
+            targetExitMax: parseFloat(document.getElementById('targetExitMax').value),
+            stopLoss: parseFloat(document.getElementById('stopLoss').value),
+            discussionUrl: document.getElementById('discussionUrl').value ||
+                'https://github.com/ArunchandMR/stock-literacy-platform/discussions',
+            notes: document.getElementById('notes').value || ''
+        };
+
+        document.getElementById('json-output').textContent = JSON.stringify(formData, null, 2);
+        document.getElementById('output-section').classList.remove('hidden');
+        document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // ── Copy to clipboard ──────────────────────────────────────────
+    document.getElementById('copy-btn').addEventListener('click', function () {
+        navigator.clipboard.writeText(document.getElementById('json-output').textContent).then(() => {
+            this.innerHTML = '<i class="fas fa-check mr-2"></i>Copied!';
+            setTimeout(() => { this.innerHTML = '<i class="fas fa-copy mr-2"></i>Copy Code'; }, 2000);
+        });
+    });
     </script>
 
 </body>
 </html>
-    <!-- Mobile menu toggle script -->
-    <script>
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        });
-    </script>
