@@ -3,34 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discussions - Stock Learning Platform</title>
-    <script src="https://tailwindcss.com"></script>
+    <meta name="description" content="Historical discussion board for stock analysis and community insights">
+    <title>Historical Discussions - Financial Literacy Platform</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans">
-
-    <!-- Global Navigation -->
-    <nav class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex justify-between items-center">
-        <div class="flex space-x-6 items-center">
-            <a href="index.html" class="text-xl font-bold text-emerald-400">Stock Literacy</a>
-            <a href="dashboard.html" class="hover:text-emerald-400 transition">Dashboard</a>
-            <a href="discussions.html" class="text-emerald-400 font-semibold">Discussions</a>
+<body class="bg-gray-50">
+    
+    <!-- SEBI Disclaimer Banner -->
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-triangle text-yellow-400 text-lg"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-xs text-yellow-700">
+                        <strong>EDUCATIONAL DISCLAIMER:</strong> Discussions are for educational purposes only. Not investment advice.
+                    </p>
+                </div>
+            </div>
         </div>
-        <a href="add-stock.html" class="bg-emerald-500 hover:bg-emerald-600 text-gray-950 font-bold px-4 py-2 rounded-lg transition text-sm">
-            + Add Stock
-        </a>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="logo-placeholder w-12 h-12 bg-gradient-to-br from-blue-600 to-green-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-line text-white text-2xl"></i>
+                        </div>
+                        <span class="ml-3 text-xl font-bold text-gray-800">Financial Literacy Hub</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
+                        <i class="fas fa-chart-bar mr-2"></i>Dashboard
+                    </a>
+                    <a href="add-stock.html" class="bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-lg transition font-semibold">
+                        <i class="fas fa-plus-circle mr-2"></i>Add Stock
+                    </a>
+                    <a href="discussions.html" class="text-blue-600 font-semibold border-b-2 border-blue-600 px-3 py-2">
+                        <i class="fas fa-comments mr-2"></i>Discussions
+                    </a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
+                        <i class="fas fa-info-circle mr-2"></i>About
+                    </a>
+                </div>
+
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-600">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
+                    <i class="fas fa-home mr-2"></i>Home
+                </a>
+                <a href="dashboard.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
+                    <i class="fas fa-chart-bar mr-2"></i>Dashboard
+                </a>
+                <a href="add-stock.html" class="block px-3 py-2 text-green-700 bg-green-50 hover:bg-green-100 rounded font-semibold">
+                    <i class="fas fa-plus-circle mr-2"></i>Add Stock
+                </a>
+                <a href="discussions.html" class="block px-3 py-2 text-blue-600 font-semibold bg-blue-50 rounded">
+                    <i class="fas fa-comments mr-2"></i>Discussions
+                </a>
+                <a href="about.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
+                    <i class="fas fa-info-circle mr-2"></i>About
+                </a>
+            </div>
+        </div>
     </nav>
 
-    <!-- Main Content Context Window -->
-    <main class="max-w-4xl mx-auto px-4 py-12">
-        <div class="bg-gray-800 border border-gray-700 rounded-2xl p-8 shadow-xl">
-            <h1 class="text-3xl font-extrabold text-emerald-400 mb-4">Collaborative Stock Case Studies</h1>
-            <p class="text-gray-400 mb-8 leading-relaxed">
-                Welcome to our community analysis center. We follow a highly structured learning framework to identify target entries safely.
+    <!-- Page Header -->
+    <section class="bg-gradient-to-r from-blue-600 to-green-500 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">
+                <i class="fas fa-comments mr-3"></i>Historical Discussion Board
+            </h1>
+            <p class="text-blue-100">
+                Community-driven analysis, fundamental research, and technical insights
             </p>
+        </div>
+    </section>
 
-            <!-- Learning Workflow Visual Stepper -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <div class="bg-gray-900/50 p-5 rounded-xl border border-gray-700">
-                    <div class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">Step 1</div>
-                    <h3 class="text-md font-bold mb-2">Team Leads Post</h3>
-                    <p class="text-xs text-gray-400">Leads publish new study cases directly into 
+    <!-- Info Banner -->
+    <section class="py-6 bg-blue-50 border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-info-circle text-blue-600 text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">About This Discussion Board</h3>
+                    <p class="text-gray-700 text-sm mb-3">
+                        This section displays historical discussions, analysis logs, and educational case studies from our community. 
+                        All discussions are powered by <strong>GitHub Discussions</strong> - a free, native feature that provides 
+                        threaded conversations, markdown support, and full search capabilities.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="#" id="view-github-discussions" target="_blank" class="inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-semibold">
+                            <i class="fab fa-github mr-2"></i>View on GitHub Discussions
+                        </a>
+                        <a href="#" id="create-discussion" target="_blank" class="inline-flex items-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition text-sm font-semibold">
+                            <i class="fas fa-plus mr-2"></i>Start New Discussion
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search & Filter -->
+    <section class="py-6 bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-search mr-2"></i>Search Discussions
+                    </label>
+                    <input 
+                        type="text" 
+                        id="discussion-search" 
+                        placeholder="Search by stock name, ticker, or keywords..." 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-filter mr-2"></i>Filter by Category
+                    </label>
+                    <select 
+                        id="category-filter" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                        <option value="all">All Categories</option>
+                        <option value="fundamental">Fundamental Analysis</option>
+                        <option value="technical">Technical Analysis</option>
+                        <option value="news">News & Updates</option>
+                        <option value="earnings">Earnings Reports</option>
+                        <option value="general">General Discussion</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Discussion Cards -->
+    <section class="py-8 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Loading State -->
+            <div id="discussions-loading" class="text-center py-12">
+                <i class="fas fa-spinner fa-spin text-4xl text-blue-600 mb-4"></i>
+                <p class="text-gray-600">Loading discussions...</p>
+            </div>
+
+            <!-- Discussion List -->
+            <div id="discussions-container" class="hidden space-y-6">
+                <!-- Discussion cards will be inserted here by JavaScript -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="discussions-empty" class="hidden text-center py-12">
+                <i class="fas fa-comments text-4xl text-gray-400 mb-4"></i>
+                <p class="text-gray-600 mb-4">No discussions found</p>
+                <a href="#" id="create-first-discussion" target="_blank" class="inline-flex items-center bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-semibold">
+                    <i class="fas fa-plus mr-2"></i>Start First Discussion
+                </a>
+            </div>
+
+            <!-- Manual Integration Guide -->
+            <div class="mt-12 bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-book mr-2"></i>How to Use GitHub Discussions
+                </h3>
+                <div class="space-y-4 text-gray-700">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">1</div>
+                        <div>
+                            <h4 class="font-semibold mb-1">Enable GitHub Discussions</h4>
+                            <p class="text-sm">Go to your repository Settings → Features → Enable Discussions</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">2</div>
+                        <div>
+                            <h4 class="font-semibold mb-1">Create Discussion Categories</h4>
+                            <p class="text-sm">Set up categories: Fundamental Analysis, Technical Analysis, News & Updates, Earnings Reports</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">3</div>
+                        <div>
+                            <h4 class="font-semibold mb-1">Link Stocks to Discussions</h4>
+                            <p class="text-sm">When adding a stock to stocks.json, include the GitHub Discussion URL in the discussionUrl field</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">4</div>
+                        <div>
+                            <h4 class="font-semibold mb-1">Automatic Integration</h4>
+                            <p class="text-sm">This page will automatically fetch and display discussions using the GitHub API (no authentication required for public repos)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded">
+                    <p class="text-sm text-yellow-800">
+                        <strong>Note:</strong> To enable automatic discussion fetching, update the repository URL in 
+                        <code class="bg-yellow-100 px-2 py-1 rounded">assets/js/discussions.js</code> with your actual GitHub organization and repository name.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center text-gray-400 text-sm">
+                <p>&copy; 2026 Financial Literacy Platform. Educational purposes only. Not investment advice.</p>
+                <p class="mt-2">
+                    <a href="disclaimer.html" class="hover:text-white underline">Full Disclaimer</a> | 
+                    <a href="index.html" class="hover:text-white underline ml-2">Home</a> | 
+                    <a href="dashboard.html" class="hover:text-white underline ml-2">Dashboard</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/discussions.js"></script>
+    
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        
+        // Update GitHub links (replace with actual repo URL)
+        const GITHUB_REPO = 'https://github.com/ArunchandMR/stock-literacy-platform';
+        document.getElementById('view-github-discussions').href = `${GITHUB_REPO}/discussions`;
+        document.getElementById('create-discussion').href = `${GITHUB_REPO}/discussions/new`;
+        document.getElementById('create-first-discussion').href = `${GITHUB_REPO}/discussions/new`;
+        
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+    </script>
+
+</body>
+</html>
