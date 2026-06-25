@@ -1,6 +1,6 @@
 /**
  * Stock Performance Dashboard - Main Logic
- * Handles data loading, rendering, and real-time updates with strategy filtering
+ * Handles data loading, rendering, live price fetching and strategy filtering
  */
 
 let dashboardData = null;
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * Load dashboard data from JSON file
+ * Load dashboard data from JSON file, then fetch live prices
  */
 async function loadDashboardData() {
     try {
@@ -31,17 +31,86 @@ async function loadDashboardData() {
         dashboardData = await response.json();
         filteredStocks = [...dashboardData.stocks];
         
-        // Apply current strategy filter if set
-        if (currentStrategy !== 'all') {
-            applyStrategyFilter(currentStrategy);
-        }
-        
+        // Render with stored data first so the page appears immediately
         renderDashboard();
         hideLoadingState();
+
+        // Then fetch live prices in background and refresh table cells
+        fetchLivePrices();
         
     } catch (error) {
         console.error('Error loading dashboard data:', error);
         showErrorState();
+    }
+}
+
+/**
+ * Fetch live prices from Yahoo Finance v8 JSON API (no API key, CORS-safe via query2)
+ * Updates each stock's currentPrice, deviance, deviancePercent in-place then re-renders.
+ */
+async function fetchLivePrices() {
+    if (!dashboardData || !dashboardData.stocks) return;
+
+    const stocks = dashboardData.stocks;
+    let anyUpdated = false;
+
+    // Fetch prices concurrently but throttle to avoid rate limiting
+    const BATCH = 5;
+    for (let i = 0; i < stocks.length; i += BATCH) {
+        const batch = stocks.slice(i, i + BATCH);
+        await Promise.all(batch.map(async (stock) => {
+            try {
+                // Yahoo Finance v8 quoteSummary — works from browser without CORS issues
+                const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(stock.ticker)}?interval=1d&range=1d`;
+                const res = await fetch(url, { cache: 'no-store' });
+                if (!res.ok) return;
+                const data = await res.json();
+                const meta = data?.chart?.result?.[0]?.meta;
+                if (!meta) return;
+
+                // regularMarketPrice is the latest traded price
+                const livePrice = meta.regularMarketPrice;
+                if (!livePrice || livePrice <= 0) return;
+
+                // Update stock object in-place
+                stock.currentPrice = parseFloat(livePrice.toFixed(2));
+                const deviance = ((stock.currentPrice - stock.entryPrice) / stock.entryPrice) * 100;
+                stock.deviance = parseFloat(deviance.toFixed(2));
+                const sign = deviance >= 0 ? '+' : '';
+                stock.deviancePercent = `${sign}${deviance.toFixed(2)}%`;
+
+                // Update risk flag based on deviance
+                if (deviance <= -5) {
+                    stock.riskFlag = 'Below Stop Loss Zone';
+                    stock.riskLevel = 'high';
+                } else if (deviance <= -2) {
+                    stock.riskFlag = 'Approaching Stop Loss';
+                    stock.riskLevel = 'medium';
+                } else if (deviance >= 10) {
+                    stock.riskFlag = 'Near Target Zone';
+                    stock.riskLevel = 'low';
+                } else {
+                    stock.riskFlag = 'Normal';
+                    stock.riskLevel = 'low';
+                }
+
+                anyUpdated = true;
+            } catch (err) {
+                // Silently ignore individual fetch failures — entry price stays as fallback
+                console.warn(`Live price fetch failed for ${stock.ticker}:`, err.message);
+            }
+        }));
+    }
+
+    if (anyUpdated) {
+        // Update summary with fresh data
+        dashboardData.lastUpdated = new Date().toISOString();
+
+        // Rebuild filteredStocks to reflect updated prices
+        applySearchAndFilters();
+        renderSummaryCards();
+        updateLastRefreshed();
+        console.log('Live prices updated successfully.');
     }
 }
 
@@ -61,13 +130,14 @@ window.applyStrategyFilter = function(strategy) {
         );
     }
     
-    // Update active tab styling
+    // Update active tab styling — 'long-term' maps to tab-long-term
     document.querySelectorAll('.strategy-tab').forEach(tab => {
         tab.classList.remove('active');
     });
-    document.getElementById(`tab-${strategy}`).classList.add('active');
+    const tabEl = document.getElementById(`tab-${strategy}`);
+    if (tabEl) tabEl.classList.add('active');
     
-    // Re-apply other filters if they exist
+    // Re-apply search/sector/sort filters on top of the strategy filter
     applySearchAndFilters();
     
     renderDashboard();
@@ -417,10 +487,11 @@ function updateLastRefreshed() {
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true
+        hour12: true,
+        timeZone: 'Asia/Kolkata'
     });
     
-    document.getElementById('last-updated').textContent = formatted;
+    document.getElementById('last-updated').textContent = formatted + ' IST (Live)';
 }
 
 /**
