@@ -17,15 +17,28 @@ class StockDataFetcher:
     def fetch_current_price(self, ticker):
         try:
             stock = yf.Ticker(ticker)
+
+            # ✅ First attempt: fast info (more reliable)
+            price = None
+            if hasattr(stock, "info"):
+                info = stock.info
+                if isinstance(info, dict):
+                    price = info.get("currentPrice")
+
+            if price is not None:
+                print(f"{ticker} price (info): {price}")
+                return float(price)
+
+            # ✅ Fallback: historical data
             data = stock.history(period="1d")
 
-            if data.empty:
-                print(f"WARNING: No data for {ticker}")
-                return None
+            if not data.empty:
+                price = float(data["Close"].iloc[-1])
+                print(f"{ticker} price (history): {price}")
+                return price
 
-            price = float(data["Close"].iloc[-1])
-            print(f"{ticker} price: {price}")
-            return price
+            print(f"WARNING: No data found for {ticker}")
+            return None
 
         except Exception as e:
             print(f"ERROR fetching {ticker}: {e}")
@@ -42,7 +55,7 @@ class StockDataFetcher:
         dashboard_data = []
 
         for stock in stocks:
-            # ✅ Handle both formats (string or object)
+            # ✅ Handle both formats (string OR object)
             if isinstance(stock, dict):
                 ticker = stock.get("ticker")
                 entry_price = float(stock.get("entryPrice", 0))
@@ -67,7 +80,7 @@ class StockDataFetcher:
                 "lastUpdated": datetime.utcnow().isoformat()
             })
 
-        # ✅ Write dashboard.json
+        # ✅ Write output
         with open(self.dashboard_file, "w") as f:
             json.dump(dashboard_data, f, indent=2)
 
