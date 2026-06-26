@@ -3,451 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Stock performance dashboard tracking historical picks with deviance metrics and risk flags">
-    <title>Stock Performance Dashboard - Financial Literacy Platform</title>
-    
-    <!-- Tailwind CSS CDN -->
+    <title>Stock Dashboard</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/styles.css">
-    
-    <style>
-        .strategy-tab {
-            background-color: #f3f4f6;
-            color: #4b5563;
-        }
-        .strategy-tab.active {
-            background-color: #3b82f6;
-            color: white;
-        }
-        .strategy-tab:hover:not(.active) {
-            background-color: #e5e7eb;
-        }
-    </style>
 </head>
-<body class="bg-gray-50">
-    
-    <!-- SEBI Disclaimer Banner (Top) -->
-    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex items-start">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-exclamation-triangle text-yellow-400 text-lg"></i>
-                </div>
-                <div class="ml-3">
-                    <p class="text-xs text-yellow-700">
-                        <strong>EDUCATIONAL DISCLAIMER:</strong> Historical performance data for educational purposes only. Not investment advice. 
-                        <a href="disclaimer.html" class="underline font-semibold">Read full disclaimer</a>
-                    </p>
-                </div>
-            </div>
+
+<body class="bg-gray-100">
+
+<!-- HEADER -->
+<header class="bg-blue-600 text-white p-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <h1 class="text-xl font-bold">📊 Stock Dashboard</h1>
+
+        <button id="refresh-btn"
+            class="bg-white text-blue-600 px-4 py-1 rounded font-semibold">
+            Refresh
+        </button>
+    </div>
+</header>
+
+<!-- STATUS BAR -->
+<section class="bg-white shadow p-4">
+    <div class="max-w-7xl mx-auto flex flex-col gap-1 text-sm">
+
+        <div>
+            <strong>Last Updated:</strong>
+            <span id="last-updated">Loading...</span>
         </div>
+
+        <div>
+            <strong>Market:</strong>
+            <span id="market-status">-</span>
+        </div>
+
+        <div>
+            <strong>Yahoo Status:</strong>
+            <span id="yahoo-status">Loading...</span>
+        </div>
+
+    </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 my-6 px-4">
+
+    <div class="bg-white p-4 rounded shadow">
+        <div class="text-gray-500 text-sm">Total</div>
+        <div id="total-stocks" class="text-xl font-bold">--</div>
     </div>
 
-    <!-- Navigation Header -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <div class="logo-placeholder w-12 h-12 bg-gradient-to-br from-blue-600 to-green-500 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-chart-line text-white text-2xl"></i>
-                        </div>
-                        <span class="ml-3 text-xl font-bold text-gray-800">Financial Literacy Hub</span>
-                    </div>
-                </div>
-                
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
-                        <i class="fas fa-home mr-2"></i>Home
-                    </a>
-                    <a href="dashboard.html" class="text-blue-600 font-semibold border-b-2 border-blue-600 px-3 py-2">
-                        <i class="fas fa-chart-bar mr-2"></i>Dashboard
-                    </a>
-                    <a href="add-stock.html" class="bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-lg transition font-semibold">
-                        <i class="fas fa-plus-circle mr-2"></i>Add Stock
-                    </a>
-                    <a href="discussions.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
-                        <i class="fas fa-comments mr-2"></i>Discussions
-                    </a>
-                    <a href="about.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
-                        <i class="fas fa-info-circle mr-2"></i>About
-                    </a>
-                </div>
+    <div class="bg-white p-4 rounded shadow">
+        <div class="text-gray-500 text-sm">Swing</div>
+        <div id="swing-count" class="text-xl font-bold">--</div>
+    </div>
 
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-600">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
+    <div class="bg-white p-4 rounded shadow">
+        <div class="text-gray-500 text-sm">Long Term</div>
+        <div id="longterm-count" class="text-xl font-bold">--</div>
+    </div>
 
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
-            <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
-                    <i class="fas fa-home mr-2"></i>Home
-                </a>
-                <a href="dashboard.html" class="block px-3 py-2 text-blue-600 font-semibold bg-blue-50 rounded">
-                    <i class="fas fa-chart-bar mr-2"></i>Dashboard
-                </a>
-                <a href="add-stock.html" class="block px-3 py-2 text-green-700 bg-green-50 hover:bg-green-100 rounded font-semibold">
-                    <i class="fas fa-plus-circle mr-2"></i>Add Stock
-                </a>
-                <a href="discussions.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
-                    <i class="fas fa-comments mr-2"></i>Discussions
-                </a>
-                <a href="about.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
-                    <i class="fas fa-info-circle mr-2"></i>About
-                </a>
-            </div>
-        </div>
-    </nav>
+    <div class="bg-white p-4 rounded shadow">
+        <div class="text-gray-500 text-sm">Fallback</div>
+        <div id="active-flags" class="text-xl font-bold">--</div>
+    </div>
 
-    <!-- Page Header -->
-    <section class="bg-gradient-to-r from-blue-600 to-green-500 text-white py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center flex-wrap gap-4">
-                <div>
-                    <h1 class="text-3xl md:text-4xl font-bold mb-2">
-                        <i class="fas fa-chart-line mr-3"></i>Stock Performance Dashboard
-                    </h1>
-                    <p class="text-blue-100">
-                        Historical tracking of educational case studies with automated deviance metrics
-                    </p>
-                    <div class="mt-4 flex items-center text-sm">
-                        <i class="fas fa-clock mr-2"></i>
-                        <span>Last Updated: <span id="last-updated" class="font-semibold">Loading...</span></span>
-                        <button id="refresh-btn" class="ml-4 bg-white text-blue-600 px-4 py-1 rounded hover:bg-blue-50 transition text-sm font-semibold">
-                            <i class="fas fa-sync-alt mr-1"></i>Refresh
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+</section>
 
-    <!-- Strategy Tabs -->
-    <section class="py-6 bg-white border-b sticky top-16 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-wrap gap-3">
-                <button 
-                    id="tab-all" 
-                    class="strategy-tab active px-6 py-3 rounded-lg font-semibold transition"
-                    onclick="filterByStrategy('all')"
-                >
-                    <i class="fas fa-list mr-2"></i>All Stocks
-                </button>
-                <button 
-                    id="tab-swing" 
-                    class="strategy-tab px-6 py-3 rounded-lg font-semibold transition"
-                    onclick="filterByStrategy('swing')"
-                >
-                    <i class="fas fa-bolt mr-2"></i>Swing Trading
-                </button>
-                <button 
-                    id="tab-long-term" 
-                    class="strategy-tab px-6 py-3 rounded-lg font-semibold transition"
-                    onclick="filterByStrategy('long-term')"
-                >
-                    <i class="fas fa-chart-line mr-2"></i>Long Term
-                </button>
-            </div>
-        </div>
-    </section>
+<!-- TABLE -->
+<section class="max-w-7xl mx-auto px-4 pb-10">
 
-    <!-- Summary Metric Cards -->
-    <section class="py-8 bg-white border-b">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <!-- Card 1: Total Studies -->
-                <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-blue-100 text-sm font-semibold uppercase">Total Studies</p>
-                            <p id="total-stocks" class="text-4xl font-bold mt-2">--</p>
-                            <p class="text-blue-100 text-xs mt-1">Stocks</p>
-                        </div>
-                        <div class="text-5xl opacity-20">
-                            <i class="fas fa-list-ul"></i>
-                        </div>
-                    </div>
-                </div>
+    <!-- LOADING -->
+    <div id="loading-state" class="text-center py-10">
+        <p>Loading dashboard...</p>
+    </div>
 
-                <!-- Card 2: Swing Trades -->
-                <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-purple-100 text-sm font-semibold uppercase">Swing Trades</p>
-                            <p id="swing-count" class="text-4xl font-bold mt-2">--</p>
-                            <p class="text-purple-100 text-xs mt-1">Active</p>
-                        </div>
-                        <div class="text-5xl opacity-20">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                    </div>
-                </div>
+    <!-- ERROR -->
+    <div id="error-state" class="hidden text-center py-10 text-red-600">
+        Error loading dashboard.json
+    </div>
 
-                <!-- Card 3: Long Term -->
-                <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-green-100 text-sm font-semibold uppercase">Long Term</p>
-                            <p id="longterm-count" class="text-4xl font-bold mt-2">--</p>
-                            <p class="text-green-100 text-xs mt-1">Holdings</p>
-                        </div>
-                        <div class="text-5xl opacity-20">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                    </div>
-                </div>
+    <!-- TABLE -->
+    <div id="table-container" class="hidden overflow-x-auto bg-white shadow rounded">
 
-                <!-- Card 4: Active Flags -->
-                <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-lg shadow-lg p-6 text-white">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-orange-100 text-sm font-semibold uppercase">Market Flags</p>
-                            <p id="active-flags" class="text-4xl font-bold mt-2">--</p>
-                            <p class="text-orange-100 text-xs mt-1">Alerts</p>
-                        </div>
-                        <div class="text-5xl opacity-20">
-                            <i class="fas fa-flag"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        <table class="min-w-full text-sm">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="p-3 text-left">Ticker</th>
+                    <th class="p-3 text-left">Strategy</th>
+                    <th class="p-3 text-left">Entry</th>
+                    <th class="p-3 text-left">Current</th>
+                    <th class="p-3 text-left">Performance</th>
+                    <th class="p-3 text-left">Source</th>
+                    <th class="p-3 text-left">Status</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
 
-    <!-- Search & Filters -->
-    <section class="py-6 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <!-- Search -->
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fas fa-search mr-2"></i>Search Stock Symbol or Name
-                        </label>
-                        <input 
-                            type="text" 
-                            id="search-input" 
-                            placeholder="e.g., RELIANCE, INFY, TATA..." 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
-                    </div>
+    </div>
 
-                    <!-- Sector Filter -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fas fa-filter mr-2"></i>Filter by Sector
-                        </label>
-                        <select 
-                            id="sector-filter" 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
-                            <option value="all">All Sectors</option>
-                            <option value="Auto">Auto</option>
-                            <option value="Banking">Banking</option>
-                            <option value="Cement">Cement</option>
-                            <option value="Conglomerate">Conglomerate</option>
-                            <option value="Consumer">Consumer</option>
-                            <option value="Energy">Energy</option>
-                            <option value="Finance">Finance</option>
-                            <option value="FMCG">FMCG</option>
-                            <option value="IT">IT</option>
-                            <option value="Mining">Mining</option>
-                            <option value="Pharma">Pharma</option>
-                            <option value="Power">Power</option>
-                            <option value="Telecom">Telecom</option>
-                        </select>
-                    </div>
+</section>
 
-                    <!-- Sort -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fas fa-sort mr-2"></i>Sort By
-                        </label>
-                        <select 
-                            id="sort-select" 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
-                            <option value="deviance-desc">Highest Deviance</option>
-                            <option value="deviance-asc">Lowest Deviance</option>
-                            <option value="date-desc">Most Recent</option>
-                            <option value="date-asc">Oldest First</option>
-                            <option value="name-asc">Name (A-Z)</option>
-                        </select>
-                    </div>
-                </div>
+<!-- JS -->
+<script src="assets/js/dashboard.js"></script>
 
-                <div class="mt-4 flex items-center justify-between">
-                    <p class="text-sm text-gray-600">
-                        <span id="filtered-count">--</span> stocks displayed
-                    </p>
-                    <button id="clear-filters" class="text-sm text-blue-600 hover:text-blue-800 font-semibold">
-                        <i class="fas fa-times-circle mr-1"></i>Clear All Filters
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
+<script>
+// ✅ Update market + yahoo status in UI
+function updateTopStatus(data) {
+    if (!data) return;
 
-    <!-- Performance Table -->
-    <section id="table-section" class="py-8 bg-gray-50 scroll-mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <!-- Table Header -->
-                <div class="bg-gray-100 px-6 py-4 border-b">
-                    <h2 class="text-xl font-bold text-gray-800">
-                        <i class="fas fa-table mr-2"></i>Stock Performance Table
-                    </h2>
-                </div>
+    document.getElementById("market-status").textContent =
+        data.marketStatus || "-";
 
-                <!-- Loading State -->
-                <div id="loading-state" class="p-12 text-center">
-                    <i class="fas fa-spinner fa-spin text-4xl text-blue-600 mb-4"></i>
-                    <p class="text-gray-600">Loading stock data...</p>
-                </div>
-
-                <!-- Error State -->
-                <div id="error-state" class="hidden p-12 text-center">
-                    <i class="fas fa-exclamation-circle text-4xl text-red-600 mb-4"></i>
-                    <p class="text-gray-600 mb-4">Failed to load dashboard data</p>
-                    <button onclick="location.reload()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-                        <i class="fas fa-redo mr-2"></i>Retry
-                    </button>
-                </div>
-
-                <!-- Table Container (Desktop) -->
-                <div id="table-container" class="hidden overflow-x-auto">
-                    <table class="w-full min-w-max">
-                        <thead class="bg-gray-50 border-b-2 border-gray-200">
-                            <tr>
-                                <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">
-                                    Stock Name<br><span class="text-gray-500 font-normal">(Ticker)</span>
-                                </th>
-                                <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase">
-                                    Strategy
-                                </th>
-                                <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase">
-                                    Entry Date/Time
-                                </th>
-                                <th class="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase">
-                                    Entry Price
-                                </th>
-                                <th class="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase">
-                                    Current Price
-                                </th>
-                                <th class="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase">
-                                    Target Range
-                                </th>
-                                <th class="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase">
-                                    Stop Loss
-                                </th>
-                                <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase">
-                                    Deviance (%)
-                                </th>
-                                <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase">
-                                    Days Held
-                                </th>
-                                <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase">
-                                    Risk Flag
-                                </th>
-                                <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase">
-                                    Discussion
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body" class="bg-white divide-y divide-gray-200">
-                            <!-- Rows will be inserted here by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Mobile Cards (Mobile View) -->
-                <div id="mobile-cards" class="hidden md:hidden">
-                    <!-- Cards will be inserted here by JavaScript -->
-                </div>
-
-                <!-- Empty State -->
-                <div id="empty-state" class="hidden p-12 text-center">
-                    <i class="fas fa-inbox text-4xl text-gray-400 mb-4"></i>
-                    <p class="text-gray-600">No stocks match your filters</p>
-                    <button id="clear-filters-empty" class="mt-4 text-blue-600 hover:text-blue-800 font-semibold">
-                        <i class="fas fa-times-circle mr-1"></i>Clear Filters
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Export & Actions -->
-    <section class="py-6 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div class="text-sm text-gray-600">
-                    <i class="fas fa-info-circle mr-2"></i>
-                    Data updates daily at 6:30 PM IST via automated GitHub Actions
-                </div>
-                <div class="flex gap-3">
-                    <button id="export-csv" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition text-sm font-semibold">
-                        <i class="fas fa-file-csv mr-2"></i>Export to CSV
-                    </button>
-                    <button id="print-table" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition text-sm font-semibold">
-                        <i class="fas fa-print mr-2"></i>Print
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center text-gray-400 text-sm">
-                <p>&copy; 2026 Financial Literacy Platform. Educational purposes only. Not investment advice.</p>
-                <p class="mt-2">
-                    <a href="disclaimer.html" class="hover:text-white underline">Full Disclaimer</a> | 
-                    <a href="index.html" class="hover:text-white underline ml-2">Home</a> | 
-                    <a href="discussions.html" class="hover:text-white underline ml-2">Discussions</a>
-                </p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- JavaScript -->
-    <script src="assets/js/common.js"></script>
-    <script src="assets/js/filters.js"></script>
-    <script src="assets/js/dashboard.js"></script>
-    
-    <script>
-        // Mobile menu toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        });
-        
-        // Strategy filter function
-        window.filterByStrategy = function(strategy) {
-            // Update active tab
-            document.querySelectorAll('.strategy-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.getElementById(`tab-${strategy}`).classList.add('active');
-            
-            // Trigger filter in dashboard.js
-            if (window.applyStrategyFilter) {
-                window.applyStrategyFilter(strategy);
-            }
-        };
-    </script>
+    if (data.yahooStatus) {
+        const y = data.yahooStatus;
+        document.getElementById("yahoo-status").textContent =
+            `${y.status} (${y.successCount}/${y.totalCount})`;
+    }
+}
+</script>
 
 </body>
 </html>
