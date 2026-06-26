@@ -16,6 +16,7 @@ class StockDataFetcher:
         self.stocks_file = self.data_dir / "stocks.json"
         self.dashboard_file = self.data_dir / "dashboard.json"
 
+    # ✅ Market hours (IST)
     def is_market_open(self):
         now = datetime.now(ZoneInfo("Asia/Kolkata"))
 
@@ -27,14 +28,15 @@ class StockDataFetcher:
 
         return start <= now <= end
 
+    # ✅ Yahoo batch fetch (SAFE)
     def fetch_yahoo_batch(self, tickers):
         try:
             data = yf.download(
                 tickers=tickers,
                 period="5d",
                 group_by="ticker",
-                threads=False,       # ✅ stable in CI
-                progress=False       # ✅ no noisy logs
+                threads=False,
+                progress=False
             )
 
             prices = {}
@@ -53,11 +55,14 @@ class StockDataFetcher:
             return prices
 
         except Exception as e:
-            print(f"Yahoo batch failed: {e}")
+            print(f"Yahoo failed completely: {e}")
             return {t: None for t in tickers}
 
-    def fetch_with_retry(self, tickers):
-        for attempt in range(2):
+    # ✅ Retry (max 2)
+    def fetch_yahoo_with_retry(self, tickers):
+        for i in range(2):
+            print(f"Yahoo attempt {i+1}")
+
             prices = self.fetch_yahoo_batch(tickers)
 
             if any(v is not None for v in prices.values()):
@@ -65,20 +70,24 @@ class StockDataFetcher:
 
             time.sleep(3)
 
-        return prices
+        print("Yahoo unusable → switching to fallback")
+        return {t: None for t in tickers}
 
+    # ✅ Stooq fallback (per stock)
     def fetch_stooq(self, ticker):
         try:
             symbol = ticker.replace(".NS", ".IN")
             df = web.DataReader(symbol, "stooq")
 
             if not df.empty:
-                return float(df["Close"].iloc[0])
+                price = float(df["Close"].iloc[0])
+                return price
         except:
             pass
 
         return None
 
+    # ✅ Cache
     def load_cache(self):
         if self.dashboard_file.exists():
             with open(self.dashboard_file, "r") as f:
@@ -86,26 +95,32 @@ class StockDataFetcher:
         return []
 
     def get_cached_price(self, cache, ticker, entry):
-        for item in cache:
-            if item.get("ticker") == ticker:
-                return item.get("currentPrice", entry)
+        for d in cache:
+            if d.get("ticker") == ticker:
+                return d.get("currentPrice", entry)
         return entry
 
+    # ✅ MAIN
     def run(self):
-        with open(self.stocks_file, "r") as f:
-            data = json.load(f)
+        if not self.stocks_file.exists():
+            print("stocks.json missing")
+            return 1
 
-        stocks = data.get("stocks", [])
+        with open(self.stocks_file) as f:
+            stocks_data = json.load(f)
+
+        stocks = stocks_data.get("stocks", [])
         cache = self.load_cache()
 
         tickers = [s.get("ticker") for s in stocks if s.get("ticker")]
 
         market_open = self.is_market_open()
 
+        # ✅ Yahoo only if market open
         if market_open:
-            yahoo_prices = self.fetch_with_retry(tickers)
+            yahoo_prices = self.fetch_yahoo_with_retry(tickers)
         else:
-            print("Market closed → skipping Yahoo")
+            print("Market closed → skip Yahoo")
             yahoo_prices = {t: None for t in tickers}
 
         dashboard = []
@@ -121,6 +136,7 @@ class StockDataFetcher:
             source = "Yahoo"
             status = "Success"
 
+            # ✅ fallback chain
             if price is None:
                 stooq_price = self.fetch_stooq(ticker)
 
