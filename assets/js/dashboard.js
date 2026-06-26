@@ -1,27 +1,27 @@
 /**
- * Stock Performance Dashboard - Main Logic (Backend Driven)
+ * FINAL STABLE DASHBOARD JS
+ * (Backend driven + Safe DOM handling + No Yahoo calls)
  */
 
 let dashboardData = null;
 let filteredStocks = [];
 let currentStrategy = 'all';
 
-// ─── Bootstrap ─────────────────────────────────────────────
+// ✅ INIT
 document.addEventListener('DOMContentLoaded', function () {
     loadDashboardData();
     setupEventListeners();
 });
 
-// ─── Data Loading (UPDATED ✅) ──────────────────────────────
+// ✅ LOAD BACKEND DATA
 async function loadDashboardData() {
     try {
         showLoadingState();
 
         const ts = Date.now();
+        const response = await fetch(`data/dashboard.json?t=${ts}`);
 
-        // ✅ LOAD FROM BACKEND
-        let response = await fetch(`data/dashboard.json?t=${ts}`);
-        if (!response.ok) throw new Error(`dashboard.json HTTP ${response.status}`);
+        if (!response.ok) throw new Error("dashboard.json load failed");
 
         const raw = await response.json();
         const stocks = raw.stocks || [];
@@ -54,7 +54,7 @@ async function loadDashboardData() {
         hideLoadingState();
 
     } catch (err) {
-        console.error('Error loading dashboard data:', err);
+        console.error("Error loading dashboard:", err);
         showErrorState();
     }
 }
@@ -63,37 +63,22 @@ async function loadDashboardData() {
 function updateTopStatus(data) {
     if (!data) return;
 
-    const last = document.getElementById("last-updated");
-    if (last) last.textContent = new Date(data.lastUpdated).toLocaleString("en-IN");
+    document.getElementById("last-updated") &&
+        (document.getElementById("last-updated").textContent =
+            new Date(data.lastUpdated).toLocaleString("en-IN"));
 
-    const market = document.getElementById("market-status");
-    if (market) market.textContent = data.marketStatus || "-";
+    document.getElementById("market-status") &&
+        (document.getElementById("market-status").textContent =
+            data.marketStatus || "-");
 
-    const yahoo = document.getElementById("yahoo-status");
-    if (yahoo && data.yahooStatus) {
-        const y = data.yahooStatus;
-        yahoo.textContent = `${y.status} (${y.successCount}/${y.totalCount})`;
+    if (data.yahooStatus) {
+        document.getElementById("yahoo-status") &&
+            (document.getElementById("yahoo-status").textContent =
+                `${data.yahooStatus.status} (${data.yahooStatus.successCount}/${data.yahooStatus.totalCount})`);
     }
 }
 
-// ─── Strategy Filter (UNCHANGED ✅) ─────────────────────────
-window.applyStrategyFilter = function (strategy) {
-    currentStrategy = strategy;
-    if (!dashboardData?.stocks) return;
-
-    filteredStocks = strategy === 'all'
-        ? [...dashboardData.stocks]
-        : dashboardData.stocks.filter(s => s.strategy === strategy);
-
-    document.querySelectorAll('.strategy-tab').forEach(t => t.classList.remove('active'));
-    const tabEl = document.getElementById(`tab-${strategy}`);
-    if (tabEl) tabEl.classList.add('active');
-
-    applySearchAndFilters();
-    renderDashboard();
-};
-
-// ─── Rendering (UNCHANGED ✅) ───────────────────────────────
+// ✅ MAIN RENDER
 function renderDashboard() {
     renderSummaryCards();
     renderStockTable();
@@ -101,102 +86,157 @@ function renderDashboard() {
     updateFilteredCount();
 }
 
+// ✅ SAFE SUMMARY
 function renderSummaryCards() {
     if (!dashboardData?.stocks) return;
 
     const all = dashboardData.stocks;
 
-    document.getElementById('total-stocks').textContent = all.length;
-    document.getElementById('swing-count').textContent =
-        all.filter(s => s.strategy === 'swing').length;
-    document.getElementById('longterm-count').textContent =
-        all.filter(s => s.strategy === 'long-term').length;
+    document.getElementById("total-stocks") &&
+        (document.getElementById("total-stocks").textContent = all.length);
 
-    document.getElementById('active-flags').textContent =
-        all.filter(s => s.riskLevel !== 'low').length;
+    document.getElementById("swing-count") &&
+        (document.getElementById("swing-count").textContent =
+            all.filter(s => s.strategy === "swing").length);
+
+    document.getElementById("longterm-count") &&
+        (document.getElementById("longterm-count").textContent =
+            all.filter(s => s.strategy === "long-term").length);
+
+    document.getElementById("active-flags") &&
+        (document.getElementById("active-flags").textContent =
+            all.filter(s => s.riskLevel !== "low").length);
 }
 
-// ✅ MAIN FIX → no Yahoo, no updateStockRow needed
+// ✅ ✅ ✅ FINAL FIXED TABLE FUNCTION
 function renderStockTable() {
+
     const tableBody = document.getElementById('table-body');
     const mobileCards = document.getElementById('mobile-cards');
     const emptyState = document.getElementById('empty-state');
     const tableContainer = document.getElementById('table-container');
 
-    tableBody.innerHTML = '';
-    mobileCards.innerHTML = '';
-
-    if (filteredStocks.length === 0) {
-        tableContainer.classList.add('hidden');
-        mobileCards.classList.add('hidden');
-        emptyState.classList.remove('hidden');
+    // ✅ CRITICAL SAFETY CHECK
+    if (!tableBody) {
+        console.error("table-body not found in DOM");
         return;
     }
 
-    emptyState.classList.add('hidden');
-    tableContainer.classList.remove('hidden');
-    mobileCards.classList.remove('hidden');
+    tableBody.innerHTML = '';
+    mobileCards && (mobileCards.innerHTML = '');
+
+    if (!filteredStocks || filteredStocks.length === 0) {
+        tableContainer?.classList.add('hidden');
+        mobileCards?.classList.add('hidden');
+        emptyState?.classList.remove('hidden');
+        return;
+    }
+
+    emptyState?.classList.add('hidden');
+    tableContainer?.classList.remove('hidden');
+    mobileCards?.classList.remove('hidden');
 
     filteredStocks.forEach(stock => {
-        tableBody.appendChild(createTableRow(stock));
-        mobileCards.appendChild(createMobileCard(stock));
+
+        const tr = document.createElement("tr");
+
+        const isLive =
+            stock.priceSource === "Yahoo" ||
+            stock.priceSource === "Stooq";
+
+        tr.innerHTML = `
+            <td class="px-4 py-3">
+                <div class="font-bold">${stock.name || ''}</div>
+                <div class="text-xs text-gray-500">${stock.ticker}</div>
+            </td>
+
+            <td class="text-center">${stock.strategy || "N/A"}</td>
+
+            <td class="text-right">₹${stock.entryPrice}</td>
+
+            <td class="text-right">
+                ${isLive ? "₹" + stock.currentPrice : "—"}
+            </td>
+
+            <td class="text-center ${
+                stock.performance > 0
+                    ? "text-green-600"
+                    : stock.performance < 0
+                    ? "text-red-500"
+                    : "text-gray-500"
+            }">
+                ${stock.performance.toFixed(2)}%
+            </td>
+
+            <td class="text-center ${stock.fetchStatus === "Success" ? "text-green-600" : "text-orange-500"}">
+                ${stock.fetchStatus}
+            </td>
+        `;
+
+        tableBody.appendChild(tr);
+
+        if (mobileCards) {
+            mobileCards.appendChild(tr.cloneNode(true));
+        }
     });
 }
 
-// ✅ FIXED "isLive"
-function createTableRow(stock) {
-    const tr = document.createElement('tr');
-    tr.setAttribute('data-ticker', stock.ticker);
-
-    const isLive = stock.priceSource === "Yahoo" || stock.priceSource === "Stooq";
-
-    tr.innerHTML = `
-        <td class="px-4 py-4">
-            <div class="font-bold">${stock.name || ''}</div>
-            <div class="text-xs text-gray-500">${stock.ticker}</div>
-        </td>
-
-        <td class="text-center">${getStrategyBadge(stock.strategy)}</td>
-
-        <td class="text-sm text-right font-semibold">
-            ${formatCurrency(stock.entryPrice)}
-        </td>
-
-        <td class="text-right">
-            ${isLive ? formatCurrency(stock.currentPrice) : '—'}
-        </td>
-
-        <td class="text-center">
-            ${getDevianceBadge(stock.deviance, stock.deviancePercent)}
-        </td>
-
-        <td class="text-center">
-            ${getRiskFlagBadge(stock.riskFlag, stock.riskLevel)}
-        </td>
-    `;
-
-    return tr;
-}
-
-// ✅ KEEP YOUR EXISTING HELPERS BELOW (UNCHANGED)
-
-// ─── Event Listeners ─────────────────────────────
+// ✅ SAFE EVENTS
 function setupEventListeners() {
-    document.getElementById('refresh-btn').addEventListener('click', loadDashboardData);
+
+    const refreshBtn = document.getElementById("refresh-btn");
+
+    if (refreshBtn) {
+        refreshBtn.addEventListener("click", async function () {
+            this.innerHTML =
+                '<i class="fas fa-spinner fa-spin mr-1"></i>Refreshing…';
+
+            await loadDashboardData();
+
+            this.innerHTML =
+                '<i class="fas fa-sync-alt mr-1"></i>Refresh';
+        });
+    }
+
+    document.getElementById("search-input")?.addEventListener("input", applySearchAndFilters);
+    document.getElementById("sector-filter")?.addEventListener("change", applySearchAndFilters);
+    document.getElementById("sort-select")?.addEventListener("change", applySearchAndFilters);
+
+    document.getElementById("export-csv")?.addEventListener("click", exportToCSV);
+    document.getElementById("print-table")?.addEventListener("click", () => window.print());
+
+    document.getElementById("clear-filters")?.addEventListener("click", clearAllFilters);
+    document.getElementById("clear-filters-empty")?.addEventListener("click", clearAllFilters);
 }
 
-// ─── UI States ────────────────────────────────────
+// ✅ UI STATES
 function showLoadingState() {
-    document.getElementById('loading-state').classList.remove('hidden');
-}
-function hideLoadingState() {
-    document.getElementById('loading-state').classList.add('hidden');
-}
-function showErrorState() {
-    document.getElementById('error-state').classList.remove('hidden');
+    document.getElementById("loading-state")?.classList.remove("hidden");
+    document.getElementById("error-state")?.classList.add("hidden");
 }
 
-// ✅ formatting
-function formatCurrency(value) {
-    return '₹' + parseFloat(value).toFixed(2);
+function hideLoadingState() {
+    document.getElementById("loading-state")?.classList.add("hidden");
 }
+
+function showErrorState() {
+    document.getElementById("loading-state")?.classList.add("hidden");
+    document.getElementById("error-state")?.classList.remove("hidden");
+}
+
+// ✅ SAFE UPDATES
+function updateLastRefreshed() {
+    if (!dashboardData?.lastUpdated) return;
+
+    const el = document.getElementById("last-updated");
+    if (el) {
+        el.textContent =
+            new Date(dashboardData.lastUpdated).toLocaleString("en-IN");
+    }
+}
+
+function updateFilteredCount() {
+    const el = document.getElementById("filtered-count");
+    if (el) el.textContent = filteredStocks.length;
+}
+``
