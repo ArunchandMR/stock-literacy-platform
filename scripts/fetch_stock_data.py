@@ -38,6 +38,7 @@ class StockDataFetcher:
     
     def __init__(self, data_dir='data'):
         self.data_dir = Path(data_dir)
+        # stocks.json is the single source of truth (20 stocks with all fields)
         self.stocks_file = self.data_dir / 'stocks.json'
         self.dashboard_file = self.data_dir / 'dashboard.json'
         self.config_file = self.data_dir / 'config.json'
@@ -67,40 +68,77 @@ class StockDataFetcher:
             print(f"WARNING: Invalid JSON in {self.config_file}. Using defaults.")
             return {}
     
-    def fetch_current_price(self, ticker):
-        """Fetch current price for a stock using yfinance"""
+def fetch_current_price(self, ticker):
+    """Fetch current price for a stock using yfinance with detailed logging"""
+
+    print(f"\nFetching {ticker}")
+
+    try:
+        stock = yf.Ticker(ticker)
+
+        # -----------------------------
+        # Method 1 : fast_info
+        # -----------------------------
         try:
-            stock = yf.Ticker(ticker)
-            
-            # Try to get current price from multiple sources
-            # 1. Try fast_info (fastest)
-            try:
-                current_price = stock.fast_info.get('lastPrice')
-                if current_price and current_price > 0:
-                    return float(current_price)
-            except:
-                pass
-            
-            # 2. Try info dict
-            try:
-                info = stock.info
-                current_price = info.get('currentPrice') or info.get('regularMarketPrice')
-                if current_price and current_price > 0:
-                    return float(current_price)
-            except:
-                pass
-            
-            # 3. Try history (most reliable but slower)
-            hist = stock.history(period='1d')
-            if not hist.empty:
-                return float(hist['Close'].iloc[-1])
-            
-            print(f"WARNING: Could not fetch price for {ticker}")
-            return None
-            
+            print("  Trying fast_info...")
+
+            current_price = stock.fast_info.get("lastPrice")
+
+            if current_price is not None and current_price > 0:
+                print(f"  SUCCESS via fast_info : ₹{current_price}")
+                return float(current_price)
+
+            print("  fast_info returned no price.")
+
         except Exception as e:
-            print(f"ERROR fetching {ticker}: {e}")
-            return None
+            print(f"  fast_info FAILED : {e}")
+
+        # -----------------------------
+        # Method 2 : info
+        # -----------------------------
+        try:
+            print("  Trying info...")
+
+            info = stock.info
+
+            current_price = (
+                info.get("currentPrice")
+                or info.get("regularMarketPrice")
+            )
+
+            if current_price is not None and current_price > 0:
+                print(f"  SUCCESS via info : ₹{current_price}")
+                return float(current_price)
+
+            print("  info returned no price.")
+
+        except Exception as e:
+            print(f"  info FAILED : {e}")
+
+        # -----------------------------
+        # Method 3 : history
+        # -----------------------------
+        try:
+            print("  Trying history...")
+
+            hist = stock.history(period="1d")
+
+            if not hist.empty:
+                current_price = float(hist["Close"].iloc[-1])
+                print(f"  SUCCESS via history : ₹{current_price}")
+                return current_price
+
+            print("  history returned empty dataframe.")
+
+        except Exception as e:
+            print(f"  history FAILED : {e}")
+
+        print(f"WARNING: Could not fetch price for {ticker}")
+        return None
+
+    except Exception as e:
+        print(f"FATAL ERROR for {ticker}: {e}")
+        return None
     
     def calculate_deviance(self, entry_price, current_price):
         """Calculate price deviance percentage"""
