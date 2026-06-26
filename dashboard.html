@@ -1,127 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Dashboard</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-100">
 
-<!-- HEADER -->
 <header class="bg-blue-600 text-white p-4">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <h1 class="text-xl font-bold">📊 Stock Dashboard</h1>
-
-        <button id="refresh-btn"
-            class="bg-white text-blue-600 px-4 py-1 rounded font-semibold">
-            Refresh
-        </button>
-    </div>
+    <h1 class="text-xl font-bold">Stock Dashboard</h1>
 </header>
 
-<!-- STATUS BAR -->
-<section class="bg-white shadow p-4">
-    <div class="max-w-7xl mx-auto flex flex-col gap-1 text-sm">
-
-        <div>
-            <strong>Last Updated:</strong>
-            <span id="last-updated">Loading...</span>
-        </div>
-
-        <div>
-            <strong>Market:</strong>
-            <span id="market-status">-</span>
-        </div>
-
-        <div>
-            <strong>Yahoo Status:</strong>
-            <span id="yahoo-status">Loading...</span>
-        </div>
-
-    </div>
+<section class="bg-white p-4 shadow">
+    <div>Last Updated: <span id="last-updated">Loading...</span></div>
+    <div>Market: <span id="market-status">-</span></div>
+    <div>Yahoo: <span id="yahoo-status">Loading...</span></div>
 </section>
 
-<!-- SUMMARY -->
-<section class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 my-6 px-4">
+<section class="grid grid-cols-4 gap-4 p-4">
+    <div>Total: <span id="total-stocks"></span></div>
+    <div>Swing: <span id="swing-count"></span></div>
+    <div>Long: <span id="longterm-count"></span></div>
+    <div>Fallback: <span id="active-flags"></span></div>
+</section>
 
-    <div class="bg-white p-4 rounded shadow">
-        <div class="text-gray-500 text-sm">Total</div>
-        <div id="total-stocks" class="text-xl font-bold">--</div>
-    </div>
+<section class="p-4">
 
-    <div class="bg-white p-4 rounded shadow">
-        <div class="text-gray-500 text-sm">Swing</div>
-        <div id="swing-count" class="text-xl font-bold">--</div>
-    </div>
+<div id="loading-state">Loading dashboard...</div>
+<div id="error-state" class="hidden text-red-600">Error loading data</div>
 
-    <div class="bg-white p-4 rounded shadow">
-        <div class="text-gray-500 text-sm">Long Term</div>
-        <div id="longterm-count" class="text-xl font-bold">--</div>
-    </div>
+<table class="w-full bg-white shadow">
+<thead class="bg-gray-200">
+<tr>
+<th>Ticker</th>
+<th>Strategy</th>
+<th>Entry</th>
+<th>Current</th>
+<th>Performance</th>
+<th>Source</th>
+<th>Status</th>
+</tr>
+</thead>
 
-    <div class="bg-white p-4 rounded shadow">
-        <div class="text-gray-500 text-sm">Fallback</div>
-        <div id="active-flags" class="text-xl font-bold">--</div>
-    </div>
+<tbody id="table-body"></tbody>
+</table>
 
 </section>
 
-<!-- TABLE -->
-<section class="max-w-7xl mx-auto px-4 pb-10">
-
-    <!-- LOADING -->
-    <div id="loading-state" class="text-center py-10">
-        <p>Loading dashboard...</p>
-    </div>
-
-    <!-- ERROR -->
-    <div id="error-state" class="hidden text-center py-10 text-red-600">
-        Error loading dashboard.json
-    </div>
-
-    <!-- TABLE -->
-    <div id="table-container" class="hidden overflow-x-auto bg-white shadow rounded">
-
-        <table class="min-w-full text-sm">
-            <thead class="bg-gray-200">
-                <tr>
-                    <th class="p-3 text-left">Ticker</th>
-                    <th class="p-3 text-left">Strategy</th>
-                    <th class="p-3 text-left">Entry</th>
-                    <th class="p-3 text-left">Current</th>
-                    <th class="p-3 text-left">Performance</th>
-                    <th class="p-3 text-left">Source</th>
-                    <th class="p-3 text-left">Status</th>
-                </tr>
-            </thead>
-            <tbody id="table-body"></tbody>
-        </table>
-
-    </div>
-
-</section>
-
-<!-- JS -->
 <script src="assets/js/dashboard.js"></script>
-
-<script>
-// ✅ Update market + yahoo status in UI
-function updateTopStatus(data) {
-    if (!data) return;
-
-    document.getElementById("market-status").textContent =
-        data.marketStatus || "-";
-
-    if (data.yahooStatus) {
-        const y = data.yahooStatus;
-        document.getElementById("yahoo-status").textContent =
-            `${y.status} (${y.successCount}/${y.totalCount})`;
-    }
-}
-</script>
 
 </body>
 </html>
