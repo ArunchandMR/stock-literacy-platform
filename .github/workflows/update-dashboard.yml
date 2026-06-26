@@ -3,7 +3,7 @@ name: Update Stock Dashboard
 on:
   # Run daily at 6:30 PM IST (13:00 UTC)
   schedule:
-    - cron: '0 13 * * *'
+    - cron: '0 */2 * * *'
   
   # Allow manual trigger
   workflow_dispatch:
