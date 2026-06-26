@@ -16,7 +16,6 @@ class StockDataFetcher:
         self.stocks_file = self.data_dir / "stocks.json"
         self.dashboard_file = self.data_dir / "dashboard.json"
 
-    # ✅ Market Hours (IST accurate)
     def is_market_open(self):
         now = datetime.now(ZoneInfo("Asia/Kolkata"))
 
@@ -28,14 +27,14 @@ class StockDataFetcher:
 
         return start <= now <= end
 
-    # ✅ Batch fetch Yahoo
     def fetch_yahoo_batch(self, tickers):
         try:
             data = yf.download(
                 tickers=tickers,
                 period="5d",
                 group_by="ticker",
-                threads=True
+                threads=False,       # ✅ stable in CI
+                progress=False       # ✅ no noisy logs
             )
 
             prices = {}
@@ -57,7 +56,6 @@ class StockDataFetcher:
             print(f"Yahoo batch failed: {e}")
             return {t: None for t in tickers}
 
-    # ✅ Retry logic
     def fetch_with_retry(self, tickers):
         for attempt in range(2):
             prices = self.fetch_yahoo_batch(tickers)
@@ -69,7 +67,6 @@ class StockDataFetcher:
 
         return prices
 
-    # ✅ Stooq fallback
     def fetch_stooq(self, ticker):
         try:
             symbol = ticker.replace(".NS", ".IN")
@@ -82,7 +79,6 @@ class StockDataFetcher:
 
         return None
 
-    # ✅ Load cached dashboard
     def load_cache(self):
         if self.dashboard_file.exists():
             with open(self.dashboard_file, "r") as f:
@@ -95,12 +91,7 @@ class StockDataFetcher:
                 return item.get("currentPrice", entry)
         return entry
 
-    # ✅ Main run
     def run(self):
-        if not self.stocks_file.exists():
-            print("stocks.json not found")
-            return 1
-
         with open(self.stocks_file, "r") as f:
             data = json.load(f)
 
@@ -111,12 +102,10 @@ class StockDataFetcher:
 
         market_open = self.is_market_open()
 
-        yahoo_prices = {}
-
         if market_open:
             yahoo_prices = self.fetch_with_retry(tickers)
         else:
-            print("Market closed → skipping Yahoo fetch")
+            print("Market closed → skipping Yahoo")
             yahoo_prices = {t: None for t in tickers}
 
         dashboard = []
@@ -132,16 +121,13 @@ class StockDataFetcher:
             source = "Yahoo"
             status = "Success"
 
-            # Step 1: Yahoo
             if price is None:
-                # Step 2: Stooq
                 stooq_price = self.fetch_stooq(ticker)
 
                 if stooq_price:
                     price = stooq_price
                     source = "Stooq"
                 else:
-                    # Step 3: Cached
                     cached = self.get_cached_price(cache, ticker, entry)
 
                     if cached != entry:
@@ -149,7 +135,6 @@ class StockDataFetcher:
                         source = "Cached"
                         status = "Fallback"
                     else:
-                        # Step 4: Entry
                         price = entry
                         source = "Entry"
                         status = "Fallback"
