@@ -1,55 +1,118 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><!DOCTYPE="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stock Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Dashboard</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-100">
 
-<header class="bg-blue-600 text-white p-4">
-    <h1 class="text-xl font-bold">Stock Dashboard</h1>
+<!-- ✅ HEADER -->
+<header class="bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow">
+    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+        <h1 class="text-2xl font-bold">📊 Stock Dashboard</h1>
+
+        <button id="refresh-btn"
+            class="bg-white text-blue-600 px-4 py-1 rounded font-semibold hover:bg-gray-100">
+            Refresh
+        </button>
+    </div>
 </header>
 
-<section class="bg-white p-4 shadow">
-    <div>Last Updated: <span id="last-updated">Loading...</span></div>
-    <div>Market: <span id="market-status">-</span></div>
-    <div>Yahoo: <span id="yahoo-status">Loading...</span></div>
+<!-- ✅ STATUS BAR -->
+<section class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+
+        <div class="text-sm text-gray-700">
+            <strong>Last Updated:</strong>
+            <span id="last-updated">Loading...</span>
+        </div>
+
+        <div class="text-sm text-gray-700 mt-1">
+            <strong>Market:</strong>
+            <span id="market-status">-</span>
+        </div>
+
+        <div class="text-sm text-gray-700 mt-1">
+            <strong>Yahoo Status:</strong>
+            <span id="yahoo-status">Loading...</span>
+        </div>
+
+    </div>
 </section>
 
-<section class="grid grid-cols-4 gap-4 p-4">
-    <div>Total: <span id="total-stocks"></span></div>
-    <div>Swing: <span id="swing-count"></span></div>
-    <div>Long: <span id="longterm-count"></span></div>
-    <div>Fallback: <span id="active-flags"></span></div>
-</section>
+<!-- ✅ SUMMARY CARDS -->
+<section class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 my-6 px-6">
 
-<section class="p-4">
+    <div class="bg-white rounded-lg shadow p-5">
+        <div class="text-gray-500 text-sm">Total Stocks</div>
+        <div id="total-stocks" class="text-2xl font-bold">--</div>
+    </div>
 
-<div id="loading-state">Loading dashboard...</div>
-<div id="error-state" class="hidden text-red-600">Error loading data</div>
+    <div class="bg-white rounded-lg shadow p-5">
+        <div class="text-gray-500 text-sm">Swing</div>
+        <div id="swing-count" class="text-2xl font-bold">--</div>
+    </div>
 
-<table class="w-full bg-white shadow">
-<thead class="bg-gray-200">
-<tr>
-<th>Ticker</th>
-<th>Strategy</th>
-<th>Entry</th>
-<th>Current</th>
-<th>Performance</th>
-<th>Source</th>
-<th>Status</th>
-</tr>
-</thead>
+    <div class="bg-white rounded-lg shadow p-5">
+        <div class="text-gray-500 text-sm">Long Term</div>
+        <div id="longterm-count" class="text-2xl font-bold">--</div>
+    </div>
 
-<tbody id="table-body"></tbody>
-</table>
+    <div class="bg-white rounded-lg shadow p-5">
+        <div class="text-gray-500 text-sm">Fallback Cases</div>
+        <div id="active-flags" class="text-2xl font-bold">--</div>
+    </div>
 
 </section>
 
+<!-- ✅ TABLE SECTION -->
+<section class="max-w-7xl mx-auto px-6 pb-10">
+
+    <!-- LOADING -->
+    <div id="loading-state" class="text-center py-10 text-gray-500">
+        Loading dashboard...
+    </div>
+
+    <!-- ERROR -->
+    <div id="error-state" class="hidden text-center py-10 text-red-600">
+        Error loading data
+    </div>
+
+    <!-- TABLE -->
+    <div id="table-container" class="hidden bg-white shadow rounded-lg overflow-x-auto">
+
+        <table class="min-w-full text-sm">
+
+            <thead class="bg-gray-200 text-gray-700">
+                <tr>
+                    <th class="px-4 py-3 text-left">Ticker</th>
+                    <th class="px-4 py-3 text-left">Strategy</th>
+                    <th class="px-4 py-3 text-right">Entry</th>
+                    <th class="px-4 py-3 text-right">Current</th>
+                    <th class="px-4 py-3 text-right">Performance</th>
+                    <th class="px-4 py-3 text-left">Source</th>
+                    <th class="px-4 py-3 text-left">Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="table-body" class="divide-y"></tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- ✅ FOOTER -->
+<footer class="bg-gray-800 text-white py-6 text-center text-sm">
+    <p>© 2026 Stock Literacy Platform</p>
+</footer>
+
+<!-- ✅ JS -->
 <script src="assets/js/dashboard.js"></script>
 
 </body>
