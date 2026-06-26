@@ -16,10 +16,15 @@ class StockDataFetcher:
         self.dashboard_file = self.data_dir / "dashboard.json"
 
     def fetch_current_price(self, ticker):
+        # ✅ Skip invalid ticker
+        if not ticker or ticker.upper() == "STOCKS":
+            print(f"Skipping invalid ticker: {ticker}")
+            return None
+
         try:
             stock = yf.Ticker(ticker)
 
-            # ✅ Method 1: fast_info (best for CI environments)
+            # ✅ Method 1: fast_info
             try:
                 if hasattr(stock, "fast_info"):
                     fast = stock.fast_info
@@ -31,18 +36,7 @@ class StockDataFetcher:
             except Exception:
                 pass
 
-            # ✅ Method 2: info fallback
-            try:
-                info = stock.info
-                if isinstance(info, dict):
-                    price = info.get("currentPrice")
-                    if price:
-                        print(f"{ticker} price (info): {price}")
-                        return float(price)
-            except Exception:
-                pass
-
-            # ✅ Method 3: history fallback (5 days)
+            # ✅ Method 2: history fallback
             try:
                 data = stock.history(period="5d")
                 if not data.empty:
@@ -52,7 +46,7 @@ class StockDataFetcher:
             except Exception:
                 pass
 
-            print(f"WARNING: No data available for {ticker}")
+            print(f"WARNING: No data for {ticker}")
             return None
 
         except Exception as e:
@@ -65,14 +59,20 @@ class StockDataFetcher:
             return 1
 
         with open(self.stocks_file, "r") as f:
-            stocks = json.load(f)
+            stocks_data = json.load(f)
+
+        # ✅ FIX: handle both formats
+        if isinstance(stocks_data, dict) and "stocks" in stocks_data:
+            stocks = stocks_data["stocks"]
+        else:
+            stocks = stocks_data
 
         dashboard_data = []
 
         for stock in stocks:
-            time.sleep(2)  # ✅ prevents Yahoo rate limiting
+            time.sleep(2)  # ✅ prevent rate limiting
 
-            # ✅ Handle both formats (string OR object)
+            # ✅ Handle formats
             if isinstance(stock, dict):
                 ticker = stock.get("ticker")
                 entry_price = float(stock.get("entryPrice", 0))
@@ -80,9 +80,12 @@ class StockDataFetcher:
                 ticker = stock
                 entry_price = 0
 
+            if not ticker:
+                print("Skipping empty ticker")
+                continue
+
             current_price = self.fetch_current_price(ticker)
 
-            # ✅ Fallback if API fails
             if current_price is None:
                 current_price = entry_price
 
