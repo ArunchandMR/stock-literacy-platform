@@ -20,6 +20,7 @@ class StockDataFetcher:
     def is_market_open(self):
         now = datetime.now(ZoneInfo("Asia/Kolkata"))
 
+        # Weekend check
         if now.weekday() >= 5:
             return False
 
@@ -58,7 +59,7 @@ class StockDataFetcher:
             print(f"Yahoo batch failed completely: {e}")
             return {t: None for t in tickers}
 
-    # ✅ Retry + health tracking
+    # ✅ Retry + Yahoo health
     def fetch_yahoo_with_retry(self, tickers):
         final_prices = None
 
@@ -77,7 +78,7 @@ class StockDataFetcher:
 
             time.sleep(3)
 
-        # ✅ Determine status (UPDATED TERMINOLOGY ✅)
+        # ✅ Determine status
         if final_prices:
             success_count = sum(1 for v in final_prices.values() if v is not None)
 
@@ -94,7 +95,6 @@ class StockDataFetcher:
                 "totalCount": len(tickers)
             }
 
-        # Completely failed
         print("Yahoo unavailable")
         return {t: None for t in tickers}, {
             "status": "Unavailable",
@@ -115,23 +115,30 @@ class StockDataFetcher:
 
         return None
 
-    # ✅ Cache
+    # ✅ Load cache (FIXED — supports both formats ✅)
     def load_cache(self):
         if self.dashboard_file.exists():
             with open(self.dashboard_file, "r") as f:
-                return json.load(f).get("stocks", [])
+                data = json.load(f)
+
+                # handle both old list format & new dict format
+                if isinstance(data, dict):
+                    return data.get("stocks", [])
+                elif isinstance(data, list):
+                    return data
+
         return []
 
-    def get_cached_price(self, cache, ticker, entry):
+    def get_cached_price(self, cache, ticker, entry_price):
         for item in cache:
             if item.get("ticker") == ticker:
-                return item.get("currentPrice", entry)
-        return entry
+                return item.get("currentPrice", entry_price)
+        return entry_price
 
-    # ✅ Main execution
+    # ✅ MAIN
     def run(self):
         if not self.stocks_file.exists():
-            print("stocks.json missing")
+            print("ERROR: stocks.json not found")
             return 1
 
         with open(self.stocks_file, "r") as f:
@@ -143,9 +150,11 @@ class StockDataFetcher:
         tickers = [s.get("ticker") for s in stocks if s.get("ticker")]
 
         market_open = self.is_market_open()
+
+        # ✅ CONSISTENT runId for full execution
         run_id = int(datetime.utcnow().timestamp())
 
-        # ✅ Yahoo fetch only in market hours
+        # ✅ Yahoo only during market hours
         if market_open:
             yahoo_prices, yahoo_info = self.fetch_yahoo_with_retry(tickers)
         else:
@@ -161,7 +170,7 @@ class StockDataFetcher:
 
         for stock in stocks:
             ticker = stock.get("ticker")
-            entry = float(stock.get("entryPrice", 0))
+            entry_price = float(stock.get("entryPrice", 0))
 
             if not ticker:
                 continue
@@ -170,7 +179,7 @@ class StockDataFetcher:
             source = "Yahoo"
             status = "Success"
 
-            # ✅ Fallback chain
+            # ✅ fallback chain
             if price is None:
                 stooq_price = self.fetch_stooq(ticker)
 
@@ -178,24 +187,27 @@ class StockDataFetcher:
                     price = stooq_price
                     source = "Stooq"
                 else:
-                    cached = self.get_cached_price(cache, ticker, entry)
+                    cached_price = self.get_cached_price(
+                        cache, ticker, entry_price
+                    )
 
-                    if cached != entry:
-                        price = cached
+                    if cached_price != entry_price:
+                        price = cached_price
                         source = "Cached"
                         status = "Fallback"
                     else:
-                        price = entry
+                        price = entry_price
                         source = "Entry"
                         status = "Fallback"
 
+            # ✅ performance
             performance = 0
-            if entry > 0:
-                performance = ((price - entry) / entry) * 100
+            if entry_price > 0:
+                performance = ((price - entry_price) / entry_price) * 100
 
             dashboard.append({
                 "ticker": ticker,
-                "entryPrice": entry,
+                "entryPrice": entry_price,
                 "currentPrice": round(price, 2),
                 "performance": round(performance, 2),
                 "priceSource": source,
@@ -203,7 +215,7 @@ class StockDataFetcher:
                 "runId": run_id
             })
 
-        # ✅ FINAL STRUCTURE (YOUR DESIGN ✅)
+        # ✅ FINAL STRUCTURE
         final_output = {
             "lastUpdated": datetime.utcnow().isoformat() + "Z",
             "yahooStatus": yahoo_info,
