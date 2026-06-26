@@ -1,20 +1,16 @@
 /**
- * FINAL DASHBOARD (Backend Driven)
- * Source: data/dashboard.json
- * No direct Yahoo calls in UI
+ * FINAL FIXED DASHBOARD JS (SAFE VERSION)
  */
 
 let dashboardData = null;
 let filteredStocks = [];
 let currentStrategy = 'all';
 
-// ✅ INIT
 document.addEventListener('DOMContentLoaded', function () {
     loadDashboardData();
     setupEventListeners();
 });
 
-// ✅ LOAD FROM BACKEND JSON
 async function loadDashboardData() {
     try {
         showLoadingState();
@@ -27,8 +23,6 @@ async function loadDashboardData() {
         const data = await response.json();
 
         dashboardData = data;
-
-        // ✅ Use backend stocks directly
         filteredStocks = [...(data.stocks || [])];
 
         renderDashboard();
@@ -40,7 +34,6 @@ async function loadDashboardData() {
     }
 }
 
-// ✅ RENDER
 function renderDashboard() {
     if (!dashboardData) return;
 
@@ -48,29 +41,31 @@ function renderDashboard() {
     renderStockTable();
     updateLastRefreshed();
     updateYahooStatus();
-    updateFilteredCount();
+    updateMarketStatus();
 }
 
-// ✅ NEW — Yahoo status display
 function updateYahooStatus() {
-    if (!dashboardData.yahooStatus) return;
-
     const el = document.getElementById("yahoo-status");
+    if (!el || !dashboardData?.yahooStatus) return;
 
-    if (el) {
-        const y = dashboardData.yahooStatus;
-        el.textContent =
-            `Yahoo: ${y.status} (${y.successCount}/${y.totalCount})`;
-    }
+    const y = dashboardData.yahooStatus;
+    el.textContent = `${y.status} (${y.successCount}/${y.totalCount})`;
 }
 
-// ✅ LAST UPDATED
+function updateMarketStatus() {
+    const el = document.getElementById("market-status");
+    if (!el || !dashboardData) return;
+
+    el.textContent = dashboardData.marketStatus || "-";
+}
+
 function updateLastRefreshed() {
-    if (!dashboardData?.lastUpdated) return;
+    const el = document.getElementById("last-updated");
+    if (!el || !dashboardData?.lastUpdated) return;
 
     const date = new Date(dashboardData.lastUpdated);
 
-    const formatted = date.toLocaleString('en-IN', {
+    el.textContent = date.toLocaleString('en-IN', {
         day: '2-digit',
         month: 'short',
         hour: '2-digit',
@@ -78,11 +73,8 @@ function updateLastRefreshed() {
         hour12: true,
         timeZone: 'Asia/Kolkata'
     });
-
-    document.getElementById('last-updated').textContent = formatted;
 }
 
-// ✅ SUMMARY
 function renderSummaryCards() {
     if (!dashboardData?.stocks) return;
 
@@ -97,94 +89,62 @@ function renderSummaryCards() {
         all.filter(s => s.fetchStatus === 'Fallback').length;
 }
 
-// ✅ TABLE
+// ✅ FIXED TABLE RENDER
 function renderStockTable() {
     const tableBody = document.getElementById('table-body');
-    const mobileCards = document.getElementById('mobile-cards');
+    const container = document.getElementById('table-container');
+
+    // ✅ SAFETY FIX
+    if (!tableBody || !container) {
+        console.error("Table elements missing in HTML");
+        return;
+    }
 
     tableBody.innerHTML = '';
-    mobileCards.innerHTML = '';
 
     filteredStocks.forEach(stock => {
         tableBody.appendChild(createTableRow(stock));
-        mobileCards.appendChild(createMobileCard(stock));
     });
+
+    container.classList.remove('hidden');
 }
 
-// ✅ ROW
 function createTableRow(stock) {
     const tr = document.createElement('tr');
 
     tr.innerHTML = `
-        <td>${stock.name || ''}</td>
-        <td>${stock.strategy}</td>
-        <td>${formatDate(stock.entryDate)}</td>
-        <td>${formatCurrency(stock.entryPrice)}</td>
-        <td>${formatCurrency(stock.currentPrice)}</td>
-        <td>${formatCurrency(stock.targetExitMin)} - ${formatCurrency(stock.targetExitMax)}</td>
-        <td>${formatCurrency(stock.stopLoss)}</td>
-        <td>${stock.performance.toFixed(2)}%</td>
-        <td>${stock.priceSource}</td>
-        <td>${stock.fetchStatus}</td>
+        <td class="p-3">${stock.ticker}</td>
+        <td class="p-3">${stock.strategy}</td>
+        <td class="p-3">₹${stock.entryPrice}</td>
+        <td class="p-3">₹${stock.currentPrice}</td>
+        <td class="p-3">${stock.performance.toFixed(2)}%</td>
+        <td class="p-3">${stock.priceSource}</td>
+        <td class="p-3">${stock.fetchStatus}</td>
     `;
 
     return tr;
 }
 
-// ✅ MOBILE CARD
-function createMobileCard(stock) {
-    const div = document.createElement('div');
-
-    div.innerHTML = `
-        <div class="p-4 border-b">
-            <b>${stock.ticker}</b><br>
-            Price: ${formatCurrency(stock.currentPrice)}<br>
-            Perf: ${stock.performance.toFixed(2)}%<br>
-            Source: ${stock.priceSource}
-        </div>
-    `;
-
-    return div;
-}
-
-// ✅ HELPERS
-function formatCurrency(val) {
-    if (val === null || val === undefined) return '-';
-    return '₹' + Number(val).toFixed(2);
-}
-
-function formatDate(date) {
-    if (!date) return '-';
-    return new Date(date).toLocaleDateString();
-}
-
-// ✅ FILTERS
-function applySearchAndFilters() {
-    let stocks = dashboardData.stocks;
-
-    if (currentStrategy !== 'all') {
-        stocks = stocks.filter(s => s.strategy === currentStrategy);
-    }
-
-    filteredStocks = stocks;
-    renderStockTable();
-    updateFilteredCount();
-}
-
-// ✅ EVENTS
 function setupEventListeners() {
-    document.getElementById('refresh-btn')
-        .addEventListener('click', loadDashboardData);
+    const btn = document.getElementById('refresh-btn');
+
+    if (btn) {
+        btn.addEventListener('click', loadDashboardData);
+    }
 }
 
-// ✅ UI STATES
+// ✅ STATES
 function showLoadingState() {
-    document.getElementById('loading-state').classList.remove('hidden');
+    const el = document.getElementById('loading-state');
+    if (el) el.classList.remove('hidden');
 }
+
 function hideLoadingState() {
-    document.getElementById('loading-state').classList.add('hidden');
+    const el = document.getElementById('loading-state');
+    if (el) el.classList.add('hidden');
 }
+
 function showErrorState() {
-    document.getElementById('error-state').classList.remove('hidden');
+    const el = document.getElementById('error-state');
+    if (el) el.classList.remove('hidden');
 }
-``
