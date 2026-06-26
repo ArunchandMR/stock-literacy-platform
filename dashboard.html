@@ -1,105 +1,154 @@
-<!DOCTYPE html><!DOCTYPE="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Dashboard</title>
+    <title>Stock Performance Dashboard - Financial Literacy Platform</title>
 
-    <!-- Tailwind -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+    <style>
+        .strategy-tab {
+            background-color: #f3f4f6;
+            color: #4b5563;
+        }
+        .strategy-tab.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .strategy-tab:hover:not(.active) {
+            background-color: #e5e7eb;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-50">
+
+<!-- ✅ NAVBAR -->
+<nav class="bg-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
+
+        <div class="flex items-center">
+            <div class="w-10 h-10 bg-blue-600 text-white flex items-center justify-center rounded">
+                📊
+            </div>
+            <span class="ml-3 font-bold text-xl">Financial Literacy Hub</span>
+        </div>
+
+        <div class="hidden md:flex space-x-6">
+            <a href="index.html" class="text-gray-700 hover:text-blue-600">Home</a>
+            <a href="dashboard.html" class="text-blue-600 font-semibold border-b-2 border-blue-600">Dashboard</a>
+            <a href="add-stock.html" class="text-gray-700 hover:text-blue-600">Add Stock</a>
+        </div>
+
+    </div>
+</nav>
 
 <!-- ✅ HEADER -->
-<header class="bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow">
-    <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-        <h1 class="text-2xl font-bold">📊 Stock Dashboard</h1>
+<section class="bg-gradient-to-r from-blue-600 to-green-500 text-white py-8">
+    <div class="max-w-7xl mx-auto px-4">
 
-        <button id="refresh-btn"
-            class="bg-white text-blue-600 px-4 py-1 rounded font-semibold hover:bg-gray-100">
-            Refresh
-        </button>
-    </div>
-</header>
+        <h1 class="text-3xl font-bold mb-2">
+            Stock Performance Dashboard
+        </h1>
 
-<!-- ✅ STATUS BAR -->
-<section class="bg-white shadow">
-    <div class="max-w-7xl mx-auto px-6 py-4">
+        <p class="text-blue-100">
+            Historical tracking with backend-driven data
+        </p>
 
-        <div class="text-sm text-gray-700">
-            <strong>Last Updated:</strong>
-            <span id="last-updated">Loading...</span>
-        </div>
+        <!-- ✅ STATUS BAR -->
+        <div class="mt-4 text-sm">
 
-        <div class="text-sm text-gray-700 mt-1">
-            <strong>Market:</strong>
-            <span id="market-status">-</span>
-        </div>
+            <div>
+                Last Updated:
+                <span id="last-updated">Loading...</span>
+            </div>
 
-        <div class="text-sm text-gray-700 mt-1">
-            <strong>Yahoo Status:</strong>
-            <span id="yahoo-status">Loading...</span>
+            <!-- ✅ NEW -->
+            <div>
+                Market:
+                <span id="market-status">-</span>
+            </div>
+
+            <!-- ✅ NEW -->
+            <div>
+                Yahoo Status:
+                <span id="yahoo-status">Loading...</span>
+            </div>
+
+            <button id="refresh-btn"
+                class="mt-2 bg-white text-blue-600 px-3 py-1 rounded text-sm">
+                Refresh
+            </button>
+
         </div>
 
     </div>
 </section>
 
 <!-- ✅ SUMMARY CARDS -->
-<section class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 my-6 px-6">
+<section class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 py-6 px-4">
 
-    <div class="bg-white rounded-lg shadow p-5">
-        <div class="text-gray-500 text-sm">Total Stocks</div>
-        <div id="total-stocks" class="text-2xl font-bold">--</div>
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-sm text-gray-500">Total Stocks</p>
+        <p id="total-stocks" class="text-2xl font-bold mt-1">--</p>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-5">
-        <div class="text-gray-500 text-sm">Swing</div>
-        <div id="swing-count" class="text-2xl font-bold">--</div>
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-sm text-gray-500">Swing</p>
+        <p id="swing-count" class="text-2xl font-bold mt-1">--</p>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-5">
-        <div class="text-gray-500 text-sm">Long Term</div>
-        <div id="longterm-count" class="text-2xl font-bold">--</div>
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-sm text-gray-500">Long Term</p>
+        <p id="longterm-count" class="text-2xl font-bold mt-1">--</p>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-5">
-        <div class="text-gray-500 text-sm">Fallback Cases</div>
-        <div id="active-flags" class="text-2xl font-bold">--</div>
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-sm text-gray-500">Alerts</p>
+        <p id="active-flags" class="text-2xl font-bold mt-1">--</p>
     </div>
 
 </section>
 
-<!-- ✅ TABLE SECTION -->
-<section class="max-w-7xl mx-auto px-6 pb-10">
+<!-- ✅ TABLE -->
+<section class="max-w-7xl mx-auto px-4 pb-10">
 
     <!-- LOADING -->
-    <div id="loading-state" class="text-center py-10 text-gray-500">
-        Loading dashboard...
+    <div id="loading-state" class="text-center py-10">
+        <i class="fas fa-spinner fa-spin text-3xl text-blue-600"></i>
+        <p class="mt-2 text-gray-600">Loading dashboard...</p>
     </div>
 
     <!-- ERROR -->
     <div id="error-state" class="hidden text-center py-10 text-red-600">
-        Error loading data
+        Error loading dashboard
     </div>
 
     <!-- TABLE -->
-    <div id="table-container" class="hidden bg-white shadow rounded-lg overflow-x-auto">
+    <div id="table-container" class="hidden bg-white shadow rounded overflow-x-auto">
 
-        <table class="min-w-full text-sm">
+        <table class="w-full">
 
-            <thead class="bg-gray-200 text-gray-700">
+            <thead class="bg-gray-200 text-gray-700 text-sm">
                 <tr>
-                    <th class="px-4 py-3 text-left">Ticker</th>
-                    <th class="px-4 py-3 text-left">Strategy</th>
+                    <th class="px-4 py-3 text-left">Stock</th>
+                    <th class="px-4 py-3 text-center">Strategy</th>
                     <th class="px-4 py-3 text-right">Entry</th>
                     <th class="px-4 py-3 text-right">Current</th>
-                    <th class="px-4 py-3 text-right">Performance</th>
-                    <th class="px-4 py-3 text-left">Source</th>
-                    <th class="px-4 py-3 text-left">Status</th>
+                    <th class="px-4 py-3 text-center">Performance</th>
+                    <th class="px-4 py-3 text-center">Risk</th>
                 </tr>
             </thead>
 
-            <tbody id="table-body" class="divide-y"></tbody>
+            <tbody id="table-body"></tbody>
 
         </table>
 
@@ -109,7 +158,7 @@
 
 <!-- ✅ FOOTER -->
 <footer class="bg-gray-800 text-white py-6 text-center text-sm">
-    <p>© 2026 Stock Literacy Platform</p>
+    © 2026 Financial Literacy Platform
 </footer>
 
 <!-- ✅ JS -->
