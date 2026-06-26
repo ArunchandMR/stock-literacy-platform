@@ -1,40 +1,81 @@
-<!DOCTYPE html><!DOCTYPE html="grid grid-cols-2 md:grid-cols-4 gap-4 p-6">
-    <div class="bg-white p-4 rounded shadow">
-        <div>Total Stocks</div>
-        <div id="total-stocks" class="text-xl font-bold">--</div>
-    </div>
+<!DOCTYPE html><!DOCTYPE htmlen">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Performance Dashboard</title>
 
-    <div class="bg-white p-4 rounded shadow">
-        <div>Swing</div>
-        <div id="swing-count" class="text-xl font-bold">--</div>
-    </div>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <div class="bg-white p-4 rounded shadow">
-        <div>Long Term</div>
-        <div id="longterm-count" class="text-xl font-bold">--</div>
-    </div>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <div class="bg-white p-4 rounded shadow">
-        <div>Alerts</div>
-        <div id="active-flags" class="text-xl font-bold">--</div>
+</head>
+
+<body class="bg-gray-50">
+
+<!-- HEADER -->
+<section class="bg-gradient-to-r from-blue-600 to-green-500 text-white py-6">
+    <div class="max-w-7xl mx-auto px-4">
+
+        <h1 class="text-3xl font-bold">
+            <i class="fas fa-chart-line mr-2"></i>
+            Stock Dashboard
+        </h1>
+
+        <div class="mt-3 text-sm">
+            Last Updated: <span id="last-updated">Loading...</span><br>
+            Market: <span id="market-status">-</span><br>
+            Yahoo Status: <span id="yahoo-status">Loading...</span>
+        </div>
+
+        <button id="refresh-btn"
+            class="mt-3 bg-white text-blue-600 px-4 py-1 rounded">
+            Refresh
+        </button>
     </div>
 </section>
 
+<!-- ✅ FIXED GRID (THIS WAS BROKEN BEFORE) -->
+<section class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-2 md:grid-cols-4 gap-6">
+
+    <div class="bg-white shadow rounded p-4">
+        <p class="text-gray-500 text-sm">Total Stocks</p>
+        <p id="total-stocks" class="text-2xl font-bold">--</p>
+    </div>
+
+    <div class="bg-white shadow rounded p-4">
+        <p class="text-gray-500 text-sm">Swing</p>
+        <p id="swing-count" class="text-2xl font-bold">--</p>
+    </div>
+
+    <div class="bg-white shadow rounded p-4">
+        <p class="text-gray-500 text-sm">Long Term</p>
+        <p id="longterm-count" class="text-2xl font-bold">--</p>
+    </div>
+
+    <div class="bg-white shadow rounded p-4">
+        <p class="text-gray-500 text-sm">Alerts</p>
+        <p id="active-flags" class="text-2xl font-bold">--</p>
+    </div>
+
+</section>
+
 <!-- TABLE -->
-<section class="p-6">
+<section class="max-w-7xl mx-auto px-4 pb-10">
 
     <!-- LOADING -->
     <div id="loading-state" class="text-center py-10">
         <i class="fas fa-spinner fa-spin text-3xl text-blue-600"></i>
-        <p class="mt-2 text-gray-600">Loading dashboard...</p>
+        <p class="text-gray-500 mt-2">Loading dashboard...</p>
     </div>
 
     <!-- ERROR -->
-    <div id="error-state" class="hidden text-center text-red-500 py-6">
+    <div id="error-state" class="hidden text-center text-red-600 py-6">
         Error loading dashboard
     </div>
 
-    <!-- ✅ THIS IS THE CRITICAL FIX -->
+    <!-- ✅ TABLE CONTAINER -->
     <div id="table-container" class="hidden bg-white shadow rounded overflow-x-auto">
 
         <table class="w-full">
@@ -50,7 +91,6 @@
                 </tr>
             </thead>
 
-            <!-- ✅ REAL tbody (NOT escaped) -->
             <tbody id="table-body"></tbody>
 
         </table>
@@ -59,37 +99,14 @@
 
 </section>
 
+<!-- FOOTER -->
+<footer class="bg-gray-800 text-white text-center py-4">
+    © 2026 Financial Literacy Platform
+</footer>
+
 <!-- JS -->
 <script src="assets/js/dashboard.js"></script>
 
 </body>
 </html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Dashboard</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-
-<body class="bg-gray-100">
-
-<!-- HEADER -->
-<section class="bg-gradient-to-r from-blue-600 to-green-500 text-white p-6">
-    <h1 class="text-3xl font-bold">Stock Dashboard</h1>
-
-    <div class="mt-3 text-sm">
-        <div>Last Updated: <span id="last-updated">Loading...</span></div>
-        <div>Market: <span id="market-status">-</span></div>
-        <div>Yahoo Status: <span id="yahoo-status">Loading...</span></div>
-
-        <button id="refresh-btn"
-            class="mt-2 bg-white text-blue-600 px-3 py-1 rounded">
-            Refresh
-        </button>
-    </div>
-</section>
-
-<!-- SUMMARY -->
