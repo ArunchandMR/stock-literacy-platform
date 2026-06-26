@@ -7,7 +7,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:05:58.278427"
+    "lastUpdated": "2026-06-26T10:19:32.263989Z",
+    "runId": 1782469171
   },
   {
     "ticker": "TATAMOTORS.NS",
@@ -17,7 +18,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:05:59.674847"
+    "lastUpdated": "2026-06-26T10:19:33.408627Z",
+    "runId": 1782469171
   },
   {
     "ticker": "INFY.NS",
@@ -27,7 +29,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:01.135187"
+    "lastUpdated": "2026-06-26T10:19:34.486662Z",
+    "runId": 1782469171
   },
   {
     "ticker": "HDFCBANK.NS",
@@ -37,7 +40,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:02.373697"
+    "lastUpdated": "2026-06-26T10:19:35.582108Z",
+    "runId": 1782469171
   },
   {
     "ticker": "TCS.NS",
@@ -47,7 +51,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:03.763458"
+    "lastUpdated": "2026-06-26T10:19:36.680810Z",
+    "runId": 1782469171
   },
   {
     "ticker": "BAJFINANCE.NS",
@@ -57,7 +62,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:05.222438"
+    "lastUpdated": "2026-06-26T10:19:37.790657Z",
+    "runId": 1782469171
   },
   {
     "ticker": "ASIANPAINT.NS",
@@ -67,7 +73,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:06.461830"
+    "lastUpdated": "2026-06-26T10:19:38.784733Z",
+    "runId": 1782469171
   },
   {
     "ticker": "MARUTI.NS",
@@ -77,7 +84,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:07.913533"
+    "lastUpdated": "2026-06-26T10:19:39.957307Z",
+    "runId": 1782469171
   },
   {
     "ticker": "ICICIBANK.NS",
@@ -87,7 +95,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:09.299016"
+    "lastUpdated": "2026-06-26T10:19:40.973796Z",
+    "runId": 1782469171
   },
   {
     "ticker": "WIPRO.NS",
@@ -97,7 +106,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:10.536167"
+    "lastUpdated": "2026-06-26T10:19:42.056407Z",
+    "runId": 1782469171
   },
   {
     "ticker": "BHARTIARTL.NS",
@@ -107,7 +117,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:11.774246"
+    "lastUpdated": "2026-06-26T10:19:43.057052Z",
+    "runId": 1782469171
   },
   {
     "ticker": "SUNPHARMA.NS",
@@ -117,7 +128,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:13.156191"
+    "lastUpdated": "2026-06-26T10:19:44.157350Z",
+    "runId": 1782469171
   },
   {
     "ticker": "HINDUNILVR.NS",
@@ -127,7 +139,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:14.381770"
+    "lastUpdated": "2026-06-26T10:19:45.166057Z",
+    "runId": 1782469171
   },
   {
     "ticker": "AXISBANK.NS",
@@ -137,7 +150,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:15.628864"
+    "lastUpdated": "2026-06-26T10:19:46.340217Z",
+    "runId": 1782469171
   },
   {
     "ticker": "COALINDIA.NS",
@@ -147,7 +161,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:16.874655"
+    "lastUpdated": "2026-06-26T10:19:47.332631Z",
+    "runId": 1782469171
   },
   {
     "ticker": "TECHM.NS",
@@ -157,7 +172,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:18.114261"
+    "lastUpdated": "2026-06-26T10:19:48.484816Z",
+    "runId": 1782469171
   },
   {
     "ticker": "ULTRACEMCO.NS",
@@ -167,7 +183,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:19.351578"
+    "lastUpdated": "2026-06-26T10:19:49.734744Z",
+    "runId": 1782469171
   },
   {
     "ticker": "TITAN.NS",
@@ -177,7 +194,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:20.588044"
+    "lastUpdated": "2026-06-26T10:19:50.866081Z",
+    "runId": 1782469171
   },
   {
     "ticker": "NTPC.NS",
@@ -187,7 +205,8 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:21.824962"
+    "lastUpdated": "2026-06-26T10:19:51.847522Z",
+    "runId": 1782469171
   },
   {
     "ticker": "ADANIENT.NS",
@@ -197,6 +216,7 @@
     "priceSource": "Entry",
     "fetchStatus": "Fallback",
     "marketStatus": "Closed",
-    "lastUpdated": "2026-06-26T10:06:23.051388"
+    "lastUpdated": "2026-06-26T10:19:53.125151Z",
+    "runId": 1782469171
   }
 ]
