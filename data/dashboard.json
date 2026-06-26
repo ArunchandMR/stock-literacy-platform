@@ -1,9 +1,142 @@
 [
   {
-    "ticker": "stocks",
-    "entryPrice": 0,
-    "currentPrice": 0,
-    "performance": 0,
-    "lastUpdated": "2026-06-26T08:31:05.384354"
+    "ticker": "RELIANCE.NS",
+    "entryPrice": 2450.0,
+    "currentPrice": 2450.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:12.250616"
+  },
+  {
+    "ticker": "TATAMOTORS.NS",
+    "entryPrice": 910.0,
+    "currentPrice": 910.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:14.634909"
+  },
+  {
+    "ticker": "INFY.NS",
+    "entryPrice": 1600.0,
+    "currentPrice": 1600.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:17.028560"
+  },
+  {
+    "ticker": "HDFCBANK.NS",
+    "entryPrice": 1650.0,
+    "currentPrice": 1650.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:20.438362"
+  },
+  {
+    "ticker": "TCS.NS",
+    "entryPrice": 3500.0,
+    "currentPrice": 3500.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:24.253175"
+  },
+  {
+    "ticker": "BAJFINANCE.NS",
+    "entryPrice": 6800.0,
+    "currentPrice": 6800.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:26.645622"
+  },
+  {
+    "ticker": "ASIANPAINT.NS",
+    "entryPrice": 3200.0,
+    "currentPrice": 3200.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:29.034822"
+  },
+  {
+    "ticker": "MARUTI.NS",
+    "entryPrice": 10500.0,
+    "currentPrice": 10500.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:31.487729"
+  },
+  {
+    "ticker": "ICICIBANK.NS",
+    "entryPrice": 1050.0,
+    "currentPrice": 1050.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:33.924864"
+  },
+  {
+    "ticker": "WIPRO.NS",
+    "entryPrice": 450.0,
+    "currentPrice": 450.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:36.307648"
+  },
+  {
+    "ticker": "BHARTIARTL.NS",
+    "entryPrice": 1100.0,
+    "currentPrice": 1100.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:38.725107"
+  },
+  {
+    "ticker": "SUNPHARMA.NS",
+    "entryPrice": 1450.0,
+    "currentPrice": 1450.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:41.108961"
+  },
+  {
+    "ticker": "HINDUNILVR.NS",
+    "entryPrice": 2600.0,
+    "currentPrice": 2600.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:43.507155"
+  },
+  {
+    "ticker": "AXISBANK.NS",
+    "entryPrice": 1080.0,
+    "currentPrice": 1080.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:45.891187"
+  },
+  {
+    "ticker": "COALINDIA.NS",
+    "entryPrice": 420.0,
+    "currentPrice": 420.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:48.280287"
+  },
+  {
+    "ticker": "TECHM.NS",
+    "entryPrice": 1250.0,
+    "currentPrice": 1250.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:50.663467"
+  },
+  {
+    "ticker": "ULTRACEMCO.NS",
+    "entryPrice": 8500.0,
+    "currentPrice": 8500.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:53.044321"
+  },
+  {
+    "ticker": "TITAN.NS",
+    "entryPrice": 3200.0,
+    "currentPrice": 3200.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:55.452665"
+  },
+  {
+    "ticker": "NTPC.NS",
+    "entryPrice": 280.0,
+    "currentPrice": 280.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:37:57.842484"
+  },
+  {
+    "ticker": "ADANIENT.NS",
+    "entryPrice": 2800.0,
+    "currentPrice": 2800.0,
+    "performance": 0.0,
+    "lastUpdated": "2026-06-26T08:38:00.233098"
   }
 ]
