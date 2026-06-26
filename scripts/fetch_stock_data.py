@@ -20,7 +20,7 @@ class StockDataFetcher:
     def is_market_open(self):
         now = datetime.now(ZoneInfo("Asia/Kolkata"))
 
-        # Weekend check
+        # Weekend
         if now.weekday() >= 5:
             return False
 
@@ -56,10 +56,10 @@ class StockDataFetcher:
             return prices
 
         except Exception as e:
-            print(f"Yahoo batch failed completely: {e}")
+            print(f"Yahoo batch failed: {e}")
             return {t: None for t in tickers}
 
-    # ✅ Retry + Yahoo health
+    # ✅ Retry + health tracking
     def fetch_yahoo_with_retry(self, tickers):
         final_prices = None
 
@@ -67,10 +67,7 @@ class StockDataFetcher:
             print(f"Yahoo attempt {attempt + 1}")
 
             prices = self.fetch_yahoo_batch(tickers)
-
             success_count = sum(1 for v in prices.values() if v is not None)
-
-            print(f"Yahoo success count: {success_count}/{len(tickers)}")
 
             if success_count > 0:
                 final_prices = prices
@@ -78,7 +75,6 @@ class StockDataFetcher:
 
             time.sleep(3)
 
-        # ✅ Determine status
         if final_prices:
             success_count = sum(1 for v in final_prices.values() if v is not None)
 
@@ -95,7 +91,6 @@ class StockDataFetcher:
                 "totalCount": len(tickers)
             }
 
-        print("Yahoo unavailable")
         return {t: None for t in tickers}, {
             "status": "Unavailable",
             "successCount": 0,
@@ -115,13 +110,12 @@ class StockDataFetcher:
 
         return None
 
-    # ✅ Load cache (FIXED — supports both formats ✅)
+    # ✅ Load cache (handles both formats safely)
     def load_cache(self):
         if self.dashboard_file.exists():
             with open(self.dashboard_file, "r") as f:
                 data = json.load(f)
 
-                # handle both old list format & new dict format
                 if isinstance(data, dict):
                     return data.get("stocks", [])
                 elif isinstance(data, list):
@@ -138,7 +132,7 @@ class StockDataFetcher:
     # ✅ MAIN
     def run(self):
         if not self.stocks_file.exists():
-            print("ERROR: stocks.json not found")
+            print("ERROR: stocks.json missing")
             return 1
 
         with open(self.stocks_file, "r") as f:
@@ -150,11 +144,9 @@ class StockDataFetcher:
         tickers = [s.get("ticker") for s in stocks if s.get("ticker")]
 
         market_open = self.is_market_open()
-
-        # ✅ CONSISTENT runId for full execution
         run_id = int(datetime.utcnow().timestamp())
 
-        # ✅ Yahoo only during market hours
+        # ✅ Fetch Yahoo only if market open
         if market_open:
             yahoo_prices, yahoo_info = self.fetch_yahoo_with_retry(tickers)
         else:
@@ -200,13 +192,15 @@ class StockDataFetcher:
                         source = "Entry"
                         status = "Fallback"
 
-            # ✅ performance
             performance = 0
             if entry_price > 0:
                 performance = ((price - entry_price) / entry_price) * 100
 
+            # ✅ FINAL DATA OBJECT (Updated ✅)
             dashboard.append({
                 "ticker": ticker,
+                "name": stock.get("name"),
+                "strategy": stock.get("strategy"),   # ✅ USER INPUT FIELD
                 "entryPrice": entry_price,
                 "currentPrice": round(price, 2),
                 "performance": round(performance, 2),
@@ -215,11 +209,10 @@ class StockDataFetcher:
                 "runId": run_id
             })
 
-        # ✅ FINAL STRUCTURE
         final_output = {
             "lastUpdated": datetime.utcnow().isoformat() + "Z",
-            "yahooStatus": yahoo_info,
             "marketStatus": "Open" if market_open else "Closed",
+            "yahooStatus": yahoo_info,
             "stocks": dashboard
         }
 
