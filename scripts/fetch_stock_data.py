@@ -42,15 +42,22 @@ class StockDataFetcher:
         dashboard_data = []
 
         for stock in stocks:
-            ticker = stock.get("ticker")
-            entry_price = float(stock.get("entryPrice", 0))
+            # ✅ Handle both formats (string or object)
+            if isinstance(stock, dict):
+                ticker = stock.get("ticker")
+                entry_price = float(stock.get("entryPrice", 0))
+            else:
+                ticker = stock
+                entry_price = 0
 
             current_price = self.fetch_current_price(ticker)
 
             if current_price is None:
                 current_price = entry_price
 
-            performance = ((current_price - entry_price) / entry_price) * 100
+            performance = 0
+            if entry_price > 0:
+                performance = ((current_price - entry_price) / entry_price) * 100
 
             dashboard_data.append({
                 "ticker": ticker,
@@ -60,6 +67,7 @@ class StockDataFetcher:
                 "lastUpdated": datetime.utcnow().isoformat()
             })
 
+        # ✅ Write dashboard.json
         with open(self.dashboard_file, "w") as f:
             json.dump(dashboard_data, f, indent=2)
 
