@@ -1,191 +1,231 @@
 {
-  "lastUpdated": "2026-06-26T10:35:34.121856Z",
+  "lastUpdated": "2026-06-26T16:28:53.888795Z",
+  "marketStatus": "Closed",
   "yahooStatus": {
     "status": "Closed",
     "successCount": 0,
     "totalCount": 20
   },
-  "marketStatus": "Closed",
   "stocks": [
     {
       "ticker": "RELIANCE.NS",
+      "name": "Reliance Industries",
+      "strategy": "long-term",
       "entryPrice": 2450.0,
       "currentPrice": 2450.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "TATAMOTORS.NS",
+      "name": "Tata Motors",
+      "strategy": "swing",
       "entryPrice": 910.0,
       "currentPrice": 910.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "INFY.NS",
+      "name": "Infosys",
+      "strategy": "long-term",
       "entryPrice": 1600.0,
       "currentPrice": 1600.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "HDFCBANK.NS",
+      "name": "HDFC Bank",
+      "strategy": "long-term",
       "entryPrice": 1650.0,
       "currentPrice": 1650.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "TCS.NS",
+      "name": "Tata Consultancy Services",
+      "strategy": "long-term",
       "entryPrice": 3500.0,
       "currentPrice": 3500.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "BAJFINANCE.NS",
+      "name": "Bajaj Finance",
+      "strategy": "swing",
       "entryPrice": 6800.0,
       "currentPrice": 6800.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "ASIANPAINT.NS",
+      "name": "Asian Paints",
+      "strategy": "long-term",
       "entryPrice": 3200.0,
       "currentPrice": 3200.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "MARUTI.NS",
+      "name": "Maruti Suzuki",
+      "strategy": "swing",
       "entryPrice": 10500.0,
       "currentPrice": 10500.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "ICICIBANK.NS",
+      "name": "ICICI Bank",
+      "strategy": "long-term",
       "entryPrice": 1050.0,
       "currentPrice": 1050.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "WIPRO.NS",
+      "name": "Wipro",
+      "strategy": "swing",
       "entryPrice": 450.0,
       "currentPrice": 450.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "BHARTIARTL.NS",
+      "name": "Bharti Airtel",
+      "strategy": "long-term",
       "entryPrice": 1100.0,
       "currentPrice": 1100.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "SUNPHARMA.NS",
+      "name": "Sun Pharmaceutical",
+      "strategy": "swing",
       "entryPrice": 1450.0,
       "currentPrice": 1450.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "HINDUNILVR.NS",
+      "name": "Hindustan Unilever",
+      "strategy": "long-term",
       "entryPrice": 2600.0,
       "currentPrice": 2600.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "AXISBANK.NS",
+      "name": "Axis Bank",
+      "strategy": "swing",
       "entryPrice": 1080.0,
       "currentPrice": 1080.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "COALINDIA.NS",
+      "name": "Coal India",
+      "strategy": "long-term",
       "entryPrice": 420.0,
       "currentPrice": 420.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "TECHM.NS",
+      "name": "Tech Mahindra",
+      "strategy": "swing",
       "entryPrice": 1250.0,
       "currentPrice": 1250.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "ULTRACEMCO.NS",
+      "name": "UltraTech Cement",
+      "strategy": "long-term",
       "entryPrice": 8500.0,
       "currentPrice": 8500.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "TITAN.NS",
+      "name": "Titan Company",
+      "strategy": "swing",
       "entryPrice": 3200.0,
       "currentPrice": 3200.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "NTPC.NS",
+      "name": "NTPC",
+      "strategy": "long-term",
       "entryPrice": 280.0,
       "currentPrice": 280.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     },
     {
       "ticker": "ADANIENT.NS",
+      "name": "Adani Enterprises",
+      "strategy": "swing",
       "entryPrice": 2800.0,
       "currentPrice": 2800.0,
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1782470112
+      "runId": 1782491312
     }
   ]
 }
