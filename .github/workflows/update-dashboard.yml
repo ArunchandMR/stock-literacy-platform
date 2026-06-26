@@ -36,8 +36,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          cd scripts
-          python fetch_stock_data.py
+          python scripts/fetch_stock_data.py
       
       - name: Check for changes
         id: git-check
