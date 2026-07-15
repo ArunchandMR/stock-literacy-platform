@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-15T17:59:52.790075Z",
+  "lastUpdated": "2026-07-15T21:32:50.899371Z",
   "marketStatus": "Closed",
   "yahooStatus": {
     "status": "Closed",
@@ -16,7 +16,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "TATAMOTORS.NS",
@@ -27,7 +27,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "INFY.NS",
@@ -38,7 +38,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "HDFCBANK.NS",
@@ -49,7 +49,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "TCS.NS",
@@ -60,7 +60,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "BAJFINANCE.NS",
@@ -71,7 +71,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "ASIANPAINT.NS",
@@ -82,7 +82,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "MARUTI.NS",
@@ -93,7 +93,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "ICICIBANK.NS",
@@ -104,7 +104,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "WIPRO.NS",
@@ -115,7 +115,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "BHARTIARTL.NS",
@@ -126,7 +126,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "SUNPHARMA.NS",
@@ -137,7 +137,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "HINDUNILVR.NS",
@@ -148,7 +148,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "AXISBANK.NS",
@@ -159,7 +159,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "COALINDIA.NS",
@@ -170,7 +170,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "TECHM.NS",
@@ -181,7 +181,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "ULTRACEMCO.NS",
@@ -192,7 +192,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "TITAN.NS",
@@ -203,7 +203,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "NTPC.NS",
@@ -214,7 +214,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     },
     {
       "ticker": "ADANIENT.NS",
@@ -225,7 +225,7 @@
       "performance": 0.0,
       "priceSource": "Entry",
       "fetchStatus": "Fallback",
-      "runId": 1784138370
+      "runId": 1784151140
     }
   ]
 }
