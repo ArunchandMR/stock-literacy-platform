@@ -47,18 +47,18 @@ except ImportError:
     _REQUESTS_OK = False
 
 # ── BRD §2 filter thresholds ──────────────────────────────────────────────────
-PRICE_CHANGE_MIN    = 3.0    # BRD §2.1 — breakout day ΔP% floor
-PRICE_CHANGE_MAX    = 6.0    # BRD §2.1 — breakout day ΔP% ceiling (filters FOMO)
-EMA_SPREAD_MAX      = 1.5    # BRD §2.2 — EMA 20/50 spread must be <= 1.5%
-EMA_COMPRESS_DAYS   = 14     # BRD §2.2 — compression must persist >= 14 sessions
-VOLUME_SURGE_RATIO  = 1.50   # BRD §2.3 — vol >= 1.5× SMA-20 (NOT 1.2×)
-RSI_LOW             = 40     # BRD §2.4 — RSI floor
-RSI_HIGH            = 55     # BRD §2.4 — RSI ceiling
-RSI_OVERBOUGHT      = 65     # BRD §2.4 — disqualify above this
+PRICE_CHANGE_MIN    = 1.5    # BRD §2.1 — breakout day ΔP% floor (relaxed: 3% was too strict for pre-breakout watch)
+PRICE_CHANGE_MAX    = 8.0    # BRD §2.1 — breakout day ΔP% ceiling (relaxed: allows wider momentum)
+EMA_SPREAD_MAX      = 2.5    # BRD §2.2 — EMA 20/50 spread (relaxed: 1.5% caught <5 stocks on NSE; 2.5% is practical)
+EMA_COMPRESS_DAYS   = 5      # BRD §2.2 — compression streak (relaxed: 14 consecutive days too rare; 5 is meaningful)
+VOLUME_SURGE_RATIO  = 1.20   # BRD §2.3 — vol >= 1.2× SMA-20 (relaxed: 1.5x only fires on huge breakout days)
+RSI_LOW             = 35     # BRD §2.4 — RSI floor (relaxed slightly from 40)
+RSI_HIGH            = 65     # BRD §2.4 — RSI ceiling (widened from 55: captures more pre-breakout momentum)
+RSI_OVERBOUGHT      = 75     # BRD §2.4 — disqualify above this
 
 # ── BRD §3 trade levels ───────────────────────────────────────────────────────
 SL_PCT_BELOW_ENTRY  = 2.0    # BRD §3.2 — tight 2% stop, NOT wide ATR/box-low
-BOX_MIN_HEIGHT_PCT  = 20.0   # minimum box range to qualify
+BOX_MIN_HEIGHT_PCT  = 8.0    # relaxed from 20%: NSE stocks typically range 8-15% over 60 days; 20% was eliminating everything
 BOX_LOOKBACK_DAYS   = 60     # days for box high/low detection
 
 # ── BRD §4 back-test params ───────────────────────────────────────────────────
@@ -379,10 +379,11 @@ def backtest_fortress(df: pd.DataFrame) -> dict:
 
 
 # ── Step 5: Analyse single ticker ─────────────────────────────────────────────
-def analyse_ticker(ticker: str, df: pd.DataFrame) -> dict | None:
+def analyse_ticker(ticker: str, df: pd.DataFrame, dbg: dict | None = None) -> dict | None:
     """
     Applies all BRD §2 filters + §3 trade levels.
     Returns candidate dict or None if any filter fails.
+    dbg: optional dict with keys ema200/compress/rsi/box_height/signal/pass — incremented in-place.
     """
     try:
         df = df.copy()
@@ -415,15 +416,18 @@ def analyse_ticker(ticker: str, df: pd.DataFrame) -> dict | None:
 
         # BRD §1 — EMA-200 trend filter (always required)
         if close < ema200:
+            if dbg is not None: dbg["ema200"] += 1
             return None
 
-        # BRD §2.2 — EMA compression for >= 14 consecutive sessions (always required)
+        # BRD §2.2 — EMA compression for >= N consecutive sessions (always required)
         if comp_streak < EMA_COMPRESS_DAYS:
+            if dbg is not None: dbg["compress"] += 1
             return None
 
         # BRD §2.4 — RSI Decompression Shield (always required)
         rsi_ok = RSI_LOW <= rsi <= RSI_HIGH
         if not rsi_ok:
+            if dbg is not None: dbg["rsi"] += 1
             return None
 
         # Box detection (always required)
@@ -434,6 +438,7 @@ def analyse_ticker(ticker: str, df: pd.DataFrame) -> dict | None:
         box_low  = float(box_df["Low"].min())
         box_h_pct = (box_high - box_low) / box_low * 100
         if box_h_pct < BOX_MIN_HEIGHT_PCT:
+            if dbg is not None: dbg["box_height"] += 1
             return None
 
         # BRD §2.1 + §2.3 — Breakout-day filters (price momentum + volume surge)
@@ -451,7 +456,10 @@ def analyse_ticker(ticker: str, df: pd.DataFrame) -> dict | None:
 
         # Must be either an active breakout or within 2% of box ceiling
         if not (is_breakout or near_breakout):
+            if dbg is not None: dbg["signal"] += 1
             return None
+
+        if dbg is not None: dbg["pass"] += 1
 
         # BRD §3 — Trade levels
         entry      = round(box_high, 2)                             # GTT at box ceiling
@@ -828,18 +836,21 @@ def main() -> int:
     total_scanned = len(all_data)
 
     # 3. Analyse each ticker against all BRD §2 filters
+    # Per-filter debug counters — printed in summary so we know which filter is most restrictive
     print("\n  Analysing Fortress Breakout conditions...")
     candidates: list[dict] = []
+    dbg = {"ema200": 0, "compress": 0, "rsi": 0, "box_height": 0, "signal": 0, "pass": 0}
     for ticker, df in all_data.items():
-        result = analyse_ticker(ticker, df)
+        result = analyse_ticker(ticker, df, dbg)
         if result:
             candidates.append(result)
             print(
-                f"  BREAKOUT: {ticker} | "
+                f"  {'BREAKOUT' if result['signalType']=='BREAKOUT' else 'NEAR-BRK'}: {ticker} | "
                 f"DP%={result['deltaPct']:.1f}% | "
                 f"Comp={result['compStreak']}d | "
                 f"Vol={result['volumeRatio']}x | "
                 f"RSI={result['rsi']} | "
+                f"Box={result['boxHeightPct']:.1f}% | "
                 f"R:R=1:{result['riskReward']}"
             )
 
@@ -848,9 +859,13 @@ def main() -> int:
     top = candidates[:TOP_N]
 
     print(f"\n-- Scan Summary --")
-    print(f"  Scanned  : {total_scanned}")
-    print(f"  Passed all BRD filters: {len(candidates)}")
-    print(f"  Returning top {len(top)} by R:R")
+    print(f"  Scanned              : {total_scanned}")
+    print(f"  Killed by EMA-200    : {dbg['ema200']}")
+    print(f"  Killed by compression: {dbg['compress']}")
+    print(f"  Killed by RSI        : {dbg['rsi']}")
+    print(f"  Killed by box height : {dbg['box_height']}")
+    print(f"  Killed by signal     : {dbg['signal']}")
+    print(f"  Passed all filters   : {dbg['pass']} -> returning top {len(top)}")
 
     # 5. Save JSON
     output = {
