@@ -52,9 +52,9 @@ class StockDataFetcher:
             df = yf.download(
                 tickers=" ".join(tickers),
                 period="5d",
-                auto_adjust=True,
+                auto_adjust=False,      # IMPORTANT: False = raw prices matching entry prices
                 progress=False,
-                threads=True,           # parallel inside yfinance — still 1 session
+                threads=True,
                 multi_level_index=False,
             )
 
@@ -62,21 +62,17 @@ class StockDataFetcher:
                 print("  ⚠ Batch download returned empty DataFrame")
                 return prices
 
-            # With multi_level_index=False and multiple tickers, columns are
-            # ("Close", "TICKER") tuples flattened to "Close_TICKER" strings.
-            # With a single ticker they're just "Close", "Open", etc.
-            close_cols = [c for c in df.columns if str(c).startswith("Close")]
-
+            # multi_level_index=False + multiple tickers → columns like "Close_RELIANCE.NS"
+            # auto_adjust=False → "Close" is the unadjusted price (what we want)
             for ticker in tickers:
                 try:
-                    # Try flat-column name first (multi-ticker)
                     col = f"Close_{ticker}"
                     if col in df.columns:
                         series = df[col].dropna()
                     elif "Close" in df.columns:
-                        # Single-ticker fallback
                         series = df["Close"].dropna()
                     else:
+                        print(f"    no Close column for {ticker}. Available: {list(df.columns)[:6]}")
                         continue
 
                     if not series.empty:
