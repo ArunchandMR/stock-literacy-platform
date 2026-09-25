@@ -134,10 +134,10 @@ def calc_ema(series: pd.Series, span: int) -> pd.Series:
 
 
 # ── Step 3: Batch download ────────────────────────────────────────────────────
-def batch_download(tickers: list[str], period: str = "3y") -> dict[str, pd.DataFrame]:
+def batch_download(tickers: list[str], period: str = "1y") -> dict[str, pd.DataFrame]:
     """
     ONE yf.download() call for all tickers. Returns {ticker: OHLCV DataFrame}.
-    Period = 3y to support the 36-month back-test window.
+    Period = 1y: EMA-200 needs ~250 rows warmup; 1y gives ~252 trading days reliably.
     Column naming: multi-ticker -> "Close_TICKER", single -> "Close"
     """
     if not tickers:
@@ -173,8 +173,9 @@ def batch_download(tickers: list[str], period: str = "3y") -> dict[str, pd.DataF
                     "Low":    raw.get(lo, pd.Series(dtype=float, index=raw.index)),
                     "Volume": raw.get(v,  pd.Series(0.0,         index=raw.index)),
                 }).dropna(subset=["Close"])
-                # Need 200 rows for EMA-200 + 60 box window + 14 compression + headroom
-                if len(df) >= 230:
+                # Need 200 rows for EMA-200 warmup + 60-day box window
+                # Use 205 to allow for occasional weekend/holiday gaps in 1y data
+                if len(df) >= 205:
                     result[ticker] = df
             except Exception:
                 pass
@@ -371,29 +372,20 @@ def analyse_ticker(ticker: str, df: pd.DataFrame) -> dict | None:
         spread    = float(latest["Spread"])
         comp_streak = int(df["CompStreak"].iloc[-1])
 
-        # BRD §2.1 — Daily price change filter
-        delta_pct = ((close - prev_close) / prev_close) * 100 if prev_close > 0 else 0
-        if not (PRICE_CHANGE_MIN <= delta_pct <= PRICE_CHANGE_MAX):
-            return None
-
-        # BRD §2.2 — EMA compression for >= 14 consecutive sessions
-        if comp_streak < EMA_COMPRESS_DAYS:
-            return None
-
-        # BRD §2.3 — Institutional volume validation
-        if avg_vol <= 0 or vol < avg_vol * VOLUME_SURGE_RATIO:
-            return None
-        vol_ratio = round(vol / avg_vol, 2)
-
-        # BRD §2.4 — RSI Decompression Shield
-        if not (RSI_LOW <= rsi <= RSI_HIGH):
-            return None
-
-        # Trend filter (BRD §1 context — bull structure only)
+        # BRD §1 — EMA-200 trend filter (always required)
         if close < ema200:
             return None
 
-        # Box detection
+        # BRD §2.2 — EMA compression for >= 14 consecutive sessions (always required)
+        if comp_streak < EMA_COMPRESS_DAYS:
+            return None
+
+        # BRD §2.4 — RSI Decompression Shield (always required)
+        rsi_ok = RSI_LOW <= rsi <= RSI_HIGH
+        if not rsi_ok:
+            return None
+
+        # Box detection (always required)
         box_df   = df.iloc[-(BOX_LOOKBACK_DAYS + 1):-1]
         if box_df.empty:
             return None
@@ -403,8 +395,21 @@ def analyse_ticker(ticker: str, df: pd.DataFrame) -> dict | None:
         if box_h_pct < BOX_MIN_HEIGHT_PCT:
             return None
 
-        # Breakout confirmation
-        if close <= box_high:
+        # BRD §2.1 + §2.3 — Breakout-day filters (price momentum + volume surge)
+        # These are checked AFTER box detection to classify the signal:
+        #   BREAKOUT  = close > box_high + DP% 3-6% + volume >= 1.5x  (active setup)
+        #   NEAR-BREAK = close within 2% of box_high + volume building  (watch setup)
+        delta_pct = ((close - prev_close) / prev_close) * 100 if prev_close > 0 else 0
+        vol_ratio = round(vol / avg_vol, 2) if avg_vol > 0 else 0
+        vol_surge = avg_vol > 0 and vol >= avg_vol * VOLUME_SURGE_RATIO
+        price_momentum_ok = PRICE_CHANGE_MIN <= delta_pct <= PRICE_CHANGE_MAX
+
+        # Determine signal classification
+        is_breakout   = close > box_high and price_momentum_ok and vol_surge
+        near_breakout = (not is_breakout) and close >= box_high * 0.98 and comp_streak >= EMA_COMPRESS_DAYS
+
+        # Must be either an active breakout or within 2% of box ceiling
+        if not (is_breakout or near_breakout):
             return None
 
         # BRD §3 — Trade levels
@@ -428,15 +433,18 @@ def analyse_ticker(ticker: str, df: pd.DataFrame) -> dict | None:
         reward = tranche1 - entry
         rr     = round(reward / risk, 2) if risk > 0 else 0
 
-        # Back-test
-        bt = backtest_fortress(df)
+        signal_type  = "BREAKOUT"   if is_breakout   else "NEAR-BREAKOUT"
+        signal_label = "Active Breakout — All 4 BRD filters passed" if is_breakout else "Near-Breakout Watch — EMA compressed, price within 2% of box ceiling"
+        pct_to_box   = round((box_high - close) / box_high * 100, 2) if not is_breakout else 0.0
 
         return {
             "ticker":          ticker,
             "name":            ticker.replace(".NS", ""),
-            # Signal data
+            "signalType":      signal_type,
+            "signalLabel":     signal_label,
             "currentPrice":    round(close, 2),
             "deltaPct":        round(delta_pct, 2),
+            "pctToBox":        pct_to_box,
             "ema20":           round(ema20, 2),
             "ema50":           round(ema50, 2),
             "ema200":          round(ema200, 2),
@@ -446,24 +454,17 @@ def analyse_ticker(ticker: str, df: pd.DataFrame) -> dict | None:
             "volume":          int(vol),
             "avgVolume":       int(avg_vol),
             "volumeRatio":     vol_ratio,
+            "volSurge":        vol_surge,
             "boxHigh":         round(box_high, 2),
             "boxLow":          round(box_low, 2),
             "boxHeightPct":    round(box_h_pct, 2),
-            # BRD §3 trade levels
             "gttEntry":        entry,
             "stopLoss":        stop_loss,
             "sl2Pct":          sl_2pct,
             "slEma20":         sl_ema20,
-            "tranche1":        tranche1,          # 50% allocation exit
-            "tranche2TrailRef": tranche2_trail_ref,  # Tranche 2 EMA-20 trail start
+            "tranche1":        tranche1,
+            "tranche2TrailRef": tranche2_trail_ref,
             "riskReward":      rr,
-            # BRD filter pass flags
-            "passedDeltaPct":   True,
-            "passedCompression": True,
-            "passedVolume":    True,
-            "passedRsi":       True,
-            # Back-test
-            "backtest":        bt,
         }
 
     except Exception as e:
@@ -480,60 +481,55 @@ def build_html(candidates: list[dict], run_time_ist: str, total_scanned: int) ->
     def pct(val):
         return f"{val:.1f}%" if val is not None else "--"
 
-    def bt_cell(val, suffix="", good_fn=None):
-        if val is None:
-            return '<span class="text-gray-400">--</span>'
-        s = f"{val}{suffix}"
-        if good_fn:
-            cls = "text-green-700 font-bold" if good_fn(val) else "text-red-600 font-semibold"
-            return f'<span class="{cls}">{s}</span>'
-        return f'<span class="text-gray-700 font-semibold">{s}</span>'
 
     rr_cls = lambda rr: "text-green-700 font-bold" if rr >= 3 else "text-blue-600 font-semibold" if rr >= 2 else "text-gray-700"
 
     cards = ""
     for i, c in enumerate(candidates):
-        rank_badge = ["#1", "#2", "#3", "#4", "#5"][i] if i < 5 else f"#{i+1}"
-        bt = c.get("backtest", {})
-        bt_wr  = bt.get("btWinRate")
-        bt_pf  = bt.get("btProfitFactor")
-        bt_mdd = bt.get("btMaxDrawdown")
-        bt_ev  = bt.get("btEvents", 0)
-        bt_note = bt.get("btNote", "")
-
-        # Compression streak bar (capped at 30 sessions for visual)
-        comp_bar = min(100, int(c["compStreak"] / 30 * 100))
+        rank_badge  = ["#1", "#2", "#3", "#4", "#5"][i] if i < 5 else f"#{i+1}"
+        comp_bar    = min(100, int(c["compStreak"] / 30 * 100))
+        is_bo       = c.get("signalType") == "BREAKOUT"
+        hdr_cls     = "bg-gradient-to-r from-green-800 to-green-700" if is_bo else "bg-gradient-to-r from-slate-800 to-slate-700"
+        sig_badge   = '<span class="bg-green-400 text-green-900 text-xs font-bold px-2 py-0.5 rounded">BREAKOUT</span>' if is_bo else '<span class="bg-amber-400 text-amber-900 text-xs font-bold px-2 py-0.5 rounded">NEAR-BREAKOUT</span>'
+        dp_cls      = "bg-green-100 text-green-800" if is_bo else "bg-amber-100 text-amber-800"
+        vol_cls     = "bg-green-100 text-green-800" if c.get("volSurge") else "bg-orange-100 text-orange-800"
+        near_label  = f'<span class="text-amber-300 text-xs">{c["pctToBox"]:.1f}% below box ceiling</span>' if not is_bo else ""
+        dp_label    = f'+{c["deltaPct"]:.1f}% today' if is_bo else f'DP% {c["deltaPct"]:.1f}% (needs 3-6% on breakout day)'
 
         cards += f"""
         <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden mb-6">
 
           <!-- Card Header -->
-          <div class="bg-gradient-to-r from-slate-800 to-slate-700 text-white px-5 py-4 flex items-center justify-between">
+          <div class="{hdr_cls} text-white px-5 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
               <span class="text-xl font-bold bg-amber-500 text-slate-900 px-2 py-0.5 rounded">{rank_badge}</span>
               <div>
                 <h3 class="text-lg font-bold">{c['name']}</h3>
-                <span class="text-xs text-slate-300 font-mono">{c['ticker']}</span>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <span class="text-xs text-slate-300 font-mono">{c['ticker']}</span>
+                  {sig_badge}
+                  {near_label}
+                </div>
               </div>
             </div>
             <div class="text-right">
               <p class="text-2xl font-bold">{fmt_inr(c['currentPrice'])}</p>
               <p class="text-xs text-slate-300">
-                <span class="text-green-400 font-semibold">+{c['deltaPct']:.2f}%</span> today
+                Box ceiling: <span class="font-semibold text-amber-300">{fmt_inr(c['boxHigh'])}</span>
               </p>
             </div>
           </div>
 
           <!-- BRD §2 filter status row -->
           <div class="px-5 py-2 bg-slate-50 border-b border-gray-100 flex flex-wrap gap-2 text-xs">
-            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">
-              BRD §2.1 DP% +{c['deltaPct']:.1f}% (3-6% band OK)
+            <span class="{dp_cls} px-2 py-0.5 rounded font-semibold">
+              BRD §2.1 {dp_label}
             </span>
             <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">
               BRD §2.2 EMA compressed {c['compStreak']}d (>= 14d)
             </span>
-            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">
-              BRD §2.3 Vol {c['volumeRatio']}x (>= 1.5x)
+            <span class="{vol_cls} px-2 py-0.5 rounded font-semibold">
+              BRD §2.3 Vol {c['volumeRatio']}x {'(>=1.5x OK)' if c.get('volSurge') else '(building up)'}
             </span>
             <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">
               BRD §2.4 RSI {c['rsi']} (40-55)
@@ -608,40 +604,19 @@ def build_html(candidates: list[dict], run_time_ist: str, total_scanned: int) ->
             <span class="text-red-600 font-semibold">Active SL = {fmt_inr(c['stopLoss'])} (lower of the two)</span>
           </div>
 
-          <!-- Back-test panel (BRD §4) -->
-          <div class="mx-5 mb-4 bg-slate-50 border border-slate-200 rounded-lg p-3">
-            <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">
-              36-Month Fortress Backtest
-              <span class="font-normal normal-case text-slate-400">({bt_ev} breakout events)</span>
-            </p>
-            <div class="grid grid-cols-3 gap-3 text-sm text-center">
-              <div>
-                <p class="text-xs text-gray-400 mb-0.5">Win Rate</p>
-                {bt_cell(bt_wr, '%', lambda v: v >= BT_WIN_RATE_TARGET)}
-              </div>
-              <div>
-                <p class="text-xs text-gray-400 mb-0.5">Profit Factor <span class="text-gray-300">(target &gt;= 1.75)</span></p>
-                {bt_cell(bt_pf, '', lambda v: v >= BT_PROFIT_FACTOR_TARGET)}
-              </div>
-              <div>
-                <p class="text-xs text-gray-400 mb-0.5">Max Drawdown</p>
-                {bt_cell(bt_mdd, '%', lambda v: v < 15.0)}
-              </div>
-            </div>
-            <p class="text-xs text-slate-400 mt-2 italic">{bt_note}</p>
-          </div>
-
         </div>"""
+
+    n_breakout = sum(1 for c in candidates if c.get("signalType") == "BREAKOUT")
+    n_near     = sum(1 for c in candidates if c.get("signalType") == "NEAR-BREAKOUT")
 
     if not candidates:
         cards = """
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-          <div class="text-5xl mb-4">No active setups</div>
-          <h3 class="text-xl font-bold text-gray-700 mb-2">No Fortress Breakout Setups Today</h3>
+          <h3 class="text-xl font-bold text-gray-700 mb-2">No Fortress Setups Today</h3>
           <p class="text-gray-400 text-sm max-w-lg mx-auto">
-            No NSE stock passed all 4 BRD filters simultaneously:
-            DP% 3-6%, EMA compressed 14+ days, Volume &gt;= 1.5x SMA, RSI 40-55,
-            plus EMA-200 uptrend + 20% box breakout.
+            No NSE stock currently has EMA(20/50) compressed 14+ days, RSI 40-55, price above EMA-200,
+            and a 20%+ box structure with price within 2% of the box ceiling.
+            Check back after next market session.
           </p>
         </div>"""
 
@@ -692,7 +667,7 @@ def build_html(candidates: list[dict], run_time_ist: str, total_scanned: int) ->
       <p class="text-slate-300 text-sm max-w-2xl mb-4">
         Scans the NSE universe using all 4 BRD quantitative filters simultaneously.
         Replaces wide box-low stops with tight 2% institutional invalidation anchors.
-        Each result includes a 36-month back-test (Win Rate, Profit Factor, Max Drawdown).
+        EMA-200 trend filter + 20% box + breakout confirmation.
       </p>
       <div class="flex flex-wrap gap-5 text-sm text-slate-300">
         <span><i class="fas fa-clock mr-1"></i>Scan: <strong class="text-white">{run_time_ist}</strong></span>
@@ -736,9 +711,14 @@ def build_html(candidates: list[dict], run_time_ist: str, total_scanned: int) ->
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-lg font-bold text-gray-800">
         <i class="fas fa-trophy mr-1 text-amber-500"></i>
-        Top {len(candidates)} Fortress Breakout Candidates
+        {len(candidates)} Fortress Candidates
+        <span class="text-sm font-normal text-gray-500 ml-2">
+          <span class="text-green-700">{n_breakout} Active Breakout</span>
+          &nbsp;·&nbsp;
+          <span class="text-amber-600">{n_near} Near-Breakout</span>
+        </span>
       </h2>
-      <span class="text-xs text-gray-400">All 4 BRD filters + EMA-200 + 20% box passed</span>
+      <span class="text-xs text-gray-400">EMA compressed 14d+ | RSI 40-55 | EMA-200 trend | Box 20%+</span>
     </div>
     {cards}
   </main>
@@ -794,16 +774,16 @@ def main() -> int:
     tickers = get_nse_tickers()
     print()
 
-    # 2. Batch download 3 years (needed for 36-month backtest)
+    # 2. Batch download — 1y gives ~252 rows, enough for EMA-200 warmup (200 rows) + box window (60)
     CHUNK = 100
     all_data: dict[str, pd.DataFrame] = {}
     for i in range(0, len(tickers), CHUNK):
         chunk = tickers[i:i + CHUNK]
         print(f"  Batch {i // CHUNK + 1}: tickers {i+1}-{i+len(chunk)}")
-        chunk_data = batch_download(chunk, period="3y")
+        chunk_data = batch_download(chunk, period="1y")
         all_data.update(chunk_data)
 
-    print(f"\n  Total tickers with 3y data: {len(all_data)}")
+    print(f"\n  Total tickers with 1y data: {len(all_data)}")
     total_scanned = len(all_data)
 
     # 3. Analyse each ticker against all BRD §2 filters
@@ -812,7 +792,6 @@ def main() -> int:
     for ticker, df in all_data.items():
         result = analyse_ticker(ticker, df)
         if result:
-            bt = result.get("backtest", {})
             candidates.append(result)
             print(
                 f"  BREAKOUT: {ticker} | "
@@ -820,8 +799,7 @@ def main() -> int:
                 f"Comp={result['compStreak']}d | "
                 f"Vol={result['volumeRatio']}x | "
                 f"RSI={result['rsi']} | "
-                f"R:R=1:{result['riskReward']} | "
-                f"BT WinRate={bt.get('btWinRate','--')}% PF={bt.get('btProfitFactor','--')}"
+                f"R:R=1:{result['riskReward']}"
             )
 
     # 4. Rank by R:R descending (best quality trades first), then by RSI

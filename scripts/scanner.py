@@ -194,7 +194,7 @@ def batch_download(tickers: list[str], period: str = "90d") -> dict[str, pd.Data
                     "volume": raw.get(v_col, pd.Series(0.0, index=raw.index)),
                 }).dropna(subset=["close"])
 
-                if len(df) >= 60:   # need 50 for EMA-50 warmup + 15 forward sessions for BT
+                if len(df) >= 55:   # need 50 for EMA-50 warmup + RSI warmup
                     out[ticker] = df
 
             except Exception:
@@ -401,9 +401,6 @@ def analyse(ticker: str, df: pd.DataFrame, meta: dict) -> dict:
         else:
             alert, level = f"Normal consolidation. Spread {spread:.2f}% | RSI {rsi}", "normal"
 
-        # BRD §3 — back-test (only run on non-normal/non-error; avoids CI timeout on universe)
-        bt = backtest_squeeze(df)
-
         result.update({
             "status":       "ok",
             "alert":        alert,
@@ -421,7 +418,6 @@ def analyse(ticker: str, df: pd.DataFrame, meta: dict) -> dict:
             "isRsiInZone":   rsi_in_zone,
             "framework":     framework,
             "frameworkDesc": framework_desc,
-            "backtest":      bt,
         })
 
     except Exception as e:
@@ -453,15 +449,6 @@ def build_html(results: list[dict], run_time: str) -> str:
     def badge(ok, yes, no, yc="bg-green-100 text-green-800", nc="bg-gray-100 text-gray-400"):
         return f'<span class="inline-block px-2 py-0.5 rounded text-xs font-semibold {yc if ok else nc}">{yes if ok else no}</span>'
 
-    def bt_cell(val, suffix="", good_fn=None, na="—"):
-        if val is None:
-            return f'<span class="text-gray-400">{na}</span>'
-        s = f"{val}{suffix}"
-        if good_fn:
-            c = "text-green-700 font-bold" if good_fn(val) else "text-red-600 font-semibold"
-            return f'<span class="{c}">{s}</span>'
-        return f'<span class="text-gray-700 font-semibold">{s}</span>'
-
     n_critical = sum(1 for r in results if r["alertLevel"] == "critical")
     n_setup    = sum(1 for r in results if r["alertLevel"] == "setup")
     n_watch    = sum(1 for r in results if r["alertLevel"] == "watch")
@@ -479,13 +466,6 @@ def build_html(results: list[dict], run_time: str) -> str:
         vr_s  = f"{r['volumeRatio']:.2f}x" if r["volumeRatio"] is not None else "—"
         seed_pill = '<span class="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded">Mentor</span>' if r.get("isSeed") else '<span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">Universe</span>'
         fw_pill   = FW_PILL.get(r.get("framework", ""), "")
-
-        bt = r.get("backtest", {})
-        bt_wr  = bt.get("btWinRate")
-        bt_mdd = bt.get("btMaxDrawdown")
-        bt_rr  = bt.get("btRR")
-        bt_note = bt.get("btNote", "")
-        bt_ev  = bt.get("btEvents", 0)
 
         cards += f"""
         <div class="rounded-lg shadow-sm p-5 {cls} mb-4">
@@ -507,8 +487,6 @@ def build_html(results: list[dict], run_time: str) -> str:
               <p class="text-xs text-gray-400">Current Price</p>
             </div>
           </div>
-
-          <!-- Live signal metrics -->
           <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-sm">
             <div class="bg-white rounded p-3 shadow-sm text-center">
               <p class="text-xs text-gray-400 mb-1">EMA 20</p>
@@ -531,31 +509,11 @@ def build_html(results: list[dict], run_time: str) -> str:
               <p class="font-semibold {'text-green-700' if r['isVolumeDryUp'] else 'text-gray-700'}">{vr_s}</p>
             </div>
             <div class="bg-white rounded p-3 shadow-sm text-center text-xs space-y-1">
-              <p class="text-gray-400 mb-1">BRD Conditions</p>
+              <p class="text-gray-400 mb-1">Conditions</p>
               {badge(r['isCompressed'],  '✅ EMA ≤1.5%',  '❌ Spread wide')}
               {badge(r['isVolumeDryUp'], '✅ Vol &lt; SMA', '❌ Normal vol')}
               {badge(r['isRsiInZone'],   '✅ RSI 30-55',   '⚠️ RSI outside', 'bg-green-100 text-green-800', 'bg-orange-100 text-orange-700')}
             </div>
-          </div>
-
-          <!-- Back-test metrics (BRD §3) -->
-          <div class="mt-3 bg-slate-50 border border-slate-200 rounded p-3">
-            <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">36-Month Back-test  <span class="font-normal normal-case text-slate-400">({bt_ev} squeeze events)</span></p>
-            <div class="grid grid-cols-3 gap-3 text-sm text-center">
-              <div>
-                <p class="text-xs text-gray-400 mb-0.5">Win Rate <span class="text-gray-300">(target &gt;80%)</span></p>
-                {bt_cell(bt_wr, '%', lambda v: v >= BT_WIN_RATE_TARGET)}
-              </div>
-              <div>
-                <p class="text-xs text-gray-400 mb-0.5">Max Drawdown</p>
-                {bt_cell(bt_mdd, '%', lambda v: v < 10.0)}
-              </div>
-              <div>
-                <p class="text-xs text-gray-400 mb-0.5">R:R <span class="text-gray-300">(target ≥1:2.5)</span></p>
-                {bt_cell(bt_rr, ':1', lambda v: v >= BT_MIN_RR_TARGET)}
-              </div>
-            </div>
-            <p class="text-xs text-slate-400 mt-2 italic">{bt_note}</p>
           </div>
         </div>"""
 
@@ -696,12 +654,14 @@ def main() -> int:
     all_tickers  = list({*live_tickers, *SEED_TICKERS})   # deduplicated
     print(f"  Total universe: {len(all_tickers)} tickers\n")
 
-    # ── 2. Batch download in chunks of 80 — 3y needed for 36-month back-test ─
+    # ── 2. Batch download in chunks of 80 — 1y is enough for all live indicators ─
+    # EMA-50 needs ~100 rows warmup; RSI needs ~30; 14-day compression streak needs 14.
+    # 1y gives ~250 trading rows — more than sufficient, and reliably fetched by Yahoo.
     CHUNK = 80
     all_data: dict[str, pd.DataFrame] = {}
     for i in range(0, len(all_tickers), CHUNK):
         chunk = all_tickers[i:i + CHUNK]
-        chunk_data = batch_download(chunk, period="3y")
+        chunk_data = batch_download(chunk, period="1y")
         all_data.update(chunk_data)
 
     print(f"\n  Downloaded: {len(all_data)} tickers with sufficient history\n")
