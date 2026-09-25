@@ -1,11 +1,11 @@
 name: Update Stock Dashboard
 
 on:
-  # Run daily at 6:30 PM IST (13:00 UTC)
+  # 4:30 PM IST = 11:00 UTC, Mon-Fri (after NSE market close at 3:30 PM IST)
   schedule:
-    - cron: '0 */2 * * *'
-  
-  # Allow manual trigger
+    - cron: '0 11 * * 1-5'
+
+  # Allow manual trigger anytime
   workflow_dispatch:
 
 permissions:
@@ -14,52 +14,46 @@ permissions:
 jobs:
   update-dashboard:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Set up Python
+
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
-      
+          # No pip cache here — ensures fresh yfinance on every run
+          # (cached yfinance sessions can cause stale cookie issues)
+
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install -r scripts/requirements.txt
-      
+
       - name: Fetch stock data
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          python scripts/fetch_stock_data.py
-      
+        run: python scripts/fetch_stock_data.py
+
       - name: Check for changes
         id: git-check
         run: |
           git diff --exit-code data/dashboard.json || echo "changed=true" >> $GITHUB_OUTPUT
-      
+
       - name: Commit and push if changed
         if: steps.git-check.outputs.changed == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add data/dashboard.json
-          git commit -m "🤖 Auto-update: Stock dashboard data ($(date +'%Y-%m-%d %H:%M IST'))"
+          git commit -m "🤖 Auto-update: Stock dashboard ($(date +'%Y-%m-%d %H:%M IST'))"
           git push
-      
+
       - name: No changes detected
         if: steps.git-check.outputs.changed != 'true'
-        run: |
-          echo "No changes in dashboard data. Skipping commit."
-      
-      - name: Deployment status
-        run: |
-          echo "✓ Dashboard update completed successfully!"
-          echo "GitHub Pages will auto-deploy within 1-2 minutes."
+        run: echo "No changes in dashboard data. Skipping commit."
 
-# Made with Bob
+      - name: Done
+        run: |
+          echo "✓ Dashboard update complete. GitHub Pages will auto-deploy in ~2 minutes."
