@@ -1,8 +1,9 @@
-# Python Dependencies for Stock Data Fetcher
+# Python Dependencies for Stock Data Fetcher + Swing Scanner
 # Zero-cost, no API keys required
 
 yfinance==0.2.40
 pandas==2.2.0
+numpy>=1.26.0
 requests==2.31.0
 pandas-datareader==0.10.0
 
