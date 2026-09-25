@@ -125,8 +125,16 @@ def batch_download(tickers: list[str], period: str = "1y") -> dict[str, pd.DataF
     """
     ONE yf.download() call for all tickers.
     Returns {ticker: OHLCV DataFrame} for tickers with sufficient data.
+
+    Column naming rules (yfinance multi_level_index=False):
+      Multiple tickers → "Close_RELIANCE.NS", "High_RELIANCE.NS", …
+      Single ticker    → "Close", "High", …
+    We handle both cases robustly.
     """
-    print(f"  📡 Batch downloading {len(tickers)} tickers ({period})…")
+    if not tickers:
+        return {}
+
+    print(f"  📡 Batch downloading {len(tickers)} tickers ({period})…", end=" ", flush=True)
     result: dict[str, pd.DataFrame] = {}
 
     try:
@@ -139,40 +147,43 @@ def batch_download(tickers: list[str], period: str = "1y") -> dict[str, pd.DataF
             multi_level_index=False,
         )
         if raw.empty:
-            print("  ⚠ Batch download returned empty DataFrame")
+            print("empty!")
             return result
+
+        print(f"got {len(raw)} rows | cols sample: {list(raw.columns)[:6]}")
 
         for ticker in tickers:
             try:
-                # multi_level_index=False → "Close_TICKER", "High_TICKER" etc.
-                # single-ticker fallback → "Close", "High" etc.
-                def col(field):
-                    c = f"{field}_{ticker}"
-                    return c if c in raw.columns else field
+                # Try prefixed columns first (multi-ticker batch)
+                c = f"Close_{ticker}"
+                h = f"High_{ticker}"
+                lo = f"Low_{ticker}"
+                v = f"Volume_{ticker}"
 
-                close_c  = col("Close")
-                high_c   = col("High")
-                low_c    = col("Low")
-                vol_c    = col("Volume")
+                # Fall back to plain names (single-ticker or when batch collapses)
+                if c not in raw.columns:
+                    c, h, lo, v = "Close", "High", "Low", "Volume"
 
-                if close_c not in raw.columns:
+                if c not in raw.columns:
                     continue
 
                 df = pd.DataFrame({
-                    "Close":  raw[close_c],
-                    "High":   raw.get(high_c,  pd.Series(dtype=float)),
-                    "Low":    raw.get(low_c,   pd.Series(dtype=float)),
-                    "Volume": raw.get(vol_c,   pd.Series(dtype=float)),
+                    "Close":  raw[c],
+                    "High":   raw.get(h,  pd.Series(dtype=float, index=raw.index)),
+                    "Low":    raw.get(lo, pd.Series(dtype=float, index=raw.index)),
+                    "Volume": raw.get(v,  pd.Series(0.0,         index=raw.index)),
                 }).dropna(subset=["Close"])
 
-                if len(df) >= 210:       # need 200 for EMA-200 + buffer
+                # Relax minimum from 210 to 205 — allows slight gaps in data
+                if len(df) >= 205:
                     result[ticker] = df
+
             except Exception:
                 pass
 
         print(f"  ✓ Usable: {len(result)}/{len(tickers)} tickers")
     except Exception as e:
-        print(f"  ✗ Batch download failed: {e}")
+        print(f"\n  ✗ Batch download failed: {e}")
 
     return result
 
