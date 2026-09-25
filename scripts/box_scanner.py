@@ -723,7 +723,7 @@ def build_html(candidates: list[dict], run_time_ist: str, total_scanned: int) ->
         <span><i class="fas fa-eye mr-1"></i>Scanned: <strong class="text-white">{total_scanned}</strong></span>
         <span><i class="fas fa-fire mr-1 text-amber-400"></i>Setups: <strong class="text-amber-300">{len(candidates)}</strong></span>
         <span class="text-xs text-slate-400">
-          Filters: DP% 3-6% | EMA compressed 14d+ | Vol &gt;= 1.5x | RSI 40-55 | EMA-200 trend | Box &gt;= 20%
+          Filters: DP% {PRICE_CHANGE_MIN}-{PRICE_CHANGE_MAX}% | EMA compressed {EMA_COMPRESS_DAYS}d+ | Vol &gt;= {VOLUME_SURGE_RATIO}x | RSI {RSI_LOW}-{RSI_HIGH} | EMA-200 trend | Box &gt;= {BOX_MIN_HEIGHT_PCT}%
         </span>
       </div>
     </div>
@@ -735,22 +735,22 @@ def build_html(candidates: list[dict], run_time_ist: str, total_scanned: int) ->
       <div class="p-3 bg-blue-50 rounded-lg">
         <p class="text-lg mb-1">BRD 2.1</p>
         <p class="font-bold text-gray-700">Price Momentum</p>
-        <p class="text-gray-500">+3% to +6% daily change. Blocks FOMO spikes (&gt;6%) and dead candles (&lt;3%).</p>
+        <p class="text-gray-500">+{PRICE_CHANGE_MIN}% to +{PRICE_CHANGE_MAX}% daily change. Blocks FOMO spikes (&gt;{PRICE_CHANGE_MAX}%) and dead candles (&lt;{PRICE_CHANGE_MIN}%).</p>
       </div>
       <div class="p-3 bg-indigo-50 rounded-lg">
         <p class="text-lg mb-1">BRD 2.2</p>
         <p class="font-bold text-gray-700">EMA Compression</p>
-        <p class="text-gray-500">EMA(20/50) spread &lt;= 1.5% for 14+ consecutive sessions. The coiled spring.</p>
+        <p class="text-gray-500">EMA(20/50) spread &lt;= {EMA_SPREAD_MAX}% for {EMA_COMPRESS_DAYS}+ consecutive sessions. The coiled spring.</p>
       </div>
       <div class="p-3 bg-green-50 rounded-lg">
         <p class="text-lg mb-1">BRD 2.3</p>
         <p class="font-bold text-gray-700">Institutional Volume</p>
-        <p class="text-gray-500">Volume &gt;= 1.50x SMA(20). Confirms programmatic desk participation.</p>
+        <p class="text-gray-500">Volume &gt;= {VOLUME_SURGE_RATIO}x SMA(20). Confirms programmatic desk participation.</p>
       </div>
       <div class="p-3 bg-amber-50 rounded-lg">
         <p class="text-lg mb-1">BRD 2.4</p>
         <p class="font-bold text-gray-700">RSI Shield</p>
-        <p class="text-gray-500">RSI(14) between 40 and 55. Disqualifies overbought (&gt;65) entries.</p>
+        <p class="text-gray-500">RSI(14) between {RSI_LOW} and {RSI_HIGH}. Disqualifies overbought (&gt;{RSI_OVERBOUGHT}) entries.</p>
       </div>
     </div>
   </section>
@@ -767,7 +767,7 @@ def build_html(candidates: list[dict], run_time_ist: str, total_scanned: int) ->
           <span class="text-amber-600">{n_near} Near-Breakout</span>
         </span>
       </h2>
-      <span class="text-xs text-gray-400">EMA compressed 14d+ | RSI 40-55 | EMA-200 trend | Box 20%+</span>
+      <span class="text-xs text-gray-400">EMA compressed {EMA_COMPRESS_DAYS}d+ | RSI {RSI_LOW}-{RSI_HIGH} | EMA-200 trend | Box {BOX_MIN_HEIGHT_PCT}%+</span>
     </div>
     {cards}
   </main>
