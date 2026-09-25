@@ -1,0 +1,13 @@
+{
+  "lastUpdated": "2026-09-25T16:15:50.005075Z",
+  "runTimeIST": "25 Sep 2026, 09:45 PM IST",
+  "totalScanned": 1,
+  "totalBreakouts": 0,
+  "config": {
+    "boxLookbackDays": 60,
+    "boxMinHeightPct": 20.0,
+    "volumeSurgeRatio": 1.2,
+    "minRR": 1.5
+  },
+  "candidates": []
+}
