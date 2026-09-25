@@ -1,26 +1,34 @@
 #!/usr/bin/env python3
 """
-Range Breakout Box Scanner — NSE Universe
-------------------------------------------
-Strategy (from YouTube Range Breakout / Box Theory):
+Institutional "Fortress Breakout" Scanner — BRD-Aligned (v2)
+-------------------------------------------------------------
+All 4 entry filters from BRD §2 implemented exactly:
 
-  1. Trend filter    : Close > EMA-200  (only bull-market structures)
-  2. Box detection   : 60-day lookback window; box height >= 20%
-  3. Breakout trigger: Today's close > box_high  AND  volume > 1.2× avg volume
-  4. Targets         : 50% of box height (partial) + 100% of box height (full)
-  5. Stop-loss       : MAX(box_low,  entry – 1.5×ATR)
-  6. Quality gate    : Risk:Reward >= 1.5
+  §2.1 Daily Price Momentum  : +3.00% <= ΔP% <= +6.00% on breakout day
+  §2.2 Dual-EMA Compression  : EMA(20/50) spread <= 1.5% for >= 14 CONSECUTIVE sessions
+  §2.3 Volume Validation     : Volume Ratio >= 1.50 (current vol >= 1.5× SMA-20)
+  §2.4 RSI Decompression     : 40 <= RSI(14) <= 55
 
-NSE ticker source (priority order):
-  A. Nifty 500 CSV from nseindia.com (public file, no auth)
-  B. Hardcoded backup of 50 liquid large/mid-caps
+Plus BRD §1 trend pre-filter:
+  - Close > EMA-200 (bull-market structure only)
+  - 60-day box height >= 20%
+  - Breakout: close > box_high
 
-Output:
-  data/box_scanner.json   ← consumed by box-dashboard.html (GitHub Pages)
-  box-dashboard.html      ← auto-generated full dashboard page
+BRD §3 Trade Lifecycle (Fortress Risk Engine):
+  - GTT Entry  : exactly at box_high (retest catch — no market-order chasing)
+  - Stop-Loss  : 2% below entry line (tight institutional anchor — NOT wide ATR/box-low)
+                 OR directly beneath EMA-20, whichever is mathematically closer
+  - Tranche 1  : entry + box_height (50% allocation — full box projection)
+  - Tranche 2  : no static target — trail via rising EMA-20 (50% allocation)
 
-API strategy: ONE batch yf.download() for all tickers, then per-ticker parse.
-No per-ticker loop delays.
+BRD §4 Back-testing (36-month rolling window):
+  - Win Rate   : % of historical breakout events that hit Tranche-1 before 2% SL
+  - Profit Factor : cumulative gross profits / cumulative gross losses (target >= 1.75)
+  - Max Drawdown : peak-to-trough equity curve decline
+
+NSE ticker source: Nifty 500 CSV (public) → backup list fallback.
+API: ONE batch yf.download() per chunk — no per-ticker loops.
+Output: data/box_scanner.json  +  box-dashboard.html (always regenerated)
 """
 
 import json
@@ -38,22 +46,37 @@ try:
 except ImportError:
     _REQUESTS_OK = False
 
-# ── Config ────────────────────────────────────────────────────────────────────
-BOX_LOOKBACK_DAYS   = 60        # days for box high/low window
-BOX_MIN_HEIGHT_PCT  = 20.0      # box must span ≥ 20%
-VOLUME_SURGE_RATIO  = 1.20      # breakout volume > 1.2× avg
-MIN_RR_RATIO        = 1.5       # minimum risk:reward
-ATR_SL_MULTIPLIER   = 1.5       # stop = entry − 1.5×ATR (floored at box_low)
-TOP_N               = 5         # return best N candidates
+# ── BRD §2 filter thresholds ──────────────────────────────────────────────────
+PRICE_CHANGE_MIN    = 3.0    # BRD §2.1 — breakout day ΔP% floor
+PRICE_CHANGE_MAX    = 6.0    # BRD §2.1 — breakout day ΔP% ceiling (filters FOMO)
+EMA_SPREAD_MAX      = 1.5    # BRD §2.2 — EMA 20/50 spread must be <= 1.5%
+EMA_COMPRESS_DAYS   = 14     # BRD §2.2 — compression must persist >= 14 sessions
+VOLUME_SURGE_RATIO  = 1.50   # BRD §2.3 — vol >= 1.5× SMA-20 (NOT 1.2×)
+RSI_LOW             = 40     # BRD §2.4 — RSI floor
+RSI_HIGH            = 55     # BRD §2.4 — RSI ceiling
+RSI_OVERBOUGHT      = 65     # BRD §2.4 — disqualify above this
+
+# ── BRD §3 trade levels ───────────────────────────────────────────────────────
+SL_PCT_BELOW_ENTRY  = 2.0    # BRD §3.2 — tight 2% stop, NOT wide ATR/box-low
+BOX_MIN_HEIGHT_PCT  = 20.0   # minimum box range to qualify
+BOX_LOOKBACK_DAYS   = 60     # days for box high/low detection
+
+# ── BRD §4 back-test params ───────────────────────────────────────────────────
+BT_HOLD_SESSIONS    = 60     # max sessions to hold before counting as loss
+BT_WIN_RATE_TARGET  = 70.0   # display target (BRD does not specify; 70% is practical)
+BT_PROFIT_FACTOR_TARGET = 1.75  # BRD §4: profit factor >= 1.75
+
+# ── Other ─────────────────────────────────────────────────────────────────────
+TOP_N               = 5      # return best N candidates
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
-ROOT           = Path(__file__).parent.parent
-DATA_DIR       = ROOT / "data"
+ROOT        = Path(__file__).parent.parent
+DATA_DIR    = ROOT / "data"
 DATA_DIR.mkdir(exist_ok=True)
-OUTPUT_JSON    = DATA_DIR / "box_scanner.json"
-OUTPUT_HTML    = ROOT / "box-dashboard.html"
+OUTPUT_JSON = DATA_DIR / "box_scanner.json"
+OUTPUT_HTML = ROOT / "box-dashboard.html"
 
-# ── Backup tickers (fired when NSE CSV is unreachable) ────────────────────────
+# ── Backup tickers ────────────────────────────────────────────────────────────
 BACKUP_TICKERS = [
     "RELIANCE.NS", "TCS.NS", "HDFCBANK.NS", "INFY.NS", "ICICIBANK.NS",
     "BHARTIARTL.NS", "KOTAKBANK.NS", "HINDUNILVR.NS", "AXISBANK.NS", "BAJFINANCE.NS",
@@ -70,17 +93,10 @@ BACKUP_TICKERS = [
 
 # ── Step 1: Get NSE tickers ───────────────────────────────────────────────────
 def get_nse_tickers() -> list[str]:
-    """
-    Try to download Nifty 500 constituents from NSE's public CSV.
-    Falls back to BACKUP_TICKERS if blocked/offline.
-    """
     urls = [
-        # NSE official Nifty 500 index CSV
-        "https://www1.nseindia.com/content/indices/ind_nifty500list.csv",
-        # Mirror via niftyindices.com
         "https://niftyindices.com/IndexConstituent/ind_nifty500list.csv",
+        "https://www1.nseindia.com/content/indices/ind_nifty500list.csv",
     ]
-
     if _REQUESTS_OK:
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
@@ -96,47 +112,38 @@ def get_nse_tickers() -> list[str]:
                     if col:
                         tickers = [f"{s.strip()}.NS" for s in df[col].dropna() if str(s).strip()]
                         if len(tickers) > 50:
-                            print(f"  ✅ Loaded {len(tickers)} NSE tickers from live source")
+                            print(f"  Loaded {len(tickers)} NSE tickers from live source")
                             return tickers
             except Exception as e:
-                print(f"  ⚠ NSE URL failed ({e})")
-
-    print(f"  ℹ Using backup list of {len(BACKUP_TICKERS)} tickers")
+                print(f"  NSE URL failed ({e})")
+    print(f"  Using backup list of {len(BACKUP_TICKERS)} tickers")
     return BACKUP_TICKERS
 
 
 # ── Step 2: Indicators ────────────────────────────────────────────────────────
-def calc_atr(df: pd.DataFrame, period: int = 14) -> pd.Series:
-    hi, lo, pc = df["High"], df["Low"], df["Close"].shift(1)
-    tr = pd.concat([hi - lo, (hi - pc).abs(), (lo - pc).abs()], axis=1).max(axis=1)
-    return tr.rolling(period).mean()
-
-
 def calc_rsi(series: pd.Series, period: int = 14) -> pd.Series:
     delta = series.diff()
-    gain  = delta.clip(lower=0).rolling(period).mean()
-    loss  = (-delta.clip(upper=0)).rolling(period).mean()
+    gain  = delta.clip(lower=0).ewm(alpha=1/period, adjust=False).mean()
+    loss  = (-delta.clip(upper=0)).ewm(alpha=1/period, adjust=False).mean()
     rs    = gain / (loss + 1e-10)
     return 100 - (100 / (1 + rs))
 
 
-# ── Step 3: Batch download ────────────────────────────────────────────────────
-def batch_download(tickers: list[str], period: str = "1y") -> dict[str, pd.DataFrame]:
-    """
-    ONE yf.download() call for all tickers.
-    Returns {ticker: OHLCV DataFrame} for tickers with sufficient data.
+def calc_ema(series: pd.Series, span: int) -> pd.Series:
+    return series.ewm(span=span, adjust=False).mean()
 
-    Column naming rules (yfinance multi_level_index=False):
-      Multiple tickers → "Close_RELIANCE.NS", "High_RELIANCE.NS", …
-      Single ticker    → "Close", "High", …
-    We handle both cases robustly.
+
+# ── Step 3: Batch download ────────────────────────────────────────────────────
+def batch_download(tickers: list[str], period: str = "3y") -> dict[str, pd.DataFrame]:
+    """
+    ONE yf.download() call for all tickers. Returns {ticker: OHLCV DataFrame}.
+    Period = 3y to support the 36-month back-test window.
+    Column naming: multi-ticker -> "Close_TICKER", single -> "Close"
     """
     if not tickers:
         return {}
-
-    print(f"  📡 Batch downloading {len(tickers)} tickers ({period})…", end=" ", flush=True)
+    print(f"  Batch downloading {len(tickers)} tickers ({period})...", end=" ", flush=True)
     result: dict[str, pd.DataFrame] = {}
-
     try:
         raw = yf.download(
             tickers=" ".join(tickers),
@@ -149,147 +156,361 @@ def batch_download(tickers: list[str], period: str = "1y") -> dict[str, pd.DataF
         if raw.empty:
             print("empty!")
             return result
-
         print(f"got {len(raw)} rows | cols sample: {list(raw.columns)[:6]}")
-
         for ticker in tickers:
             try:
-                # Try prefixed columns first (multi-ticker batch)
-                c = f"Close_{ticker}"
-                h = f"High_{ticker}"
+                c  = f"Close_{ticker}"
+                h  = f"High_{ticker}"
                 lo = f"Low_{ticker}"
-                v = f"Volume_{ticker}"
-
-                # Fall back to plain names (single-ticker or when batch collapses)
+                v  = f"Volume_{ticker}"
                 if c not in raw.columns:
                     c, h, lo, v = "Close", "High", "Low", "Volume"
-
                 if c not in raw.columns:
                     continue
-
                 df = pd.DataFrame({
                     "Close":  raw[c],
                     "High":   raw.get(h,  pd.Series(dtype=float, index=raw.index)),
                     "Low":    raw.get(lo, pd.Series(dtype=float, index=raw.index)),
                     "Volume": raw.get(v,  pd.Series(0.0,         index=raw.index)),
                 }).dropna(subset=["Close"])
-
-                # Relax minimum from 210 to 205 — allows slight gaps in data
-                if len(df) >= 205:
+                # Need 200 rows for EMA-200 + 60 box window + 14 compression + headroom
+                if len(df) >= 230:
                     result[ticker] = df
-
             except Exception:
                 pass
-
-        print(f"  ✓ Usable: {len(result)}/{len(tickers)} tickers")
+        print(f"  Usable: {len(result)}/{len(tickers)} tickers")
     except Exception as e:
-        print(f"\n  ✗ Batch download failed: {e}")
-
+        print(f"\n  Batch download failed: {e}")
     return result
 
 
-# ── Step 4: Analyse single ticker ─────────────────────────────────────────────
+# ── Step 4: Back-test fortress breakout events (BRD §4) ───────────────────────
+def backtest_fortress(df: pd.DataFrame) -> dict:
+    """
+    Scans 36-month history for past Fortress Breakout events and reports:
+      - Win Rate   : % that hit Tranche-1 target before 2% SL
+      - Profit Factor : gross wins / gross losses (BRD target >= 1.75)
+      - Max Drawdown  : worst equity curve decline across all events
+
+    Historical breakout event definition (all 4 BRD filters on day T):
+      1. ΔP% between +3% and +6%
+      2. EMA(20/50) spread <= 1.5% for 14+ consecutive prior sessions
+      3. Volume ratio >= 1.50
+      4. RSI 40-55
+      5. Close > 60-day box high
+      6. Close > EMA-200
+    """
+    result = {
+        "btEvents":       0,
+        "btWins":         0,
+        "btLosses":       0,
+        "btWinRate":      None,
+        "btProfitFactor": None,
+        "btMaxDrawdown":  None,
+        "btMeetsPF":      False,
+        "btNote":         "Insufficient history for back-test",
+    }
+    try:
+        df = df.copy()
+        df["EMA20"]   = calc_ema(df["Close"], 20)
+        df["EMA50"]   = calc_ema(df["Close"], 50)
+        df["EMA200"]  = calc_ema(df["Close"], 200)
+        df["RSI"]     = calc_rsi(df["Close"])
+        df["VolSMA"]  = df["Volume"].rolling(20).mean()
+        df["Spread"]  = (df["EMA20"] - df["EMA50"]).abs() / df["EMA50"] * 100
+        df["DeltaPct"]= df["Close"].pct_change() * 100
+
+        # Minimum compression streak column
+        df["CompDay"] = (df["Spread"] <= EMA_SPREAD_MAX).astype(int)
+        # Rolling count of consecutive compressed days (reset on break)
+        streak = []
+        count = 0
+        for v in df["CompDay"]:
+            count = count + 1 if v == 1 else 0
+            streak.append(count)
+        df["CompStreak"] = streak
+
+        # Leave last BT_HOLD_SESSIONS rows for live signal; use rest for BT
+        cutoff = len(df) - BT_HOLD_SESSIONS
+        if cutoff < 230:
+            return result
+
+        events = []
+        for i in range(230, cutoff):
+            row = df.iloc[i]
+            if pd.isna(row["VolSMA"]) or row["VolSMA"] <= 0:
+                continue
+
+            # BRD §2.1 — price change
+            dp = row["DeltaPct"]
+            if not (PRICE_CHANGE_MIN <= dp <= PRICE_CHANGE_MAX):
+                continue
+
+            # BRD §2.2 — 14+ consecutive compressed days
+            if row["CompStreak"] < EMA_COMPRESS_DAYS:
+                continue
+
+            # BRD §2.3 — volume surge
+            if row["Volume"] < row["VolSMA"] * VOLUME_SURGE_RATIO:
+                continue
+
+            # BRD §2.4 — RSI
+            rsi = row["RSI"]
+            if pd.isna(rsi) or not (RSI_LOW <= rsi <= RSI_HIGH):
+                continue
+
+            # Trend + box breakout
+            if row["Close"] <= row["EMA200"]:
+                continue
+
+            box_start = max(0, i - BOX_LOOKBACK_DAYS - 1)
+            box_high = float(df["High"].iloc[box_start:i].max())
+            box_low  = float(df["Low"].iloc[box_start:i].min())
+            if (box_high - box_low) / box_low * 100 < BOX_MIN_HEIGHT_PCT:
+                continue
+            if row["Close"] <= box_high:
+                continue
+
+            events.append((i, box_high, box_high - box_low))
+
+        if not events:
+            result["btNote"] = "No historical Fortress Breakout events in back-test window"
+            return result
+
+        wins, losses = [], []
+        equity = [1.0]
+        peak   = 1.0
+        max_dd = 0.0
+
+        for (idx, entry, box_depth) in events:
+            entry_price   = float(df["Close"].iloc[idx])
+            tranche1_tgt  = entry_price + box_depth          # full box projection = Tranche 1
+            sl_price      = entry_price * (1 - SL_PCT_BELOW_ENTRY / 100)
+            future_close  = df["Close"].iloc[idx + 1: idx + 1 + BT_HOLD_SESSIONS]
+
+            outcome = "loss"
+            pnl_pct = -(SL_PCT_BELOW_ENTRY)  # default if window expires
+
+            for p in future_close:
+                if p >= tranche1_tgt:
+                    outcome = "win"
+                    pnl_pct = (p - entry_price) / entry_price * 100
+                    break
+                if p <= sl_price:
+                    outcome = "loss"
+                    pnl_pct = (p - entry_price) / entry_price * 100
+                    break
+
+            eq = equity[-1] * (1 + pnl_pct / 100)
+            equity.append(eq)
+            if eq > peak:
+                peak = eq
+            dd = (peak - eq) / peak * 100
+            if dd > max_dd:
+                max_dd = dd
+
+            if outcome == "win":
+                wins.append(abs(pnl_pct))
+            else:
+                losses.append(abs(pnl_pct))
+
+        total        = len(wins) + len(losses)
+        win_rate     = round(len(wins) / total * 100, 1) if total else 0
+        gross_profit = sum(wins)
+        gross_loss   = sum(losses)
+        pf           = round(gross_profit / gross_loss, 2) if gross_loss > 0 else None
+        max_dd       = round(max_dd, 2)
+
+        result.update({
+            "btEvents":       total,
+            "btWins":         len(wins),
+            "btLosses":       len(losses),
+            "btWinRate":      win_rate,
+            "btProfitFactor": pf,
+            "btMaxDrawdown":  max_dd,
+            "btMeetsPF":      (pf or 0) >= BT_PROFIT_FACTOR_TARGET,
+            "btNote":         f"{total} events | {len(wins)}W / {len(losses)}L | 36-month window",
+        })
+    except Exception as e:
+        result["btNote"] = f"Back-test error: {e}"
+    return result
+
+
+# ── Step 5: Analyse single ticker ─────────────────────────────────────────────
 def analyse_ticker(ticker: str, df: pd.DataFrame) -> dict | None:
     """
-    Apply full box strategy rules. Returns candidate dict or None.
+    Applies all BRD §2 filters + §3 trade levels.
+    Returns candidate dict or None if any filter fails.
     """
     try:
         df = df.copy()
-        df["EMA200"] = df["Close"].ewm(span=200, adjust=False).mean()
+        df["EMA20"]  = calc_ema(df["Close"], 20)
+        df["EMA50"]  = calc_ema(df["Close"], 50)
+        df["EMA200"] = calc_ema(df["Close"], 200)
         df["RSI"]    = calc_rsi(df["Close"])
-        df["ATR"]    = calc_atr(df)
+        df["VolSMA"] = df["Volume"].rolling(20).mean()
+        df["Spread"] = (df["EMA20"] - df["EMA50"]).abs() / df["EMA50"] * 100
 
-        latest = df.iloc[-1]
-        close  = float(latest["Close"])
-        vol    = float(latest["Volume"])
-        ema200 = float(latest["EMA200"])
-        rsi    = float(latest["RSI"])
-        atr    = float(latest["ATR"])
+        # ── Compression streak ────────────────────────────────────────────────
+        streak, count = [], 0
+        for v in (df["Spread"] <= EMA_SPREAD_MAX).astype(int):
+            count = count + 1 if v else 0
+            streak.append(count)
+        df["CompStreak"] = streak
 
-        # ── Trend filter ─────────────────────────────────────────────────────
+        latest    = df.iloc[-1]
+        prev      = df.iloc[-2]
+        close     = float(latest["Close"])
+        prev_close= float(prev["Close"])
+        vol       = float(latest["Volume"])
+        ema20     = float(latest["EMA20"])
+        ema50     = float(latest["EMA50"])
+        ema200    = float(latest["EMA200"])
+        rsi       = float(latest["RSI"])
+        avg_vol   = float(latest["VolSMA"]) if not pd.isna(latest["VolSMA"]) else 0
+        spread    = float(latest["Spread"])
+        comp_streak = int(df["CompStreak"].iloc[-1])
+
+        # BRD §2.1 — Daily price change filter
+        delta_pct = ((close - prev_close) / prev_close) * 100 if prev_close > 0 else 0
+        if not (PRICE_CHANGE_MIN <= delta_pct <= PRICE_CHANGE_MAX):
+            return None
+
+        # BRD §2.2 — EMA compression for >= 14 consecutive sessions
+        if comp_streak < EMA_COMPRESS_DAYS:
+            return None
+
+        # BRD §2.3 — Institutional volume validation
+        if avg_vol <= 0 or vol < avg_vol * VOLUME_SURGE_RATIO:
+            return None
+        vol_ratio = round(vol / avg_vol, 2)
+
+        # BRD §2.4 — RSI Decompression Shield
+        if not (RSI_LOW <= rsi <= RSI_HIGH):
+            return None
+
+        # Trend filter (BRD §1 context — bull structure only)
         if close < ema200:
             return None
 
-        # ── Box window ────────────────────────────────────────────────────────
-        box_df  = df.iloc[-(BOX_LOOKBACK_DAYS + 1):-1]
+        # Box detection
+        box_df   = df.iloc[-(BOX_LOOKBACK_DAYS + 1):-1]
         if box_df.empty:
             return None
-
         box_high = float(box_df["High"].max())
         box_low  = float(box_df["Low"].min())
-        avg_vol  = float(box_df["Volume"].mean())
-
         box_h_pct = (box_high - box_low) / box_low * 100
         if box_h_pct < BOX_MIN_HEIGHT_PCT:
             return None
 
-        # ── Breakout check ────────────────────────────────────────────────────
+        # Breakout confirmation
         if close <= box_high:
             return None
-        if avg_vol <= 0 or vol < avg_vol * VOLUME_SURGE_RATIO:
-            return None
 
-        # ── Trade levels ──────────────────────────────────────────────────────
-        entry         = round(box_high, 2)
-        box_depth     = box_high - box_low
-        sl_atr        = round(entry - ATR_SL_MULTIPLIER * atr, 2)
-        stop_loss     = round(max(box_low, sl_atr), 2)
-        target_50     = round(entry + box_depth * 0.50, 2)
-        target_100    = round(entry + box_depth, 2)
+        # BRD §3 — Trade levels
+        entry      = round(box_high, 2)                             # GTT at box ceiling
+        box_depth  = box_high - box_low
 
-        risk          = entry - stop_loss
-        reward        = target_100 - entry
-        rr            = reward / (risk + 1e-10)
+        # BRD §3.2 — Tight 2% stop (NOT box-low, NOT ATR)
+        sl_2pct    = round(entry * (1 - SL_PCT_BELOW_ENTRY / 100), 2)
+        sl_ema20   = round(ema20, 2)                                # "directly beneath EMA-20"
+        stop_loss  = min(sl_2pct, sl_ema20)                        # whichever is closer (lower)
+        stop_loss  = round(stop_loss, 2)
 
-        if rr < MIN_RR_RATIO:
-            return None
+        # BRD §3.3 — Tranche 1: full box height projected up (50% allocation)
+        tranche1   = round(entry + box_depth, 2)
+        # BRD §3.3 — Tranche 2: trail EMA-20 (50% allocation — no static price)
+        # We record the current EMA-20 as the trailing reference start point
+        tranche2_trail_ref = round(ema20, 2)
 
-        vol_ratio     = round(vol / avg_vol, 2)
+        # R:R vs Tranche 1 only
+        risk   = entry - stop_loss
+        reward = tranche1 - entry
+        rr     = round(reward / risk, 2) if risk > 0 else 0
+
+        # Back-test
+        bt = backtest_fortress(df)
 
         return {
-            "ticker":       ticker,
-            "name":         ticker.replace(".NS", ""),
-            "currentPrice": round(close, 2),
-            "ema200":       round(ema200, 2),
-            "rsi":          round(rsi, 2),
-            "atr":          round(atr, 2),
-            "boxHigh":      round(box_high, 2),
-            "boxLow":       round(box_low, 2),
-            "boxHeightPct": round(box_h_pct, 2),
-            "volumeRatio":  vol_ratio,
-            "gttEntry":     entry,
-            "stopLoss":     stop_loss,
-            "target50":     target_50,
-            "target100":    target_100,
-            "riskReward":   round(rr, 2),
+            "ticker":          ticker,
+            "name":            ticker.replace(".NS", ""),
+            # Signal data
+            "currentPrice":    round(close, 2),
+            "deltaPct":        round(delta_pct, 2),
+            "ema20":           round(ema20, 2),
+            "ema50":           round(ema50, 2),
+            "ema200":          round(ema200, 2),
+            "emaSpreadPct":    round(spread, 3),
+            "compStreak":      comp_streak,
+            "rsi":             round(rsi, 2),
+            "volume":          int(vol),
+            "avgVolume":       int(avg_vol),
+            "volumeRatio":     vol_ratio,
+            "boxHigh":         round(box_high, 2),
+            "boxLow":          round(box_low, 2),
+            "boxHeightPct":    round(box_h_pct, 2),
+            # BRD §3 trade levels
+            "gttEntry":        entry,
+            "stopLoss":        stop_loss,
+            "sl2Pct":          sl_2pct,
+            "slEma20":         sl_ema20,
+            "tranche1":        tranche1,          # 50% allocation exit
+            "tranche2TrailRef": tranche2_trail_ref,  # Tranche 2 EMA-20 trail start
+            "riskReward":      rr,
+            # BRD filter pass flags
+            "passedDeltaPct":   True,
+            "passedCompression": True,
+            "passedVolume":    True,
+            "passedRsi":       True,
+            # Back-test
+            "backtest":        bt,
         }
 
     except Exception as e:
-        print(f"    ⚠ Error analysing {ticker}: {e}")
+        print(f"    Error analysing {ticker}: {e}")
         return None
 
 
-# ── Step 5: Build HTML page ───────────────────────────────────────────────────
+# ── Step 6: Build HTML dashboard ──────────────────────────────────────────────
 def build_html(candidates: list[dict], run_time_ist: str, total_scanned: int) -> str:
 
     def fmt_inr(val):
-        return f"₹{val:,.2f}" if val is not None else "—"
+        return f"Rs.{val:,.2f}" if val is not None else "--"
 
-    rr_colour = lambda rr: "text-green-700 font-bold" if rr >= 3 else "text-blue-600 font-semibold" if rr >= 2 else "text-gray-700"
+    def pct(val):
+        return f"{val:.1f}%" if val is not None else "--"
+
+    def bt_cell(val, suffix="", good_fn=None):
+        if val is None:
+            return '<span class="text-gray-400">--</span>'
+        s = f"{val}{suffix}"
+        if good_fn:
+            cls = "text-green-700 font-bold" if good_fn(val) else "text-red-600 font-semibold"
+            return f'<span class="{cls}">{s}</span>'
+        return f'<span class="text-gray-700 font-semibold">{s}</span>'
+
+    rr_cls = lambda rr: "text-green-700 font-bold" if rr >= 3 else "text-blue-600 font-semibold" if rr >= 2 else "text-gray-700"
 
     cards = ""
     for i, c in enumerate(candidates):
-        rank_badge = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"][i] if i < 5 else f"#{i+1}"
-        box_bar_w  = min(100, int(c["boxHeightPct"] * 2))   # visual bar width %
-        vol_bar_w  = min(100, int(c["volumeRatio"] * 40))
+        rank_badge = ["#1", "#2", "#3", "#4", "#5"][i] if i < 5 else f"#{i+1}"
+        bt = c.get("backtest", {})
+        bt_wr  = bt.get("btWinRate")
+        bt_pf  = bt.get("btProfitFactor")
+        bt_mdd = bt.get("btMaxDrawdown")
+        bt_ev  = bt.get("btEvents", 0)
+        bt_note = bt.get("btNote", "")
+
+        # Compression streak bar (capped at 30 sessions for visual)
+        comp_bar = min(100, int(c["compStreak"] / 30 * 100))
 
         cards += f"""
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-5">
+        <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden mb-6">
 
-          <!-- Card header -->
-          <div class="bg-gradient-to-r from-slate-700 to-slate-600 text-white px-5 py-4 flex items-center justify-between">
+          <!-- Card Header -->
+          <div class="bg-gradient-to-r from-slate-800 to-slate-700 text-white px-5 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <span class="text-2xl">{rank_badge}</span>
+              <span class="text-xl font-bold bg-amber-500 text-slate-900 px-2 py-0.5 rounded">{rank_badge}</span>
               <div>
                 <h3 class="text-lg font-bold">{c['name']}</h3>
                 <span class="text-xs text-slate-300 font-mono">{c['ticker']}</span>
@@ -297,103 +518,139 @@ def build_html(candidates: list[dict], run_time_ist: str, total_scanned: int) ->
             </div>
             <div class="text-right">
               <p class="text-2xl font-bold">{fmt_inr(c['currentPrice'])}</p>
-              <p class="text-xs text-slate-300">Current Price</p>
+              <p class="text-xs text-slate-300">
+                <span class="text-green-400 font-semibold">+{c['deltaPct']:.2f}%</span> today
+              </p>
             </div>
           </div>
 
-          <!-- Key metrics grid -->
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-0 divide-x divide-y divide-gray-100 border-b border-gray-100">
+          <!-- BRD §2 filter status row -->
+          <div class="px-5 py-2 bg-slate-50 border-b border-gray-100 flex flex-wrap gap-2 text-xs">
+            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">
+              BRD §2.1 DP% +{c['deltaPct']:.1f}% (3-6% band OK)
+            </span>
+            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">
+              BRD §2.2 EMA compressed {c['compStreak']}d (>= 14d)
+            </span>
+            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">
+              BRD §2.3 Vol {c['volumeRatio']}x (>= 1.5x)
+            </span>
+            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">
+              BRD §2.4 RSI {c['rsi']} (40-55)
+            </span>
+          </div>
+
+          <!-- BRD §3 Trade Lifecycle Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-y divide-gray-100 border-b border-gray-100">
             <div class="p-4 text-center">
               <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">GTT Entry</p>
               <p class="text-lg font-bold text-blue-600">{fmt_inr(c['gttEntry'])}</p>
-              <p class="text-xs text-gray-400">Above box breakout</p>
+              <p class="text-xs text-gray-400">Box ceiling retest</p>
             </div>
             <div class="p-4 text-center">
-              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Stop Loss</p>
-              <p class="text-lg font-bold text-red-500">{fmt_inr(c['stopLoss'])}</p>
-              <p class="text-xs text-gray-400">Box low / ATR floor</p>
+              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Stop-Loss (2%)</p>
+              <p class="text-lg font-bold text-red-600">{fmt_inr(c['stopLoss'])}</p>
+              <p class="text-xs text-gray-400">Tight institutional anchor</p>
             </div>
             <div class="p-4 text-center">
-              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">50% Target</p>
-              <p class="text-lg font-bold text-amber-500">{fmt_inr(c['target50'])}</p>
-              <p class="text-xs text-gray-400">Partial profit booking</p>
+              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Tranche 1 (50%)</p>
+              <p class="text-lg font-bold text-green-600">{fmt_inr(c['tranche1'])}</p>
+              <p class="text-xs text-gray-400">Full box projection exit</p>
             </div>
             <div class="p-4 text-center">
-              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">100% Target</p>
-              <p class="text-lg font-bold text-green-600">{fmt_inr(c['target100'])}</p>
-              <p class="text-xs text-gray-400">Full extension</p>
+              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Tranche 2 (50%)</p>
+              <p class="text-lg font-bold text-amber-500">Trail EMA-20</p>
+              <p class="text-xs text-gray-400">Ref: {fmt_inr(c['tranche2TrailRef'])} today</p>
             </div>
           </div>
 
           <!-- Secondary metrics -->
-          <div class="px-5 py-4 grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
-
+          <div class="px-5 py-4 grid grid-cols-2 md:grid-cols-6 gap-4 text-sm">
+            <div>
+              <p class="text-xs text-gray-400 mb-0.5">EMA Spread</p>
+              <p class="font-semibold text-green-700">{c['emaSpreadPct']:.2f}%</p>
+              <p class="text-xs text-gray-400">&lt;= 1.5% (compressed)</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 mb-0.5">Compression</p>
+              <p class="font-semibold text-green-700">{c['compStreak']} sessions</p>
+              <div class="mt-1 h-1.5 bg-gray-100 rounded-full">
+                <div class="h-full bg-indigo-400 rounded-full" style="width:{comp_bar}%"></div>
+              </div>
+            </div>
             <div>
               <p class="text-xs text-gray-400 mb-0.5">Box Height</p>
               <p class="font-semibold text-gray-800">{c['boxHeightPct']:.1f}%</p>
-              <div class="mt-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                <div class="h-full bg-blue-400 rounded-full" style="width:{box_bar_w}%"></div>
-              </div>
+              <p class="text-xs text-gray-400">&gt;= 20% required</p>
             </div>
-
             <div>
               <p class="text-xs text-gray-400 mb-0.5">Volume Surge</p>
-              <p class="font-semibold text-gray-800">{c['volumeRatio']}×</p>
-              <div class="mt-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                <div class="h-full bg-green-400 rounded-full" style="width:{vol_bar_w}%"></div>
-              </div>
+              <p class="font-semibold text-green-700">{c['volumeRatio']}x</p>
+              <p class="text-xs text-gray-400">&gt;= 1.50x required</p>
             </div>
-
             <div>
-              <p class="text-xs text-gray-400 mb-0.5">RSI</p>
-              <p class="font-semibold {'text-green-600' if 50 <= c['rsi'] <= 70 else 'text-red-500' if c['rsi'] > 75 else 'text-gray-700'}">{c['rsi']}</p>
+              <p class="text-xs text-gray-400 mb-0.5">RSI (14)</p>
+              <p class="font-semibold text-green-700">{c['rsi']}</p>
+              <p class="text-xs text-gray-400">Zone: 40-55</p>
             </div>
-
             <div>
-              <p class="text-xs text-gray-400 mb-0.5">EMA-200</p>
-              <p class="font-semibold text-gray-700">{fmt_inr(c['ema200'])}</p>
+              <p class="text-xs text-gray-400 mb-0.5">R:R Ratio</p>
+              <p class="{rr_cls(c['riskReward'])}">1:{c['riskReward']}</p>
+              <p class="text-xs text-gray-400">vs Tranche 1</p>
             </div>
-
-            <div>
-              <p class="text-xs text-gray-400 mb-0.5">Risk : Reward</p>
-              <p class="{rr_colour(c['riskReward'])}">1 : {c['riskReward']}</p>
-            </div>
-
           </div>
 
-          <!-- Visual price ladder -->
-          <div class="px-5 pb-4">
-            <p class="text-xs text-gray-400 mb-2 uppercase tracking-wide">Price Ladder</p>
-            <div class="relative h-8 bg-gray-100 rounded-full overflow-hidden text-xs font-mono">
-              <div class="absolute inset-y-0 bg-green-100 rounded-full"
-                   style="left:0%; right:{100 - int((c['target100']-c['stopLoss'])/(c['target100']-c['stopLoss'])*60 + 40)}%"></div>
-              <div class="absolute left-1 inset-y-0 flex items-center text-red-500">SL {fmt_inr(c['stopLoss'])}</div>
-              <div class="absolute inset-y-0 flex items-center" style="left:38%">
-                <span class="bg-blue-500 text-white px-1 rounded text-xs">Entry {fmt_inr(c['gttEntry'])}</span>
+          <!-- SL detail row -->
+          <div class="px-5 pb-3 text-xs text-gray-400 border-t border-gray-50">
+            <span class="font-semibold text-gray-600">Stop-Loss Logic (BRD §3.2):</span>
+            2% below entry = {fmt_inr(c['sl2Pct'])} |
+            EMA-20 = {fmt_inr(c['slEma20'])} |
+            <span class="text-red-600 font-semibold">Active SL = {fmt_inr(c['stopLoss'])} (lower of the two)</span>
+          </div>
+
+          <!-- Back-test panel (BRD §4) -->
+          <div class="mx-5 mb-4 bg-slate-50 border border-slate-200 rounded-lg p-3">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">
+              36-Month Fortress Backtest
+              <span class="font-normal normal-case text-slate-400">({bt_ev} breakout events)</span>
+            </p>
+            <div class="grid grid-cols-3 gap-3 text-sm text-center">
+              <div>
+                <p class="text-xs text-gray-400 mb-0.5">Win Rate</p>
+                {bt_cell(bt_wr, '%', lambda v: v >= BT_WIN_RATE_TARGET)}
               </div>
-              <div class="absolute right-1 inset-y-0 flex items-center text-green-600">T {fmt_inr(c['target100'])}</div>
+              <div>
+                <p class="text-xs text-gray-400 mb-0.5">Profit Factor <span class="text-gray-300">(target &gt;= 1.75)</span></p>
+                {bt_cell(bt_pf, '', lambda v: v >= BT_PROFIT_FACTOR_TARGET)}
+              </div>
+              <div>
+                <p class="text-xs text-gray-400 mb-0.5">Max Drawdown</p>
+                {bt_cell(bt_mdd, '%', lambda v: v < 15.0)}
+              </div>
             </div>
+            <p class="text-xs text-slate-400 mt-2 italic">{bt_note}</p>
           </div>
 
         </div>"""
 
-    no_candidates_block = """
+    if not candidates:
+        cards = """
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-          <div class="text-5xl mb-4">⏳</div>
-          <h3 class="text-xl font-bold text-gray-700 mb-2">No Breakout Setups Today</h3>
-          <p class="text-gray-400 text-sm max-w-md mx-auto">
-            No stocks in the NSE universe met all 5 criteria today:
-            EMA-200 uptrend, 20%+ box, volume surge breakout, and Risk:Reward ≥ 1.5.
-            Check back after next market session.
+          <div class="text-5xl mb-4">No active setups</div>
+          <h3 class="text-xl font-bold text-gray-700 mb-2">No Fortress Breakout Setups Today</h3>
+          <p class="text-gray-400 text-sm max-w-lg mx-auto">
+            No NSE stock passed all 4 BRD filters simultaneously:
+            DP% 3-6%, EMA compressed 14+ days, Volume &gt;= 1.5x SMA, RSI 40-55,
+            plus EMA-200 uptrend + 20% box breakout.
           </p>
-        </div>""" if not candidates else ""
+        </div>"""
 
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Range Breakout Box Scanner — NSE</title>
+  <title>Fortress Breakout Scanner - NSE</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -402,7 +659,7 @@ def build_html(candidates: list[dict], run_time_ist: str, total_scanned: int) ->
   <!-- SEBI Banner -->
   <div class="bg-yellow-50 border-b border-yellow-300 py-2 px-4 text-xs text-yellow-800 text-center">
     <i class="fas fa-exclamation-triangle mr-1"></i>
-    <strong>Educational use only.</strong> Range Breakout signals are for learning — not investment advice.
+    <strong>Educational use only.</strong> Fortress Breakout signals are for learning -- not investment advice.
     <a href="disclaimer.html" class="underline ml-1">Full Disclaimer</a>
   </div>
 
@@ -414,120 +671,106 @@ def build_html(candidates: list[dict], run_time_ist: str, total_scanned: int) ->
         Financial Literacy Hub
       </a>
       <div class="hidden md:flex items-center gap-6 text-sm">
-        <a href="index.html"          class="text-gray-600 hover:text-blue-600 transition">Home</a>
-        <a href="dashboard.html"      class="text-gray-600 hover:text-blue-600 transition">Dashboard</a>
-        <a href="swing-dashboard.html" class="text-gray-600 hover:text-blue-600 transition">Swing Scanner</a>
-        <a href="box-dashboard.html"  class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-0.5">Box Scanner</a>
-        <a href="discussions.html"    class="text-gray-600 hover:text-blue-600 transition">Discussions</a>
+        <a href="index.html"           class="text-gray-600 hover:text-blue-600">Home</a>
+        <a href="dashboard.html"       class="text-gray-600 hover:text-blue-600">Dashboard</a>
+        <a href="swing-dashboard.html" class="text-gray-600 hover:text-blue-600">Swing Scanner</a>
+        <a href="box-dashboard.html"   class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-0.5">Box Scanner</a>
+        <a href="discussions.html"     class="text-gray-600 hover:text-blue-600">
+          <i class="fas fa-tasks mr-1"></i>Stock Manager
+        </a>
       </div>
     </div>
   </nav>
 
   <!-- Header -->
-  <section class="bg-gradient-to-r from-slate-800 to-slate-600 text-white py-10">
+  <section class="bg-gradient-to-r from-slate-800 to-slate-700 text-white py-10">
     <div class="max-w-5xl mx-auto px-4">
       <h1 class="text-3xl font-bold mb-2">
-        <i class="fas fa-box-open mr-2 text-amber-400"></i>
-        Range Breakout Box Scanner
+        <i class="fas fa-fort-awesome mr-2 text-amber-400"></i>
+        Institutional Fortress Breakout Scanner
       </h1>
       <p class="text-slate-300 text-sm max-w-2xl mb-4">
-        Scans the NSE universe every trading day after market close.
-        Finds stocks with a 20%+ consolidation box that just broke out with high volume,
-        sitting above their EMA-200 uptrend with Risk:Reward ≥ 1.5.
+        Scans the NSE universe using all 4 BRD quantitative filters simultaneously.
+        Replaces wide box-low stops with tight 2% institutional invalidation anchors.
+        Each result includes a 36-month back-test (Win Rate, Profit Factor, Max Drawdown).
       </p>
       <div class="flex flex-wrap gap-5 text-sm text-slate-300">
-        <span><i class="fas fa-clock mr-1"></i>Scan time: <strong class="text-white">{run_time_ist}</strong></span>
-        <span><i class="fas fa-eye mr-1"></i>Stocks scanned: <strong class="text-white">{total_scanned}</strong></span>
-        <span><i class="fas fa-fire mr-1 text-amber-400"></i>Breakouts found: <strong class="text-amber-300">{len(candidates)}</strong></span>
+        <span><i class="fas fa-clock mr-1"></i>Scan: <strong class="text-white">{run_time_ist}</strong></span>
+        <span><i class="fas fa-eye mr-1"></i>Scanned: <strong class="text-white">{total_scanned}</strong></span>
+        <span><i class="fas fa-fire mr-1 text-amber-400"></i>Setups: <strong class="text-amber-300">{len(candidates)}</strong></span>
+        <span class="text-xs text-slate-400">
+          Filters: DP% 3-6% | EMA compressed 14d+ | Vol &gt;= 1.5x | RSI 40-55 | EMA-200 trend | Box &gt;= 20%
+        </span>
       </div>
     </div>
   </section>
 
-  <!-- Strategy Summary -->
+  <!-- BRD Filter Legend -->
   <section class="max-w-5xl mx-auto px-4 py-4">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 grid md:grid-cols-5 gap-3 text-xs text-center">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 grid md:grid-cols-4 gap-3 text-xs text-center">
       <div class="p-3 bg-blue-50 rounded-lg">
-        <p class="text-2xl mb-1">📈</p>
-        <p class="font-bold text-gray-700">EMA-200</p>
-        <p class="text-gray-500">Close above 200-day MA (bull structure only)</p>
+        <p class="text-lg mb-1">BRD 2.1</p>
+        <p class="font-bold text-gray-700">Price Momentum</p>
+        <p class="text-gray-500">+3% to +6% daily change. Blocks FOMO spikes (&gt;6%) and dead candles (&lt;3%).</p>
       </div>
-      <div class="p-3 bg-amber-50 rounded-lg">
-        <p class="text-2xl mb-1">📦</p>
-        <p class="font-bold text-gray-700">Box ≥ 20%</p>
-        <p class="text-gray-500">60-day consolidation range at least 20% tall</p>
+      <div class="p-3 bg-indigo-50 rounded-lg">
+        <p class="text-lg mb-1">BRD 2.2</p>
+        <p class="font-bold text-gray-700">EMA Compression</p>
+        <p class="text-gray-500">EMA(20/50) spread &lt;= 1.5% for 14+ consecutive sessions. The coiled spring.</p>
       </div>
       <div class="p-3 bg-green-50 rounded-lg">
-        <p class="text-2xl mb-1">🚀</p>
-        <p class="font-bold text-gray-700">Breakout</p>
-        <p class="text-gray-500">Close &gt; box high with 1.2× volume surge</p>
+        <p class="text-lg mb-1">BRD 2.3</p>
+        <p class="font-bold text-gray-700">Institutional Volume</p>
+        <p class="text-gray-500">Volume &gt;= 1.50x SMA(20). Confirms programmatic desk participation.</p>
       </div>
-      <div class="p-3 bg-purple-50 rounded-lg">
-        <p class="text-2xl mb-1">🎯</p>
-        <p class="font-bold text-gray-700">GTT Order</p>
-        <p class="text-gray-500">Place limit order above box — auto triggers on retest</p>
-      </div>
-      <div class="p-3 bg-red-50 rounded-lg">
-        <p class="text-2xl mb-1">⚖️</p>
-        <p class="font-bold text-gray-700">R:R ≥ 1.5</p>
-        <p class="text-gray-500">Only setups with reward at least 1.5× the risk</p>
+      <div class="p-3 bg-amber-50 rounded-lg">
+        <p class="text-lg mb-1">BRD 2.4</p>
+        <p class="font-bold text-gray-700">RSI Shield</p>
+        <p class="text-gray-500">RSI(14) between 40 and 55. Disqualifies overbought (&gt;65) entries.</p>
       </div>
     </div>
   </section>
 
   <!-- Results -->
   <main class="max-w-5xl mx-auto px-4 py-2 pb-12">
-    <div class="flex items-center gap-3 mb-4">
+    <div class="flex items-center justify-between mb-4">
       <h2 class="text-lg font-bold text-gray-800">
         <i class="fas fa-trophy mr-1 text-amber-500"></i>
-        Top {len(candidates)} Breakout Candidates
+        Top {len(candidates)} Fortress Breakout Candidates
       </h2>
-      <span class="text-xs text-gray-400">Ranked by RSI strength</span>
+      <span class="text-xs text-gray-400">All 4 BRD filters + EMA-200 + 20% box passed</span>
     </div>
     {cards}
-    {no_candidates_block}
   </main>
 
-  <!-- How to use -->
+  <!-- BRD §3 Risk Engine Explainer -->
   <section class="max-w-5xl mx-auto px-4 pb-10">
     <div class="bg-slate-800 text-white rounded-xl p-6 text-sm">
-      <h3 class="font-bold text-amber-400 mb-4 text-base"><i class="fas fa-graduation-cap mr-2"></i>How to Execute This Strategy</h3>
+      <h3 class="font-bold text-amber-400 mb-4 text-base">
+        <i class="fas fa-shield-alt mr-2"></i>BRD §3 Fortress Risk Engine
+      </h3>
       <div class="grid md:grid-cols-3 gap-5 text-slate-300">
         <div>
-          <p class="font-bold text-white mb-2">1. NSE Stock Selection</p>
-          <p>On NSE India, filter for Advances → sort by Total Trading Volume → pick stocks that moved 5%+ in one session. These are your high-momentum candidates.</p>
+          <p class="font-bold text-white mb-2">Entry (GTT Limit)</p>
+          <p>Configured exactly at the box upper resistance ceiling. Catches the retest automatically. Market-order chasing at the open is blocked by design.</p>
         </div>
         <div>
-          <p class="font-bold text-white mb-2">2. Box Setup on Chart</p>
-          <p>Open daily chart. Identify swing high and swing low with ≥20% range. Draw horizontal rectangle between them. The breakout above the upper band is your entry signal.</p>
+          <p class="font-bold text-red-400 mb-2">Stop-Loss (Tight 2%)</p>
+          <p>Hard 2% below the breakout line -- or directly below the EMA-20, whichever is lower. Completely eliminates the traditional 20%+ wide box-low stop. Capital block preserved on false bull traps.</p>
         </div>
         <div>
-          <p class="font-bold text-white mb-2">3. GTT Order (No Screen-Watching)</p>
-          <p>Place a Good-Till-Triggered limit order just above the box high after the breakout candle closes. It fires automatically on retest. No intraday monitoring needed.</p>
+          <p class="font-bold text-green-400 mb-2">Exits (Symmetric Tranches)</p>
+          <p><strong class="text-white">Tranche 1 (50%):</strong> Static exit at full box-height projected upward from entry. Mathematical symmetry.<br>
+          <strong class="text-white">Tranche 2 (50%):</strong> Trails via rising EMA-20. No static target -- exits only on daily close below EMA-20.</p>
         </div>
-        <div>
-          <p class="font-bold text-white mb-2">4. Profit Targets (Math-Based)</p>
-          <p>50% of box height = conservative partial booking. 100% clone of the box above breakout = full swing target. Pure price symmetry — no guessing.</p>
-        </div>
-        <div>
-          <p class="font-bold text-white mb-2">5. Stop Loss</p>
-          <p>Hard stop at box low (ultimate invalidation). Since this is a wide stop, use small position sizing per trade (e.g. ₹5,000) so a full loss is never portfolio-damaging.</p>
-        </div>
-        <div>
-          <p class="font-bold text-white mb-2">6. Capital Allocation</p>
-          <p>Split capital into small pots. Deploy only a small fraction per breakout. The wide stop is designed for equity only — never leverage or F&O on this strategy.</p>
-        </div>
-      </div>
-      <div class="mt-5 pt-4 border-t border-slate-600 grid md:grid-cols-2 gap-4 text-xs text-slate-400">
-        <div><strong class="text-green-400">Advantages:</strong> Mathematically objective targets, stress-free GTT execution, no time decay (equity only), predefined risk per trade.</div>
-        <div><strong class="text-red-400">Risks:</strong> Capital locked for 40–100+ days, wide nominal drawdowns during pullbacks before the move. Only use surplus funds.</div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="bg-gray-800 text-gray-400 text-center py-6 text-xs">
-    <p>© 2026 Financial Literacy Platform — Built by volunteers on GitHub Pages</p>
-    <p class="mt-1">Educational platform only. Not SEBI investment advice. <a href="disclaimer.html" class="underline">Disclaimer</a></p>
+    <p>&copy; 2026 Financial Literacy Platform -- Educational only, not SEBI investment advice.</p>
+    <p class="mt-1"><a href="disclaimer.html" class="underline">Full Disclaimer</a></p>
   </footer>
 
 </body>
@@ -539,68 +782,84 @@ def main() -> int:
     ist          = ZoneInfo("Asia/Kolkata")
     run_time_ist = datetime.now(ist).strftime("%d %b %Y, %I:%M %p IST")
 
-    print(f"🔍 Range Breakout Box Scanner — {run_time_ist}")
-    print(f"   Min box height: {BOX_MIN_HEIGHT_PCT}% | Volume surge: {VOLUME_SURGE_RATIO}× | Min R:R: {MIN_RR_RATIO}")
+    print(f"Fortress Breakout Scanner (BRD v2) -- {run_time_ist}")
+    print(f"  BRD 2.1: DP% {PRICE_CHANGE_MIN}-{PRICE_CHANGE_MAX}%")
+    print(f"  BRD 2.2: EMA spread <= {EMA_SPREAD_MAX}% for >= {EMA_COMPRESS_DAYS} sessions")
+    print(f"  BRD 2.3: Volume ratio >= {VOLUME_SURGE_RATIO}x")
+    print(f"  BRD 2.4: RSI {RSI_LOW}-{RSI_HIGH}")
+    print(f"  BRD 3.2: Stop-loss = 2% below entry (tight institutional anchor)")
     print()
 
-    # ── 1. Get tickers ────────────────────────────────────────────────────────
+    # 1. Get tickers
     tickers = get_nse_tickers()
     print()
 
-    # ── 2. Batch download 1 year of daily OHLCV ──────────────────────────────
-    # Process in chunks of 100 to avoid Yahoo throttling on large universes
+    # 2. Batch download 3 years (needed for 36-month backtest)
     CHUNK = 100
     all_data: dict[str, pd.DataFrame] = {}
     for i in range(0, len(tickers), CHUNK):
         chunk = tickers[i:i + CHUNK]
-        print(f"  Batch {i // CHUNK + 1}: tickers {i+1}–{i+len(chunk)}")
-        chunk_data = batch_download(chunk)
+        print(f"  Batch {i // CHUNK + 1}: tickers {i+1}-{i+len(chunk)}")
+        chunk_data = batch_download(chunk, period="3y")
         all_data.update(chunk_data)
 
-    print(f"\n  Total tickers with 1-year data: {len(all_data)}")
+    print(f"\n  Total tickers with 3y data: {len(all_data)}")
     total_scanned = len(all_data)
 
-    # ── 3. Analyse each ticker ────────────────────────────────────────────────
-    print("\n⚙️  Analysing breakout conditions…")
+    # 3. Analyse each ticker against all BRD §2 filters
+    print("\n  Analysing Fortress Breakout conditions...")
     candidates: list[dict] = []
     for ticker, df in all_data.items():
         result = analyse_ticker(ticker, df)
         if result:
+            bt = result.get("backtest", {})
             candidates.append(result)
-            print(f"  ✅ BREAKOUT: {ticker} | Box {result['boxHeightPct']:.1f}% | R:R 1:{result['riskReward']}")
+            print(
+                f"  BREAKOUT: {ticker} | "
+                f"DP%={result['deltaPct']:.1f}% | "
+                f"Comp={result['compStreak']}d | "
+                f"Vol={result['volumeRatio']}x | "
+                f"RSI={result['rsi']} | "
+                f"R:R=1:{result['riskReward']} | "
+                f"BT WinRate={bt.get('btWinRate','--')}% PF={bt.get('btProfitFactor','--')}"
+            )
 
-    # ── 4. Rank top N by RSI ──────────────────────────────────────────────────
-    candidates.sort(key=lambda x: x["rsi"], reverse=True)
+    # 4. Rank by R:R descending (best quality trades first), then by RSI
+    candidates.sort(key=lambda x: (x["riskReward"], x["rsi"]), reverse=True)
     top = candidates[:TOP_N]
 
-    print(f"\n── Scan Summary ──────────────────────────────")
-    print(f"  Scanned : {total_scanned}")
-    print(f"  Breakouts: {len(candidates)}")
-    print(f"  Returning top {len(top)} by RSI")
+    print(f"\n-- Scan Summary --")
+    print(f"  Scanned  : {total_scanned}")
+    print(f"  Passed all BRD filters: {len(candidates)}")
+    print(f"  Returning top {len(top)} by R:R")
 
-    # ── 5. Save JSON ──────────────────────────────────────────────────────────
+    # 5. Save JSON
     output = {
-        "lastUpdated":   datetime.utcnow().isoformat() + "Z",
-        "runTimeIST":    run_time_ist,
-        "totalScanned":  total_scanned,
-        "totalBreakouts": len(candidates),
-        "config": {
-            "boxLookbackDays":   BOX_LOOKBACK_DAYS,
-            "boxMinHeightPct":   BOX_MIN_HEIGHT_PCT,
-            "volumeSurgeRatio":  VOLUME_SURGE_RATIO,
-            "minRR":             MIN_RR_RATIO,
+        "lastUpdated":      datetime.utcnow().isoformat() + "Z",
+        "runTimeIST":       run_time_ist,
+        "totalScanned":     total_scanned,
+        "totalBreakouts":   len(candidates),
+        "brdConfig": {
+            "priceChangeMin":   PRICE_CHANGE_MIN,
+            "priceChangeMax":   PRICE_CHANGE_MAX,
+            "emaSpreadMax":     EMA_SPREAD_MAX,
+            "emaCompressDays":  EMA_COMPRESS_DAYS,
+            "volumeSurgeRatio": VOLUME_SURGE_RATIO,
+            "rsiLow":           RSI_LOW,
+            "rsiHigh":          RSI_HIGH,
+            "slPctBelowEntry":  SL_PCT_BELOW_ENTRY,
         },
         "candidates": top,
     }
     with open(OUTPUT_JSON, "w") as f:
         json.dump(output, f, indent=2)
-    print(f"\n✅ Saved: {OUTPUT_JSON}")
+    print(f"\n  Saved: {OUTPUT_JSON}")
 
-    # ── 6. Save HTML ──────────────────────────────────────────────────────────
+    # 6. Save HTML
     html = build_html(top, run_time_ist, total_scanned)
     with open(OUTPUT_HTML, "w", encoding="utf-8") as f:
         f.write(html)
-    print(f"✅ Saved: {OUTPUT_HTML}")
+    print(f"  Saved: {OUTPUT_HTML}")
 
     return 0
 
