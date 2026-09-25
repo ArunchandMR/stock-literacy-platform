@@ -24,11 +24,11 @@
         Financial Literacy Hub
       </a>
       <div class="hidden md:flex items-center gap-6 text-sm">
-        <a href="index.html"          class="text-gray-600 hover:text-blue-600 transition">Home</a>
-        <a href="dashboard.html"      class="text-gray-600 hover:text-blue-600 transition">Dashboard</a>
+        <a href="index.html"           class="text-gray-600 hover:text-blue-600 transition">Home</a>
+        <a href="dashboard.html"       class="text-gray-600 hover:text-blue-600 transition">Dashboard</a>
         <a href="swing-dashboard.html" class="text-gray-600 hover:text-blue-600 transition">Swing Scanner</a>
-        <a href="box-dashboard.html"  class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-0.5">Box Scanner</a>
-        <a href="discussions.html"    class="text-gray-600 hover:text-blue-600 transition">Discussions</a>
+        <a href="box-dashboard.html"   class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-0.5">Box Scanner</a>
+        <a href="discussions.html"     class="text-gray-600 hover:text-blue-600 transition"><i class="fas fa-tasks mr-1"></i>Stock Manager</a>
       </div>
     </div>
   </nav>
@@ -46,20 +46,20 @@
         sitting above their EMA-200 uptrend with Risk:Reward ≥ 1.5.
       </p>
       <div class="flex flex-wrap gap-5 text-sm text-slate-300">
-        <span><i class="fas fa-clock mr-1"></i>Scan time: <strong class="text-white">25 Sep 2026, 09:45 PM IST</strong></span>
-        <span><i class="fas fa-eye mr-1"></i>Stocks scanned: <strong class="text-white">1</strong></span>
-        <span><i class="fas fa-fire mr-1 text-amber-400"></i>Breakouts found: <strong class="text-amber-300">0</strong></span>
+        <span><i class="fas fa-clock mr-1"></i>Runs automatically every trading day at <strong class="text-white">4:45 PM IST</strong></span>
+        <span><i class="fas fa-database mr-1"></i>Scans <strong class="text-white">Nifty 500</strong> universe</span>
+        <span><i class="fas fa-trophy mr-1 text-amber-400"></i>Returns <strong class="text-amber-300">Top 5</strong> by RSI strength</span>
       </div>
     </div>
   </section>
 
-  <!-- Strategy Summary -->
+  <!-- Strategy cards -->
   <section class="max-w-5xl mx-auto px-4 py-4">
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 grid md:grid-cols-5 gap-3 text-xs text-center">
       <div class="p-3 bg-blue-50 rounded-lg">
         <p class="text-2xl mb-1">📈</p>
         <p class="font-bold text-gray-700">EMA-200</p>
-        <p class="text-gray-500">Close above 200-day MA (bull structure only)</p>
+        <p class="text-gray-500">Close above 200-day MA — bull structure only</p>
       </div>
       <div class="p-3 bg-amber-50 rounded-lg">
         <p class="text-2xl mb-1">📦</p>
@@ -74,36 +74,59 @@
       <div class="p-3 bg-purple-50 rounded-lg">
         <p class="text-2xl mb-1">🎯</p>
         <p class="font-bold text-gray-700">GTT Order</p>
-        <p class="text-gray-500">Place limit order above box — auto triggers on retest</p>
+        <p class="text-gray-500">Limit order above box — auto triggers on retest</p>
       </div>
       <div class="p-3 bg-red-50 rounded-lg">
         <p class="text-2xl mb-1">⚖️</p>
         <p class="font-bold text-gray-700">R:R ≥ 1.5</p>
-        <p class="text-gray-500">Only setups with reward at least 1.5× the risk</p>
+        <p class="text-gray-500">Only setups with reward 1.5× the risk</p>
       </div>
     </div>
   </section>
 
-  <!-- Results -->
-  <main class="max-w-5xl mx-auto px-4 py-2 pb-12">
-    <div class="flex items-center gap-3 mb-4">
-      <h2 class="text-lg font-bold text-gray-800">
-        <i class="fas fa-trophy mr-1 text-amber-500"></i>
-        Top 0 Breakout Candidates
-      </h2>
-      <span class="text-xs text-gray-400">Ranked by RSI strength</span>
+  <!-- Awaiting first scan -->
+  <main class="max-w-5xl mx-auto px-4 py-4 pb-12">
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+      <div class="text-5xl mb-4">⏳</div>
+      <h2 class="text-xl font-bold text-gray-800 mb-2">Awaiting First Automated Scan</h2>
+      <p class="text-gray-500 text-sm max-w-lg mx-auto mb-6">
+        The scanner runs automatically every Monday–Friday at <strong>4:45 PM IST</strong> after NSE market close.
+        It downloads 1 year of daily data for the Nifty 500 universe (500 stocks), applies the Box Theory rules,
+        and updates this page with the top 5 high-probability breakout candidates.
+      </p>
+      <div class="mt-4 text-xs text-gray-400 bg-gray-50 rounded-lg p-4 max-w-md mx-auto text-left space-y-1">
+        <p>📊 Scans: Nifty 500 universe (~500 tickers)</p>
+        <p>⏱ Runtime: ~8–12 minutes (1 batch download)</p>
+        <p>🔁 Schedule: Mon–Fri 4:45 PM IST</p>
+        <p>🖥 Manual trigger: Actions → Daily Range Breakout Box Scanner → Run workflow</p>
+      </div>
     </div>
-    
-    
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-          <div class="text-5xl mb-4">⏳</div>
-          <h3 class="text-xl font-bold text-gray-700 mb-2">No Breakout Setups Today</h3>
-          <p class="text-gray-400 text-sm max-w-md mx-auto">
-            No stocks in the NSE universe met all 5 criteria today:
-            EMA-200 uptrend, 20%+ box, volume surge breakout, and Risk:Reward ≥ 1.5.
-            Check back after next market session.
-          </p>
-        </div>
+
+    <!-- Strategy table preview -->
+    <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="bg-slate-700 text-white px-5 py-3 text-sm font-semibold">
+        <i class="fas fa-table mr-2"></i>What Each Result Will Show
+      </div>
+      <table class="w-full text-xs">
+        <thead class="bg-gray-50 text-gray-500 uppercase text-xs tracking-wide border-b">
+          <tr>
+            <th class="px-4 py-2 text-left">Field</th>
+            <th class="px-4 py-2 text-left">What It Means</th>
+            <th class="px-4 py-2 text-left">How to Use It</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 text-gray-600">
+          <tr><td class="px-4 py-2 font-semibold text-blue-600">GTT Entry</td><td class="px-4 py-2">Box upper breakout level</td><td class="px-4 py-2">Place Good-Till-Triggered limit order here</td></tr>
+          <tr><td class="px-4 py-2 font-semibold text-red-500">Stop Loss</td><td class="px-4 py-2">Box low / ATR floor</td><td class="px-4 py-2">Hard exit if structure breaks down</td></tr>
+          <tr><td class="px-4 py-2 font-semibold text-amber-500">50% Target</td><td class="px-4 py-2">Half box height above entry</td><td class="px-4 py-2">Book partial profits here</td></tr>
+          <tr><td class="px-4 py-2 font-semibold text-green-600">100% Target</td><td class="px-4 py-2">Full box height above entry</td><td class="px-4 py-2">Full swing profit objective</td></tr>
+          <tr><td class="px-4 py-2 font-semibold">Box Height %</td><td class="px-4 py-2">Range of consolidation box</td><td class="px-4 py-2">Must be ≥ 20% to qualify</td></tr>
+          <tr><td class="px-4 py-2 font-semibold">Volume Surge</td><td class="px-4 py-2">Today's vol ÷ 60-day avg vol</td><td class="px-4 py-2">Must be ≥ 1.2× to confirm genuine breakout</td></tr>
+          <tr><td class="px-4 py-2 font-semibold">Risk : Reward</td><td class="px-4 py-2">Reward ÷ Risk ratio</td><td class="px-4 py-2">Only shown if ≥ 1.5 — skips false setups</td></tr>
+        </tbody>
+      </table>
+    </div>
   </main>
 
   <!-- How to use -->
@@ -113,32 +136,32 @@
       <div class="grid md:grid-cols-3 gap-5 text-slate-300">
         <div>
           <p class="font-bold text-white mb-2">1. NSE Stock Selection</p>
-          <p>On NSE India, filter for Advances → sort by Total Trading Volume → pick stocks that moved 5%+ in one session. These are your high-momentum candidates.</p>
+          <p>Filter for Advances → sort by Total Volume → pick 5%+ movers. These are your momentum candidates already in active uptrends.</p>
         </div>
         <div>
           <p class="font-bold text-white mb-2">2. Box Setup on Chart</p>
-          <p>Open daily chart. Identify swing high and swing low with ≥20% range. Draw horizontal rectangle between them. The breakout above the upper band is your entry signal.</p>
+          <p>Open daily chart. Draw horizontal rectangle between swing high and swing low with ≥20% range. Breakout above upper band = entry signal.</p>
         </div>
         <div>
-          <p class="font-bold text-white mb-2">3. GTT Order (No Screen-Watching)</p>
-          <p>Place a Good-Till-Triggered limit order just above the box high after the breakout candle closes. It fires automatically on retest. No intraday monitoring needed.</p>
+          <p class="font-bold text-white mb-2">3. GTT Order (Stress-Free)</p>
+          <p>Place limit order just above box high after breakout candle closes. It fires automatically on retest. No intraday monitoring needed.</p>
         </div>
         <div>
-          <p class="font-bold text-white mb-2">4. Profit Targets (Math-Based)</p>
-          <p>50% of box height = conservative partial booking. 100% clone of the box above breakout = full swing target. Pure price symmetry — no guessing.</p>
+          <p class="font-bold text-white mb-2">4. Profit Targets</p>
+          <p>50% of box height = conservative partial booking. 100% clone of the box = full swing target. Pure price symmetry — mathematically objective.</p>
         </div>
         <div>
           <p class="font-bold text-white mb-2">5. Stop Loss</p>
-          <p>Hard stop at box low (ultimate invalidation). Since this is a wide stop, use small position sizing per trade (e.g. ₹5,000) so a full loss is never portfolio-damaging.</p>
+          <p>Hard stop at box low. Use small allocation per trade (e.g. ₹5,000) so a full loss never damages overall portfolio.</p>
         </div>
         <div>
           <p class="font-bold text-white mb-2">6. Capital Allocation</p>
-          <p>Split capital into small pots. Deploy only a small fraction per breakout. The wide stop is designed for equity only — never leverage or F&O on this strategy.</p>
+          <p>Split into small pots. Deploy only a fraction per breakout. Equity only — never leverage or F&amp;O with this strategy.</p>
         </div>
       </div>
       <div class="mt-5 pt-4 border-t border-slate-600 grid md:grid-cols-2 gap-4 text-xs text-slate-400">
         <div><strong class="text-green-400">Advantages:</strong> Mathematically objective targets, stress-free GTT execution, no time decay (equity only), predefined risk per trade.</div>
-        <div><strong class="text-red-400">Risks:</strong> Capital locked for 40–100+ days, wide nominal drawdowns during pullbacks before the move. Only use surplus funds.</div>
+        <div><strong class="text-red-400">Risks:</strong> Capital locked 40–100+ days; wide nominal drawdowns before the move fires. Only use surplus funds you can afford to hold.</div>
       </div>
     </div>
   </section>

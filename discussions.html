@@ -3,67 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Historical discussion board for stock analysis and community insights">
-    <title>Historical Discussions - Financial Literacy Platform</title>
-    
+    <meta name="description" content="Stock Manager — Add or remove stocks from the watchlist">
+    <title>Stock Manager - Financial Literacy Platform</title>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/styles.css">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
 </head>
 <body class="bg-gray-50">
-    
+
     <!-- SEBI Disclaimer Banner -->
     <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex items-start">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-exclamation-triangle text-yellow-400 text-lg"></i>
-                </div>
-                <div class="ml-3">
-                    <p class="text-xs text-yellow-700">
-                        <strong>EDUCATIONAL DISCLAIMER:</strong> Discussions are for educational purposes only. Not investment advice.
-                    </p>
-                </div>
-            </div>
+        <div class="max-w-7xl mx-auto flex items-start gap-3">
+            <i class="fas fa-exclamation-triangle text-yellow-400 text-lg mt-0.5"></i>
+            <p class="text-xs text-yellow-700">
+                <strong>EDUCATIONAL DISCLAIMER:</strong> This platform is for educational purposes only. Not SEBI-registered investment advice.
+            </p>
         </div>
     </div>
 
-    <!-- Navigation Header -->
+    <!-- Navigation -->
     <nav class="bg-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <div class="logo-placeholder w-12 h-12 bg-gradient-to-br from-blue-600 to-green-500 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-chart-line text-white text-2xl"></i>
-                        </div>
-                        <span class="ml-3 text-xl font-bold text-gray-800">Financial Literacy Hub</span>
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-chart-line text-white text-xl"></i>
                     </div>
+                    <span class="ml-3 text-xl font-bold text-gray-800">Financial Literacy Hub</span>
                 </div>
-                
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
-                        <i class="fas fa-home mr-2"></i>Home
+
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition text-sm">
+                        <i class="fas fa-home mr-1"></i>Home
                     </a>
-                    <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
-                        <i class="fas fa-chart-bar mr-2"></i>Dashboard
+                    <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition text-sm">
+                        <i class="fas fa-chart-bar mr-1"></i>Dashboard
                     </a>
-                    <a href="add-stock.html" class="bg-green-600 text-white hover:bg-green-700 px-4 py-2 rounded-lg transition font-semibold">
-                        <i class="fas fa-plus-circle mr-2"></i>Add Stock
+                    <a href="swing-dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition text-sm">
+                        <i class="fas fa-compress-arrows-alt mr-1"></i>Swing Scanner
                     </a>
-                    <a href="discussions.html" class="text-blue-600 font-semibold border-b-2 border-blue-600 px-3 py-2">
-                        <i class="fas fa-comments mr-2"></i>Discussions
+                    <a href="box-dashboard.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition text-sm">
+                        <i class="fas fa-box-open mr-1"></i>Box Scanner
                     </a>
-                    <a href="about.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition">
-                        <i class="fas fa-info-circle mr-2"></i>About
+                    <a href="discussions.html" class="text-blue-600 font-semibold border-b-2 border-blue-600 px-3 py-2 text-sm">
+                        <i class="fas fa-tasks mr-1"></i>Stock Manager
+                    </a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 transition text-sm">
+                        <i class="fas fa-info-circle mr-1"></i>About
                     </a>
                 </div>
 
@@ -76,202 +68,318 @@
         </div>
 
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
-            <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
-                    <i class="fas fa-home mr-2"></i>Home
-                </a>
-                <a href="dashboard.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
-                    <i class="fas fa-chart-bar mr-2"></i>Dashboard
-                </a>
-                <a href="add-stock.html" class="block px-3 py-2 text-green-700 bg-green-50 hover:bg-green-100 rounded font-semibold">
-                    <i class="fas fa-plus-circle mr-2"></i>Add Stock
-                </a>
-                <a href="discussions.html" class="block px-3 py-2 text-blue-600 font-semibold bg-blue-50 rounded">
-                    <i class="fas fa-comments mr-2"></i>Discussions
-                </a>
-                <a href="about.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded">
-                    <i class="fas fa-info-circle mr-2"></i>About
-                </a>
+            <div class="px-2 pt-2 pb-3 space-y-1 text-sm">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-home mr-2"></i>Home</a>
+                <a href="dashboard.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-chart-bar mr-2"></i>Dashboard</a>
+                <a href="swing-dashboard.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-compress-arrows-alt mr-2"></i>Swing Scanner</a>
+                <a href="box-dashboard.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-box-open mr-2"></i>Box Scanner</a>
+                <a href="discussions.html" class="block px-3 py-2 text-blue-600 font-semibold bg-blue-50 rounded"><i class="fas fa-tasks mr-2"></i>Stock Manager</a>
+                <a href="about.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded"><i class="fas fa-info-circle mr-2"></i>About</a>
             </div>
         </div>
     </nav>
 
     <!-- Page Header -->
-    <section class="bg-gradient-to-r from-blue-600 to-green-500 text-white py-8">
+    <section class="bg-gradient-to-r from-blue-700 to-blue-500 text-white py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl md:text-4xl font-bold mb-2">
-                <i class="fas fa-comments mr-3"></i>Historical Discussion Board
-            </h1>
-            <p class="text-blue-100">
-                Community-driven analysis, fundamental research, and technical insights
-            </p>
+            <h1 class="text-3xl font-bold mb-1"><i class="fas fa-tasks mr-3"></i>Stock Manager</h1>
+            <p class="text-blue-100 text-sm">View, add or remove stocks from the watchlist. Changes are applied via GitHub Issues.</p>
         </div>
     </section>
 
-    <!-- Info Banner -->
-    <section class="py-6 bg-blue-50 border-b">
+    <!-- How It Works Banner -->
+    <section class="bg-blue-50 border-b py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-start">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-info-circle text-blue-600 text-2xl"></i>
+            <div class="flex flex-wrap gap-6 text-sm text-gray-700">
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                    Click <strong class="mx-1">Add Stock</strong> → GitHub Issue form opens pre-filled
                 </div>
-                <div class="ml-4">
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">About This Discussion Board</h3>
-                    <p class="text-gray-700 text-sm mb-3">
-                        This section displays historical discussions, analysis logs, and educational case studies from our community. 
-                        All discussions are powered by <strong>GitHub Discussions</strong> - a free, native feature that provides 
-                        threaded conversations, markdown support, and full search capabilities.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <a href="#" id="view-github-discussions" target="_blank" class="inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-semibold">
-                            <i class="fab fa-github mr-2"></i>View on GitHub Discussions
-                        </a>
-                        <a href="#" id="create-discussion" target="_blank" class="inline-flex items-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition text-sm font-semibold">
-                            <i class="fas fa-plus mr-2"></i>Start New Discussion
-                        </a>
-                    </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                    Submit the issue → admin applies <code class="bg-blue-100 px-1 rounded">approved</code> label
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                    GitHub Action auto-writes stock into <code class="bg-blue-100 px-1 rounded">data/stocks.json</code>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Search & Filter -->
-    <section class="py-6 bg-white border-b">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">
-                        <i class="fas fa-search mr-2"></i>Search Discussions
-                    </label>
-                    <input 
-                        type="text" 
-                        id="discussion-search" 
-                        placeholder="Search by stock name, ticker, or keywords..." 
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">
-                        <i class="fas fa-filter mr-2"></i>Filter by Category
-                    </label>
-                    <select 
-                        id="category-filter" 
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                        <option value="all">All Categories</option>
-                        <option value="fundamental">Fundamental Analysis</option>
-                        <option value="technical">Technical Analysis</option>
-                        <option value="news">News & Updates</option>
-                        <option value="earnings">Earnings Reports</option>
-                        <option value="general">General Discussion</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Discussion Cards -->
-    <section class="py-8 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <!-- Loading State -->
-            <div id="discussions-loading" class="text-center py-12">
-                <i class="fas fa-spinner fa-spin text-4xl text-blue-600 mb-4"></i>
-                <p class="text-gray-600">Loading discussions...</p>
+    <!-- Action Bar -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <!-- Search -->
+            <div class="relative flex-1 max-w-sm">
+                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                <input
+                    id="search-input"
+                    type="text"
+                    placeholder="Search by name, ticker or sector…"
+                    class="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
             </div>
 
-            <!-- Discussion List -->
-            <div id="discussions-container" class="hidden space-y-6">
-                <!-- Discussion cards will be inserted here by JavaScript -->
-            </div>
-
-            <!-- Empty State -->
-            <div id="discussions-empty" class="hidden text-center py-12">
-                <i class="fas fa-comments text-4xl text-gray-400 mb-4"></i>
-                <p class="text-gray-600 mb-4">No discussions found</p>
-                <a href="#" id="create-first-discussion" target="_blank" class="inline-flex items-center bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-semibold">
-                    <i class="fas fa-plus mr-2"></i>Start First Discussion
+            <!-- Counts + Add Button -->
+            <div class="flex items-center gap-4">
+                <span class="text-sm text-gray-500">
+                    Showing <strong id="visible-count">—</strong> of <strong id="total-count">—</strong> stocks
+                </span>
+                <a
+                    id="add-stock-btn"
+                    href="https://github.com/ArunchandMR/stock-literacy-platform/issues/new?template=add-stock.yml"
+                    target="_blank"
+                    class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition"
+                >
+                    <i class="fas fa-plus-circle"></i>Add Stock
                 </a>
             </div>
-
-            <!-- Manual Integration Guide -->
-            <div class="mt-12 bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-xl font-bold text-gray-800 mb-4">
-                    <i class="fas fa-book mr-2"></i>How to Use GitHub Discussions
-                </h3>
-                <div class="space-y-4 text-gray-700">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">1</div>
-                        <div>
-                            <h4 class="font-semibold mb-1">Enable GitHub Discussions</h4>
-                            <p class="text-sm">Go to your repository Settings → Features → Enable Discussions</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">2</div>
-                        <div>
-                            <h4 class="font-semibold mb-1">Create Discussion Categories</h4>
-                            <p class="text-sm">Set up categories: Fundamental Analysis, Technical Analysis, News & Updates, Earnings Reports</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">3</div>
-                        <div>
-                            <h4 class="font-semibold mb-1">Link Stocks to Discussions</h4>
-                            <p class="text-sm">When adding a stock to stocks.json, include the GitHub Discussion URL in the discussionUrl field</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-3">4</div>
-                        <div>
-                            <h4 class="font-semibold mb-1">Automatic Integration</h4>
-                            <p class="text-sm">This page will automatically fetch and display discussions using the GitHub API (no authentication required for public repos)</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded">
-                    <p class="text-sm text-yellow-800">
-                        <strong>Note:</strong> Repository integration is already configured for <strong>ArunchandMR/stock-literacy-platform</strong>. Enable <strong>GitHub Discussions</strong> in Repository Settings → Features → Discussions. Once enabled, copy the discussion URL into the <code class="bg-yellow-100 px-2 py-1 rounded">discussionUrl</code> field in <code class="bg-yellow-100 px-2 py-1 rounded">data/stocks.json</code>.
-                    </p>
-                </div>
-            </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center text-gray-400 text-sm">
-                <p>&copy; 2026 Financial Literacy Platform. Educational purposes only. Not investment advice.</p>
-                <p class="mt-2">
-                    <a href="disclaimer.html" class="hover:text-white underline">Full Disclaimer</a> | 
-                    <a href="index.html" class="hover:text-white underline ml-2">Home</a> | 
-                    <a href="dashboard.html" class="hover:text-white underline ml-2">Dashboard</a>
-                </p>
+    <!-- Stock Table -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+
+        <!-- Loading -->
+        <div id="loading-state" class="text-center py-16">
+            <i class="fas fa-spinner fa-spin text-3xl text-blue-500 mb-3"></i>
+            <p class="text-gray-500 text-sm">Loading stocks…</p>
+        </div>
+
+        <!-- Error -->
+        <div id="error-state" class="hidden text-center py-16">
+            <i class="fas fa-exclamation-circle text-3xl text-red-400 mb-3"></i>
+            <p class="text-gray-600 text-sm mb-2">Could not load stocks.json</p>
+            <p class="text-gray-400 text-xs">Make sure the file exists at <code>data/stocks.json</code></p>
+        </div>
+
+        <!-- Table -->
+        <div id="table-wrapper" class="hidden overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-200">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="bg-gray-50 border-b border-gray-200 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                        <th class="px-4 py-3">#</th>
+                        <th class="px-4 py-3">Ticker</th>
+                        <th class="px-4 py-3">Name</th>
+                        <th class="px-4 py-3">Sector</th>
+                        <th class="px-4 py-3">Strategy</th>
+                        <th class="px-4 py-3">Entry Date</th>
+                        <th class="px-4 py-3 text-right">Entry ₹</th>
+                        <th class="px-4 py-3 text-right">Target ₹</th>
+                        <th class="px-4 py-3 text-right">SL ₹</th>
+                        <th class="px-4 py-3 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="stock-table-body">
+                    <!-- rows injected by JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty state -->
+        <div id="empty-state" class="hidden text-center py-16">
+            <i class="fas fa-inbox text-4xl text-gray-300 mb-4"></i>
+            <p class="text-gray-500 mb-4">No stocks found</p>
+            <a
+                href="https://github.com/ArunchandMR/stock-literacy-platform/issues/new?template=add-stock.yml"
+                target="_blank"
+                class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-semibold transition"
+            >
+                <i class="fas fa-plus"></i>Add your first stock
+            </a>
+        </div>
+
+    </section>
+
+    <!-- Remove Instructions Modal -->
+    <div id="remove-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-800"><i class="fas fa-trash-alt text-red-500 mr-2"></i>Remove Stock</h3>
+                <button id="close-modal" class="text-gray-400 hover:text-gray-600 text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
+            <p class="text-gray-600 text-sm mb-2">
+                To remove <strong id="remove-stock-name" class="text-gray-800">this stock</strong> from the watchlist, open a GitHub Issue using the button below. The admin will process the removal.
+            </p>
+            <p class="text-xs text-gray-400 mb-5">
+                The issue title is pre-filled. Just submit it — the admin will delete the entry from <code>data/stocks.json</code> and merge.
+            </p>
+            <div class="flex gap-3">
+                <a
+                    id="remove-issue-link"
+                    href="#"
+                    target="_blank"
+                    class="flex-1 inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition"
+                >
+                    <i class="fab fa-github"></i>Open Remove Request
+                </a>
+                <button
+                    id="close-modal-btn"
+                    class="flex-1 inline-flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition"
+                >
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400 text-sm">
+            <p>&copy; 2026 Financial Literacy Platform. Educational purposes only. Not investment advice.</p>
+            <p class="mt-2">
+                <a href="disclaimer.html" class="hover:text-white underline">Disclaimer</a>
+                <span class="mx-2">|</span>
+                <a href="index.html" class="hover:text-white underline">Home</a>
+                <span class="mx-2">|</span>
+                <a href="dashboard.html" class="hover:text-white underline">Dashboard</a>
+            </p>
         </div>
     </footer>
 
-    <!-- JavaScript -->
-    <script src="assets/js/discussions.js"></script>
-    
     <script>
-        // Mobile menu toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+        // ── mobile menu ──────────────────────────────────────────────────────
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
-        
-        // Update GitHub links (replace with actual repo URL)
-        const GITHUB_REPO = 'https://github.com/ArunchandMR/stock-literacy-platform';
-        document.getElementById('view-github-discussions').href = `${GITHUB_REPO}/discussions`;
-        document.getElementById('create-discussion').href = `${GITHUB_REPO}/discussions/new`;
-        document.getElementById('create-first-discussion').href = `${GITHUB_REPO}/discussions/new`;
-        
-        // Mobile menu toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
+
+        // ── constants ────────────────────────────────────────────────────────
+        const GITHUB_ISSUES = 'https://github.com/ArunchandMR/stock-literacy-platform/issues/new';
+        const STRATEGY_COLORS = {
+            swing:      'bg-indigo-100 text-indigo-700',
+            'long-term':'bg-green-100  text-green-700',
+            'long_term':'bg-green-100  text-green-700',
+            longterm:   'bg-green-100  text-green-700',
+        };
+
+        // ── state ────────────────────────────────────────────────────────────
+        let allStocks = [];
+
+        // ── helpers ──────────────────────────────────────────────────────────
+        function strategyBadge(s) {
+            const cls = STRATEGY_COLORS[s?.toLowerCase()] || 'bg-gray-100 text-gray-600';
+            const label = s === 'long-term' || s === 'long_term' || s === 'longterm'
+                ? 'Long-Term' : s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+            return `<span class="px-2 py-0.5 rounded-full text-xs font-semibold ${cls}">${label}</span>`;
+        }
+
+        function fmt(val) {
+            if (val == null || val === '') return '—';
+            return '₹' + Number(val).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function buildRemoveURL(stock) {
+            const title = encodeURIComponent(`[REMOVE] ${stock.ticker} — ${stock.name}`);
+            const body  = encodeURIComponent(
+                `**Remove Request**\n\n` +
+                `- **Ticker:** ${stock.ticker}\n` +
+                `- **ID:** ${stock.id || ''}\n` +
+                `- **Name:** ${stock.name}\n\n` +
+                `Please remove this stock from \`data/stocks.json\`.`
+            );
+            return `${GITHUB_ISSUES}?title=${title}&body=${body}&labels=remove-stock`;
+        }
+
+        // ── render ───────────────────────────────────────────────────────────
+        function renderTable(stocks) {
+            const tbody = document.getElementById('stock-table-body');
+            document.getElementById('visible-count').textContent = stocks.length;
+
+            if (stocks.length === 0) {
+                document.getElementById('table-wrapper').classList.add('hidden');
+                document.getElementById('empty-state').classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('table-wrapper').classList.remove('hidden');
+            document.getElementById('empty-state').classList.add('hidden');
+
+            tbody.innerHTML = stocks.map((s, i) => `
+                <tr class="border-b border-gray-100 hover:bg-blue-50 transition" data-id="${s.id || i}">
+                    <td class="px-4 py-3 text-gray-400">${i + 1}</td>
+                    <td class="px-4 py-3 font-mono font-semibold text-blue-700">${s.ticker || '—'}</td>
+                    <td class="px-4 py-3 font-medium text-gray-800">${s.name || '—'}</td>
+                    <td class="px-4 py-3 text-gray-600">${s.sector || '—'}</td>
+                    <td class="px-4 py-3">${strategyBadge(s.strategy)}</td>
+                    <td class="px-4 py-3 text-gray-600">${s.entryDate || '—'}</td>
+                    <td class="px-4 py-3 text-right font-medium text-gray-800">${fmt(s.entryPrice)}</td>
+                    <td class="px-4 py-3 text-right text-green-700">${fmt(s.targetExitMin)}${s.targetExitMax ? '<br><span class="text-xs text-green-500">' + fmt(s.targetExitMax) + '</span>' : ''}</td>
+                    <td class="px-4 py-3 text-right text-red-600">${fmt(s.stopLoss)}</td>
+                    <td class="px-4 py-3 text-center">
+                        <button
+                            class="remove-btn text-xs text-red-500 hover:text-red-700 border border-red-200 hover:border-red-400 px-2 py-1 rounded transition"
+                            data-idx="${i}"
+                            title="Request removal"
+                        >
+                            <i class="fas fa-trash-alt mr-1"></i>Remove
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // attach remove button listeners
+            tbody.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const stock = stocks[parseInt(btn.dataset.idx)];
+                    openRemoveModal(stock);
+                });
+            });
+        }
+
+        // ── search / filter ──────────────────────────────────────────────────
+        function filterStocks(query) {
+            if (!query.trim()) return allStocks;
+            const q = query.toLowerCase();
+            return allStocks.filter(s =>
+                (s.ticker  || '').toLowerCase().includes(q) ||
+                (s.name    || '').toLowerCase().includes(q) ||
+                (s.sector  || '').toLowerCase().includes(q) ||
+                (s.strategy|| '').toLowerCase().includes(q)
+            );
+        }
+
+        document.getElementById('search-input').addEventListener('input', e => {
+            renderTable(filterStocks(e.target.value));
         });
+
+        // ── remove modal ─────────────────────────────────────────────────────
+        function openRemoveModal(stock) {
+            document.getElementById('remove-stock-name').textContent = `${stock.name} (${stock.ticker})`;
+            document.getElementById('remove-issue-link').href = buildRemoveURL(stock);
+            document.getElementById('remove-modal').classList.remove('hidden');
+        }
+        function closeModal() {
+            document.getElementById('remove-modal').classList.add('hidden');
+        }
+        document.getElementById('close-modal').addEventListener('click', closeModal);
+        document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+        document.getElementById('remove-modal').addEventListener('click', e => {
+            if (e.target === document.getElementById('remove-modal')) closeModal();
+        });
+
+        // ── load data ────────────────────────────────────────────────────────
+        async function loadStocks() {
+            try {
+                const res = await fetch('data/stocks.json?t=' + Date.now());
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                allStocks = data.stocks || [];
+
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('total-count').textContent = allStocks.length;
+
+                renderTable(allStocks);
+            } catch (err) {
+                console.error(err);
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('error-state').classList.remove('hidden');
+            }
+        }
+
+        loadStocks();
     </script>
 
 </body>
