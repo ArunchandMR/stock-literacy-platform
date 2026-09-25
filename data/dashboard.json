@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-25T15:39:24.324846Z",
+  "lastUpdated": "2026-09-25T17:21:33.102695Z",
   "marketStatus": "Closed",
   "yahooStatus": {
     "status": "Partial",
@@ -24,7 +24,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/1",
       "notes": "Strong fundamentals, diversified business model",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "TATA001",
@@ -43,7 +43,7 @@
       "fetchStatus": "Cached",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/2",
       "notes": "Technical breakout pattern, short-term momentum",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "INFY001",
@@ -62,7 +62,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/3",
       "notes": "IT sector leader, consistent dividend payer",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "HDFC001",
@@ -81,7 +81,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/4",
       "notes": "Banking sector heavyweight, stable growth",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "TCS001",
@@ -100,7 +100,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/5",
       "notes": "IT giant, strong order book",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "BAJFIN001",
@@ -119,7 +119,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/6",
       "notes": "NBFC leader, technical setup for short-term gain",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "ASIAN001",
@@ -138,7 +138,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/7",
       "notes": "Paint sector leader, strong brand",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "MARUTI001",
@@ -157,7 +157,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/8",
       "notes": "Auto sector recovery play, momentum trade",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "ICICI001",
@@ -176,7 +176,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/9",
       "notes": "Private bank with strong retail franchise",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "WIPRO001",
@@ -195,7 +195,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/10",
       "notes": "IT sector value play, technical bounce expected",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "BHARTI001",
@@ -214,7 +214,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/11",
       "notes": "Telecom leader, 5G rollout beneficiary",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "SUNPHARMA001",
@@ -233,7 +233,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/12",
       "notes": "Pharma sector momentum, short-term trade",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "HIND001",
@@ -252,7 +252,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/13",
       "notes": "FMCG giant, defensive stock",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "AXIS001",
@@ -271,7 +271,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/14",
       "notes": "Banking sector technical breakout",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "COAL001",
@@ -290,7 +290,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/15",
       "notes": "PSU with high dividend yield",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "TECH001",
@@ -309,7 +309,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/16",
       "notes": "IT sector recovery play, 5G exposure",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "ULTRA001",
@@ -328,7 +328,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/17",
       "notes": "Cement sector leader, infrastructure play",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "TITAN001",
@@ -347,7 +347,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/18",
       "notes": "Jewelry sector leader, festive season play",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "NTPC001",
@@ -366,7 +366,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/19",
       "notes": "Power sector PSU, dividend stock",
-      "runId": 1790350719
+      "runId": 1790356850
     },
     {
       "id": "ADANI001",
@@ -385,7 +385,7 @@
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/20",
       "notes": "High beta stock, momentum trade",
-      "runId": 1790350719
+      "runId": 1790356850
     }
   ]
 }
