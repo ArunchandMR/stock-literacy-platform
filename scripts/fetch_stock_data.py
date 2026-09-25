@@ -1,4 +1,20 @@
 #!/usr/bin/env python3
+"""
+Stock Data Fetcher — CI-safe build
+-----------------------------------
+Root cause of Yahoo failures in GitHub Actions:
+  yf.download() sends a batch request that Yahoo Finance blocks in CI
+  environments (rate-limiting / missing browser cookies).
+
+Fix applied:
+  • Per-ticker yf.Ticker(t).fast_info (lightweight, single-ticker call)
+  • 1-second delay between tickers to avoid rate-limiting
+  • Stooq as first fallback (no cookie required)
+  • Last-known cached price as second fallback
+  • Entry price as last resort  (shows "Pending" in UI — not "Fallback")
+  • Market-hours gate REMOVED: the workflow runs after market close,
+    so we always want to fetch the closing price.
+"""
 
 import json
 import time
@@ -7,220 +23,229 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import yfinance as yf
-import pandas_datareader.data as web
+
+# pandas_datareader Stooq fallback — optional, graceful if missing
+try:
+    import pandas_datareader.data as pdr_web
+    _PDR_AVAILABLE = True
+except ImportError:
+    _PDR_AVAILABLE = False
+
+# ── Paths ─────────────────────────────────────────────────────────────────────
+_SCRIPT_DIR  = Path(__file__).parent
+_DATA_DIR    = _SCRIPT_DIR.parent / "data"
+_STOCKS_FILE = _DATA_DIR / "stocks.json"
+_DASH_FILE   = _DATA_DIR / "dashboard.json"
+
+# ── Fetch delay (seconds) between individual ticker calls ────────────────────
+_TICKER_DELAY = 1.2
 
 
 class StockDataFetcher:
+
     def __init__(self):
-        self.data_dir = Path("data")
-        self.stocks_file = self.data_dir / "stocks.json"
-        self.dashboard_file = self.data_dir / "dashboard.json"
+        _DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-    # ✅ Market hours (IST)
-    def is_market_open(self):
-        now = datetime.now(ZoneInfo("Asia/Kolkata"))
-
-        # Weekend
-        if now.weekday() >= 5:
-            return False
-
-        start = now.replace(hour=9, minute=15, second=0, microsecond=0)
-        end = now.replace(hour=15, minute=30, second=0, microsecond=0)
-
-        return start <= now <= end
-
-    # ✅ Yahoo batch fetch
-    def fetch_yahoo_batch(self, tickers):
+    # ── Individual-ticker fetch (CI-safe) ─────────────────────────────────────
+    def _fetch_single_yahoo(self, ticker: str) -> float | None:
+        """
+        Uses Ticker.fast_info — a lightweight, single-stock endpoint that
+        avoids the session/cookie issues that block yf.download() in CI.
+        Falls back to history(period='5d') if fast_info is missing.
+        """
         try:
-            data = yf.download(
-                tickers=tickers,
-                period="5d",
-                group_by="ticker",
-                threads=False,
-                progress=False
-            )
+            t = yf.Ticker(ticker)
 
-            prices = {}
+            # fast_info is the most reliable in CI
+            fi = t.fast_info
+            price = getattr(fi, "last_price", None)
+            if price and float(price) > 0:
+                return round(float(price), 2)
 
-            for ticker in tickers:
-                try:
-                    df = data[ticker] if ticker in data else data
-
-                    if "Close" in df and not df["Close"].empty:
-                        prices[ticker] = float(df["Close"].iloc[-1])
-                    else:
-                        prices[ticker] = None
-                except Exception:
-                    prices[ticker] = None
-
-            return prices
+            # fallback: last row of 5-day history
+            hist = t.history(period="5d", auto_adjust=True)
+            if not hist.empty:
+                return round(float(hist["Close"].iloc[-1]), 2)
 
         except Exception as e:
-            print(f"Yahoo batch failed: {e}")
-            return {t: None for t in tickers}
-
-    # ✅ Retry + health tracking
-    def fetch_yahoo_with_retry(self, tickers):
-        final_prices = None
-
-        for attempt in range(2):
-            print(f"Yahoo attempt {attempt + 1}")
-
-            prices = self.fetch_yahoo_batch(tickers)
-            success_count = sum(1 for v in prices.values() if v is not None)
-
-            if success_count > 0:
-                final_prices = prices
-                break
-
-            time.sleep(3)
-
-        if final_prices:
-            success_count = sum(1 for v in final_prices.values() if v is not None)
-
-            if success_count == len(tickers):
-                status = "Healthy"
-            elif success_count > 0:
-                status = "Partial"
-            else:
-                status = "Unavailable"
-
-            return final_prices, {
-                "status": status,
-                "successCount": success_count,
-                "totalCount": len(tickers)
-            }
-
-        return {t: None for t in tickers}, {
-            "status": "Unavailable",
-            "successCount": 0,
-            "totalCount": len(tickers)
-        }
-
-    # ✅ Stooq fallback
-    def fetch_stooq(self, ticker):
-        try:
-            symbol = ticker.replace(".NS", ".IN")
-            df = web.DataReader(symbol, "stooq")
-
-            if not df.empty:
-                return float(df["Close"].iloc[0])
-        except Exception:
-            pass
+            print(f"    Yahoo single fetch failed for {ticker}: {e}")
 
         return None
 
-    # ✅ Load cache (handles both formats safely)
-    def load_cache(self):
-        if self.dashboard_file.exists():
-            with open(self.dashboard_file, "r") as f:
+    # ── Stooq fallback (no authentication needed) ─────────────────────────────
+    def _fetch_stooq(self, ticker: str) -> float | None:
+        if not _PDR_AVAILABLE:
+            return None
+        try:
+            symbol = ticker.replace(".NS", ".IN").replace(".BO", ".IN")
+            df = pdr_web.DataReader(symbol, "stooq")
+            if not df.empty:
+                return round(float(df["Close"].iloc[0]), 2)
+        except Exception:
+            pass
+        return None
+
+    # ── Load previous dashboard.json for cached prices ────────────────────────
+    def _load_cache(self) -> dict:
+        """Returns {ticker: currentPrice} from last successful run."""
+        if not _DASH_FILE.exists():
+            return {}
+        try:
+            with open(_DASH_FILE) as f:
                 data = json.load(f)
+            stocks = data.get("stocks", data) if isinstance(data, dict) else data
+            return {
+                s["ticker"]: s.get("currentPrice")
+                for s in stocks
+                if s.get("ticker") and s.get("currentPrice")
+            }
+        except Exception:
+            return {}
 
-                if isinstance(data, dict):
-                    return data.get("stocks", [])
-                elif isinstance(data, list):
-                    return data
-
-        return []
-
-    def get_cached_price(self, cache, ticker, entry_price):
-        for item in cache:
-            if item.get("ticker") == ticker:
-                return item.get("currentPrice", entry_price)
-        return entry_price
-
-    # ✅ MAIN
-    def run(self):
-        if not self.stocks_file.exists():
-            print("ERROR: stocks.json missing")
+    # ── Main orchestrator ─────────────────────────────────────────────────────
+    def run(self) -> int:
+        if not _STOCKS_FILE.exists():
+            print(f"ERROR: {_STOCKS_FILE} not found")
             return 1
 
-        with open(self.stocks_file, "r") as f:
-            data = json.load(f)
+        with open(_STOCKS_FILE) as f:
+            stocks_data = json.load(f)
 
-        stocks = data.get("stocks", [])
-        cache = self.load_cache()
+        stocks    = stocks_data.get("stocks", [])
+        cache     = self._load_cache()
+        run_id    = int(datetime.utcnow().timestamp())
+        ist       = ZoneInfo("Asia/Kolkata")
+        now_ist   = datetime.now(ist)
 
-        tickers = [s.get("ticker") for s in stocks if s.get("ticker")]
+        print(f"▶ Fetching {len(stocks)} stocks at "
+              f"{now_ist.strftime('%Y-%m-%d %H:%M IST')}")
+        print(f"  Cache has {len(cache)} entries from previous run")
 
-        market_open = self.is_market_open()
-        run_id = int(datetime.utcnow().timestamp())
-
-        # ✅ Fetch Yahoo only if market open
-        if market_open:
-            yahoo_prices, yahoo_info = self.fetch_yahoo_with_retry(tickers)
-        else:
-            print("Market closed → skipping Yahoo")
-            yahoo_prices = {t: None for t in tickers}
-            yahoo_info = {
-                "status": "Closed",
-                "successCount": 0,
-                "totalCount": len(tickers)
-            }
-
-        dashboard = []
+        dashboard    = []
+        yahoo_ok     = 0
+        stooq_ok     = 0
+        cached_ok    = 0
+        failed_total = 0
 
         for stock in stocks:
-            ticker = stock.get("ticker")
-            entry_price = float(stock.get("entryPrice", 0))
+            ticker      = stock.get("ticker", "").strip()
+            entry_price = float(stock.get("entryPrice") or 0)
 
             if not ticker:
                 continue
 
-            price = yahoo_prices.get(ticker)
-            source = "Yahoo"
-            status = "Success"
+            price  = None
+            source = None
+            status = None
 
-            # ✅ fallback chain
+            # ── 1. Yahoo Finance (per-ticker, CI-safe) ────────────────────
+            print(f"  [{ticker}] trying Yahoo fast_info…", end=" ", flush=True)
+            price = self._fetch_single_yahoo(ticker)
+            if price:
+                source = "Yahoo"
+                status = "Live"
+                yahoo_ok += 1
+                print(f"✓ ₹{price}")
+            else:
+                print("✗")
+
+            # ── 2. Stooq fallback ─────────────────────────────────────────
             if price is None:
-                stooq_price = self.fetch_stooq(ticker)
-
-                if stooq_price:
-                    price = stooq_price
+                print(f"  [{ticker}] trying Stooq…", end=" ", flush=True)
+                price = self._fetch_stooq(ticker)
+                if price:
                     source = "Stooq"
+                    status = "Live"
+                    stooq_ok += 1
+                    print(f"✓ ₹{price}")
                 else:
-                    cached_price = self.get_cached_price(
-                        cache, ticker, entry_price
-                    )
+                    print("✗")
 
-                    if cached_price != entry_price:
-                        price = cached_price
-                        source = "Cached"
-                        status = "Fallback"
-                    else:
-                        price = entry_price
-                        source = "Entry"
-                        status = "Fallback"
+            # ── 3. Cached price from previous run ─────────────────────────
+            if price is None and ticker in cache:
+                cached_val = cache[ticker]
+                if cached_val and float(cached_val) > 0:
+                    price  = float(cached_val)
+                    source = "Cached"
+                    status = "Cached"
+                    cached_ok += 1
+                    print(f"  [{ticker}] using cached ₹{price}")
 
-            performance = 0
+            # ── 4. Entry price — last resort ──────────────────────────────
+            if price is None:
+                price  = entry_price
+                source = "Entry"
+                status = "Pending"
+                failed_total += 1
+                print(f"  [{ticker}] no data — showing entry price ₹{price}")
+
+            performance = 0.0
             if entry_price > 0:
-                performance = ((price - entry_price) / entry_price) * 100
+                performance = round(((price - entry_price) / entry_price) * 100, 2)
 
-            # ✅ FINAL DATA OBJECT (Updated ✅)
             dashboard.append({
-                "ticker": ticker,
-                "name": stock.get("name"),
-                "strategy": stock.get("strategy"),   # ✅ USER INPUT FIELD
-                "entryPrice": entry_price,
+                "id":           stock.get("id", ""),
+                "ticker":       ticker,
+                "name":         stock.get("name", ""),
+                "sector":       stock.get("sector", ""),
+                "strategy":     stock.get("strategy", ""),
+                "entryDate":    stock.get("entryDate", ""),
+                "entryPrice":   entry_price,
                 "currentPrice": round(price, 2),
-                "performance": round(performance, 2),
-                "priceSource": source,
-                "fetchStatus": status,
-                "runId": run_id
+                "targetExitMin": stock.get("targetExitMin"),
+                "targetExitMax": stock.get("targetExitMax"),
+                "stopLoss":      stock.get("stopLoss"),
+                "performance":  performance,
+                "priceSource":  source,
+                "fetchStatus":  status,
+                "discussionUrl": stock.get("discussionUrl", ""),
+                "notes":        stock.get("notes", ""),
+                "runId":        run_id,
             })
 
+            # Be polite to Yahoo — avoid rate limit
+            time.sleep(_TICKER_DELAY)
+
+        # ── Summary ───────────────────────────────────────────────────────────
+        total = len(dashboard)
+        live  = yahoo_ok + stooq_ok
+
+        print(f"\n── Fetch Summary ──────────────────────────────")
+        print(f"  Yahoo Live  : {yahoo_ok}/{total}")
+        print(f"  Stooq Live  : {stooq_ok}/{total}")
+        print(f"  Cached      : {cached_ok}/{total}")
+        print(f"  Pending     : {failed_total}/{total}")
+
+        if live == 0 and total > 0:
+            yahoo_status = {"status": "Unavailable", "successCount": 0,  "totalCount": total}
+        elif live < total:
+            yahoo_status = {"status": "Partial",     "successCount": live, "totalCount": total}
+        else:
+            yahoo_status = {"status": "Healthy",     "successCount": live, "totalCount": total}
+
         final_output = {
-            "lastUpdated": datetime.utcnow().isoformat() + "Z",
-            "marketStatus": "Open" if market_open else "Closed",
-            "yahooStatus": yahoo_info,
-            "stocks": dashboard
+            "lastUpdated":  datetime.utcnow().isoformat() + "Z",
+            "marketStatus": self._market_status(now_ist),
+            "yahooStatus":  yahoo_status,
+            "stocks":       dashboard,
         }
 
-        with open(self.dashboard_file, "w") as f:
+        with open(_DASH_FILE, "w") as f:
             json.dump(final_output, f, indent=2)
 
-        print("✅ dashboard.json updated")
+        print(f"\n✅ dashboard.json saved — {live}/{total} live prices")
         return 0
+
+    def _market_status(self, now_ist: datetime) -> str:
+        if now_ist.weekday() >= 5:
+            return "Weekend"
+        open_t  = now_ist.replace(hour=9,  minute=15, second=0, microsecond=0)
+        close_t = now_ist.replace(hour=15, minute=30, second=0, microsecond=0)
+        if open_t <= now_ist <= close_t:
+            return "Open"
+        elif now_ist < open_t:
+            return "Pre-Market"
+        return "Closed"
 
 
 if __name__ == "__main__":
