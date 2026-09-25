@@ -1,13 +1,17 @@
 {
-  "lastUpdated": "2026-09-25T16:15:50.005075Z",
-  "runTimeIST": "25 Sep 2026, 09:45 PM IST",
+  "lastUpdated": "2026-09-25T17:28:53.905372Z",
+  "runTimeIST": "25 Sep 2026, 10:58 PM IST",
   "totalScanned": 1,
   "totalBreakouts": 0,
-  "config": {
-    "boxLookbackDays": 60,
-    "boxMinHeightPct": 20.0,
-    "volumeSurgeRatio": 1.2,
-    "minRR": 1.5
+  "brdConfig": {
+    "priceChangeMin": 3.0,
+    "priceChangeMax": 6.0,
+    "emaSpreadMax": 1.5,
+    "emaCompressDays": 14,
+    "volumeSurgeRatio": 1.5,
+    "rsiLow": 40,
+    "rsiHigh": 55,
+    "slPctBelowEntry": 2.0
   },
   "candidates": []
 }
