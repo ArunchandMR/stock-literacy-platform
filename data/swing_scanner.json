@@ -1,0 +1,14 @@
+{
+  "lastUpdated": "2026-09-25T16:31:46.237776Z",
+  "runTimeIST": "25 Sep 2026, 10:01 PM IST",
+  "totalScanned": 0,
+  "summary": {},
+  "thresholds": {
+    "emaSpreadMax": 1.5,
+    "volumeDryUpRatio": 0.75,
+    "rsiLow": 40,
+    "rsiHigh": 55,
+    "rsiOverbought": 70
+  },
+  "results": []
+}
