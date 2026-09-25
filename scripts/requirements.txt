@@ -1,9 +1,10 @@
-# Python Dependencies for Stock Data Fetcher + Swing Scanner
+# Python Dependencies for Stock Data Fetcher + Swing Scanner + Box Scanner
 # Zero-cost, no API keys required
 
-# yfinance 0.2.61+ fixes the .NS ticker currentTradingPeriod crumb bug
-# and adds multi_level_index=False support for clean batch downloads
-yfinance>=0.2.61
+# yfinance 0.2.61 = first version with multi_level_index=False + .NS crumb fix.
+# Pin to ==0.2.61 so CI always gets the exact version we tested against.
+# If you upgrade, re-test column naming (Adj Close_TICKER vs Close_TICKER).
+yfinance==0.2.61
 pandas>=2.2.0
 numpy>=1.26.0
 requests>=2.31.0

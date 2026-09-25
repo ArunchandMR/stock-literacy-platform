@@ -146,15 +146,47 @@ def compute_rsi(series: pd.Series, period: int = 14) -> float:
 
 
 # ── Step 3: Batch download — handles both 1-ticker and multi-ticker output ────
-def batch_download(tickers: list[str], period: str = "90d") -> dict[str, pd.DataFrame]:
+def _find_col(raw_cols, field: str, ticker: str) -> str | None:
+    """
+    Robustly find the right column name regardless of yfinance version behaviour.
+
+    yfinance returns columns in different formats depending on version and context:
+      Multi-ticker, auto_adjust=False : "Close_TICKER"   or "Adj Close_TICKER"
+      Multi-ticker, auto_adjust=True  : "Close_TICKER"
+      Single ticker                   : "Close"  or "Adj Close"
+
+    We try all known patterns and return the first match.
+    """
+    candidates = [
+        f"{field}_{ticker}",          # e.g. "Close_LT.NS"
+        f"Adj {field}_{ticker}",       # e.g. "Adj Close_LT.NS"   ← yfinance ≥0.2.61 multi-batch
+        field,                         # e.g. "Close"              ← single-ticker batch
+        f"Adj {field}",                # e.g. "Adj Close"
+    ]
+    for c in candidates:
+        if c in raw_cols:
+            return c
+    return None
+
+
+def batch_download(tickers: list[str], period: str = "1y") -> dict[str, pd.DataFrame]:
     """
     Single yf.download() call. Returns {ticker: df(close, volume)}.
-    Handles yfinance column naming quirks robustly.
+
+    Handles ALL yfinance column-layout variants defensively:
+      A) MultiIndex  (old yfinance, or multi_level_index param ignored by older pip version)
+         → ('Close', 'LT.NS')  — we flatten to "Close_LT.NS" on the spot
+      B) Flat + adjusted  (yfinance ≥0.2.61, auto_adjust=False, multi_level_index=False)
+         → "Adj Close_LT.NS"   — handled by _find_col()
+      C) Flat + unadjusted  (yfinance ≥0.2.x some builds)
+         → "Close_LT.NS"       — handled by _find_col()
+      D) Single-ticker flat  (yfinance any version, 1 ticker)
+         → "Close" / "Adj Close" — handled by _find_col()
     """
     if not tickers:
         return {}
 
-    print(f"  📡 Downloading {len(tickers)} tickers ({period})…", end=" ", flush=True)
+    print(f"  Downloading {len(tickers)} tickers ({period})...", end=" ", flush=True)
     out: dict[str, pd.DataFrame] = {}
 
     try:
@@ -170,28 +202,27 @@ def batch_download(tickers: list[str], period: str = "90d") -> dict[str, pd.Data
             print("empty!")
             return out
 
-        print(f"got {len(raw)} rows, cols: {list(raw.columns)[:8]}")
+        # ── Defensive MultiIndex flatten ──────────────────────────────────────
+        # If the installed yfinance ignores multi_level_index=False (older pip
+        # cache, CI environment), columns will still be a MultiIndex like
+        # ('Close', 'LT.NS').  Flatten to "Close_LT.NS" so _find_col() works.
+        if isinstance(raw.columns, pd.MultiIndex):
+            raw.columns = [f"{field}_{ticker}" for field, ticker in raw.columns]
+
+        raw_cols = set(raw.columns)
+        print(f"got {len(raw)} rows | cols sample: {list(raw.columns)[:6]}")
 
         for ticker in tickers:
             try:
-                # yfinance with multi_level_index=False uses different naming
-                # depending on whether 1 or >1 ticker was requested:
-                #   >1 tickers → "Close_LT.NS", "Volume_LT.NS"
-                #   1 ticker   → "Close", "Volume"
-                c_col = f"Close_{ticker}"
-                v_col = f"Volume_{ticker}"
+                c_col = _find_col(raw_cols, "Close",  ticker)
+                v_col = _find_col(raw_cols, "Volume", ticker)
 
-                if c_col not in raw.columns:
-                    # single-ticker response or fallback
-                    c_col = "Close"
-                    v_col = "Volume"
-
-                if c_col not in raw.columns:
+                if c_col is None:
                     continue
 
                 df = pd.DataFrame({
                     "close":  raw[c_col],
-                    "volume": raw.get(v_col, pd.Series(0.0, index=raw.index)),
+                    "volume": raw[v_col] if v_col else pd.Series(0.0, index=raw.index),
                 }).dropna(subset=["close"])
 
                 if len(df) >= 55:   # need 50 for EMA-50 warmup + RSI warmup
@@ -201,7 +232,7 @@ def batch_download(tickers: list[str], period: str = "90d") -> dict[str, pd.Data
                 pass
 
     except Exception as e:
-        print(f"\n  ✗ Batch failed: {e}")
+        print(f"\n  Batch failed: {e}")
 
     return out
 

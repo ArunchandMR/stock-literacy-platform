@@ -38,6 +38,26 @@ class StockDataFetcher:
         _DATA_DIR.mkdir(parents=True, exist_ok=True)
 
     # ── ONE batch download for all tickers ────────────────────────────────────
+    @staticmethod
+    def _find_col(cols: set, field: str, ticker: str) -> str | None:
+        """
+        Robustly find the Close/Volume column regardless of yfinance version.
+
+        yfinance ≥0.2.61 with auto_adjust=False + multi_level_index=False returns:
+          Multi-ticker : "Adj Close_TICKER"   (NOT "Close_TICKER")
+          Single-ticker: "Adj Close" or "Close"
+        We try all known patterns so the dashboard never silently misses prices.
+        """
+        for candidate in [
+            f"{field}_{ticker}",       # Close_RELIANCE.NS
+            f"Adj {field}_{ticker}",   # Adj Close_RELIANCE.NS  ← yfinance ≥0.2.61 CI
+            field,                     # Close                  ← single-ticker batch
+            f"Adj {field}",            # Adj Close
+        ]:
+            if candidate in cols:
+                return candidate
+        return None
+
     def _batch_download(self, tickers: list[str]) -> dict[str, float | None]:
         """
         Single yf.download() call — ONE Yahoo session, ONE crumb handshake.
@@ -47,8 +67,6 @@ class StockDataFetcher:
         prices: dict[str, float | None] = {t: None for t in tickers}
 
         try:
-            # multi_level_index=False (yfinance ≥ 0.2.50) gives columns like
-            # Close_RELIANCE.NS  instead of a MultiIndex — much easier to parse.
             df = yf.download(
                 tickers=" ".join(tickers),
                 period="5d",
@@ -62,19 +80,23 @@ class StockDataFetcher:
                 print("  ⚠ Batch download returned empty DataFrame")
                 return prices
 
-            # multi_level_index=False + multiple tickers → columns like "Close_RELIANCE.NS"
-            # auto_adjust=False → "Close" is the unadjusted price (what we want)
+            # ── Defensive MultiIndex flatten ──────────────────────────────────
+            # If the installed yfinance ignores multi_level_index=False (older pip
+            # cache in CI), columns arrive as ('Close', 'RELIANCE.NS').
+            # Flatten to "Close_RELIANCE.NS" so _find_col() works correctly.
+            if isinstance(df.columns, pd.MultiIndex):
+                df.columns = [f"{field}_{tkr}" for field, tkr in df.columns]
+
+            raw_cols = set(df.columns)
+            print(f"  cols sample: {list(df.columns)[:6]}")
+
             for ticker in tickers:
                 try:
-                    col = f"Close_{ticker}"
-                    if col in df.columns:
-                        series = df[col].dropna()
-                    elif "Close" in df.columns:
-                        series = df["Close"].dropna()
-                    else:
+                    col = self._find_col(raw_cols, "Close", ticker)
+                    if col is None:
                         print(f"    no Close column for {ticker}. Available: {list(df.columns)[:6]}")
                         continue
-
+                    series = df[col].dropna()
                     if not series.empty:
                         prices[ticker] = round(float(series.iloc[-1]), 2)
                 except Exception as e:

@@ -133,12 +133,42 @@ def calc_ema(series: pd.Series, span: int) -> pd.Series:
     return series.ewm(span=span, adjust=False).mean()
 
 
+# ── Column resolver — handles all yfinance naming variants ───────────────────
+def _find_col(raw_cols: set, field: str, ticker: str) -> str | None:
+    """
+    Find the correct column for (field, ticker) regardless of yfinance version.
+
+    Known formats returned by yfinance ≥0.2.x with multi_level_index=False:
+      Multi-ticker batch  : "Close_TICKER"      (auto_adjust=True)
+                          : "Adj Close_TICKER"  (auto_adjust=False, latest versions)
+      Single-ticker batch : "Close"
+                          : "Adj Close"
+    """
+    for candidate in [
+        f"{field}_{ticker}",       # Close_HDFCBANK.NS
+        f"Adj {field}_{ticker}",   # Adj Close_HDFCBANK.NS  ← what CI actually gets
+        field,                     # Close                  ← single-ticker fallback
+        f"Adj {field}",            # Adj Close
+    ]:
+        if candidate in raw_cols:
+            return candidate
+    return None
+
+
 # ── Step 3: Batch download ────────────────────────────────────────────────────
 def batch_download(tickers: list[str], period: str = "1y") -> dict[str, pd.DataFrame]:
     """
-    ONE yf.download() call for all tickers. Returns {ticker: OHLCV DataFrame}.
-    Period = 1y: EMA-200 needs ~250 rows warmup; 1y gives ~252 trading days reliably.
-    Column naming: multi-ticker -> "Close_TICKER", single -> "Close"
+    ONE yf.download() call. Returns {ticker: OHLCV DataFrame}.
+
+    Handles ALL yfinance column-layout variants defensively:
+      A) MultiIndex  (old yfinance, or multi_level_index param ignored by older pip version)
+         → ('Close', 'HDFCBANK.NS')  — we flatten to "Close_HDFCBANK.NS" on the spot
+      B) Flat + adjusted  (yfinance ≥0.2.61, auto_adjust=False, multi_level_index=False)
+         → "Adj Close_HDFCBANK.NS"   — handled by _find_col()
+      C) Flat + unadjusted  (yfinance ≥0.2.x some builds)
+         → "Close_HDFCBANK.NS"       — handled by _find_col()
+      D) Single-ticker flat  (yfinance any version, 1 ticker)
+         → "Close" / "Adj Close"     — handled by _find_col()
     """
     if not tickers:
         return {}
@@ -156,29 +186,40 @@ def batch_download(tickers: list[str], period: str = "1y") -> dict[str, pd.DataF
         if raw.empty:
             print("empty!")
             return result
+
+        # ── Defensive MultiIndex flatten ──────────────────────────────────────
+        # If the installed yfinance ignores multi_level_index=False (older pip
+        # cache, CI environment), columns will still be a MultiIndex like
+        # ('Close', 'HDFCBANK.NS').  Flatten to "Close_HDFCBANK.NS" so _find_col() works.
+        if isinstance(raw.columns, pd.MultiIndex):
+            raw.columns = [f"{field}_{ticker}" for field, ticker in raw.columns]
+
+        raw_cols = set(raw.columns)
         print(f"got {len(raw)} rows | cols sample: {list(raw.columns)[:6]}")
+
         for ticker in tickers:
             try:
-                c  = f"Close_{ticker}"
-                h  = f"High_{ticker}"
-                lo = f"Low_{ticker}"
-                v  = f"Volume_{ticker}"
-                if c not in raw.columns:
-                    c, h, lo, v = "Close", "High", "Low", "Volume"
-                if c not in raw.columns:
+                c  = _find_col(raw_cols, "Close",  ticker)
+                h  = _find_col(raw_cols, "High",   ticker)
+                lo = _find_col(raw_cols, "Low",    ticker)
+                v  = _find_col(raw_cols, "Volume", ticker)
+
+                if c is None:
                     continue
+
                 df = pd.DataFrame({
                     "Close":  raw[c],
-                    "High":   raw.get(h,  pd.Series(dtype=float, index=raw.index)),
-                    "Low":    raw.get(lo, pd.Series(dtype=float, index=raw.index)),
-                    "Volume": raw.get(v,  pd.Series(0.0,         index=raw.index)),
+                    "High":   raw[h]  if h  else pd.Series(dtype=float, index=raw.index),
+                    "Low":    raw[lo] if lo else pd.Series(dtype=float, index=raw.index),
+                    "Volume": raw[v]  if v  else pd.Series(0.0,         index=raw.index),
                 }).dropna(subset=["Close"])
+
                 # Need 200 rows for EMA-200 warmup + 60-day box window
-                # Use 205 to allow for occasional weekend/holiday gaps in 1y data
                 if len(df) >= 205:
                     result[ticker] = df
             except Exception:
                 pass
+
         print(f"  Usable: {len(result)}/{len(tickers)} tickers")
     except Exception as e:
         print(f"\n  Batch download failed: {e}")
