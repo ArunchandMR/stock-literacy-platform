@@ -11,11 +11,13 @@ Mentor's framework:
 Watchlist: LT, ACMESOLAR, CYIENTDLM, TECHNOE, SRF, COALINDIA, HINDCOPPER
 Runs daily Mon-Fri after market close (4:00 PM IST via GitHub Actions).
 Output: data/swing_scanner.json  +  swing-dashboard.html
+
+API strategy: ONE batch yf.download() call for all 7 tickers.
+Single session = single crumb handshake with Yahoo. No per-ticker delays.
 """
 
 import json
 import os
-import time
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -62,10 +64,52 @@ def compute_rsi(series: pd.Series, period: int = 14) -> float:
     return round(float(rsi.iloc[-1]), 2)
 
 
-def analyse_stock(item: dict) -> dict:
+def batch_download_history(tickers: list[str], period: str = "90d") -> dict[str, pd.DataFrame]:
     """
-    Download 60 days of daily data and evaluate mentor's squeeze conditions.
-    Returns a result dict with all computed fields.
+    ONE yf.download() call for all tickers — single Yahoo session.
+    Returns {ticker: DataFrame(close, volume)} or {} on failure.
+    """
+    print(f"  📡 Batch downloading {len(tickers)} tickers ({period})…")
+    result: dict[str, pd.DataFrame] = {}
+    try:
+        raw = yf.download(
+            tickers=" ".join(tickers),
+            period=period,
+            auto_adjust=True,
+            progress=False,
+            threads=True,
+            multi_level_index=False,
+        )
+        if raw.empty:
+            print("  ⚠ Batch download returned empty DataFrame")
+            return result
+
+        for ticker in tickers:
+            close_col  = f"Close_{ticker}"
+            volume_col = f"Volume_{ticker}"
+            # single-ticker fallback column names
+            if close_col not in raw.columns and "Close" in raw.columns:
+                close_col, volume_col = "Close", "Volume"
+
+            if close_col in raw.columns:
+                df = pd.DataFrame({
+                    "close":  raw[close_col],
+                    "volume": raw.get(volume_col, pd.Series(dtype=float)),
+                }).dropna(subset=["close"])
+                if not df.empty:
+                    result[ticker] = df
+
+        ok = len(result)
+        print(f"  ✓ Batch result: {ok}/{len(tickers)} tickers have data")
+    except Exception as e:
+        print(f"  ✗ Batch download failed: {e}")
+    return result
+
+
+def analyse_stock(item: dict, df: pd.DataFrame | None) -> dict:
+    """
+    Evaluate mentor's squeeze conditions on a pre-fetched DataFrame.
+    df must have columns: close, volume  (indexed by date, chronological).
     """
     ticker = item["ticker"]
     result = {
@@ -88,16 +132,14 @@ def analyse_stock(item: dict) -> dict:
         "isRsiInZone":     False,
     }
 
+    if df is None or df.empty:
+        return result
+
     try:
-        df = yf.Ticker(ticker).history(period="90d")   # 90d for RSI warm-up
         if len(df) < 52:
             result["alert"] = "⏭️ Insufficient data (< 52 days)"
             result["alertLevel"] = "warning"
             return result
-
-        # Rename for consistency
-        df = df.rename(columns={"Close": "close", "Volume": "volume",
-                                 "High": "high", "Low": "low"})
 
         # ── Indicators ──────────────────────────────────────────────────────
         df["ema20"]    = df["close"].ewm(span=20, adjust=False).mean()
@@ -434,13 +476,19 @@ def main():
     print(f"   Thresholds: EMA spread ≤ {EMA_SPREAD_THRESHOLD}% | Vol ratio < {VOLUME_DRYUP_RATIO} | RSI {RSI_ENTRY_LOW}–{RSI_ENTRY_HIGH}")
     print()
 
+    # ── ONE batch download for all 7 tickers ─────────────────────────────────
+    tickers    = [item["ticker"] for item in WATCHLIST]
+    batch_data = batch_download_history(tickers, period="90d")
+    print()
+
     results = []
     for item in WATCHLIST:
-        print(f"  Scanning {item['ticker']} ({item['name']})…")
-        result = analyse_stock(item)
+        ticker = item["ticker"]
+        df     = batch_data.get(ticker)
+        print(f"  Analysing {ticker} ({item['name']})…")
+        result = analyse_stock(item, df)
         results.append(result)
         print(f"    → {result['alertLevel'].upper()} | {result['alert'][:70]}")
-        time.sleep(1.5)   # avoid Yahoo rate-limiting in CI
 
     # ── Save JSON ────────────────────────────────────────────────────────────
     output = {
