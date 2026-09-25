@@ -29,14 +29,15 @@ async function loadDashboardData() {
         dashboardData = {
             lastUpdated: raw.lastUpdated,
             stocks: stocks.map(s => {
-                let dev = s.performance || 0;
+                // support both field names: performance (new) and deviance (legacy)
+                const perf = s.performance ?? s.deviance ?? 0;
 
                 return {
                     ...s,
                     currentPrice: s.currentPrice,
-
-                    deviance: dev,
-                    deviancePercent: `${dev >= 0 ? '+' : ''}${dev.toFixed(2)}%`,
+                    performance: perf,
+                    deviance: perf,
+                    deviancePercent: `${perf >= 0 ? '+' : ''}${perf.toFixed(2)}%`,
 
                     riskFlag: s.fetchStatus === "Success" ? "Normal" : "Fallback",
                     riskLevel: s.fetchStatus === "Success" ? "low" : "medium",
@@ -112,29 +113,21 @@ function renderSummaryCards() {
 function renderStockTable() {
 
     const tableBody = document.getElementById('table-body');
-    const mobileCards = document.getElementById('mobile-cards');
-    const emptyState = document.getElementById('empty-state');
     const tableContainer = document.getElementById('table-container');
 
-    // ✅ CRITICAL SAFETY CHECK
     if (!tableBody) {
         console.error("table-body not found in DOM");
         return;
     }
 
     tableBody.innerHTML = '';
-    mobileCards && (mobileCards.innerHTML = '');
 
     if (!filteredStocks || filteredStocks.length === 0) {
         tableContainer?.classList.add('hidden');
-        mobileCards?.classList.add('hidden');
-        emptyState?.classList.remove('hidden');
         return;
     }
 
-    emptyState?.classList.add('hidden');
     tableContainer?.classList.remove('hidden');
-    mobileCards?.classList.remove('hidden');
 
     filteredStocks.forEach(stock => {
 
@@ -143,6 +136,9 @@ function renderStockTable() {
         const isLive =
             stock.priceSource === "Yahoo" ||
             stock.priceSource === "Stooq";
+
+        const perf = stock.performance ?? 0;
+        const perfClass = perf > 0 ? "text-green-600" : perf < 0 ? "text-red-500" : "text-gray-500";
 
         tr.innerHTML = `
             <td class="px-4 py-3">
@@ -158,26 +154,16 @@ function renderStockTable() {
                 ${isLive ? "₹" + stock.currentPrice : "—"}
             </td>
 
-            <td class="text-center ${
-                stock.performance > 0
-                    ? "text-green-600"
-                    : stock.performance < 0
-                    ? "text-red-500"
-                    : "text-gray-500"
-            }">
-                ${stock.performance.toFixed(2)}%
+            <td class="text-center ${perfClass}">
+                ${perf.toFixed(2)}%
             </td>
 
             <td class="text-center ${stock.fetchStatus === "Success" ? "text-green-600" : "text-orange-500"}">
-                ${stock.fetchStatus}
+                ${stock.fetchStatus || "—"}
             </td>
         `;
 
         tableBody.appendChild(tr);
-
-        if (mobileCards) {
-            mobileCards.appendChild(tr.cloneNode(true));
-        }
     });
 }
 
@@ -239,4 +225,3 @@ function updateFilteredCount() {
     const el = document.getElementById("filtered-count");
     if (el) el.textContent = filteredStocks.length;
 }
-``
