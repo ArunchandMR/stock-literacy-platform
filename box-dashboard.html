@@ -45,10 +45,10 @@
       <p class="text-slate-300 text-sm max-w-2xl mb-4">
         Scans the NSE universe using all 4 BRD quantitative filters simultaneously.
         Replaces wide box-low stops with tight 2% institutional invalidation anchors.
-        Each result includes a 36-month back-test (Win Rate, Profit Factor, Max Drawdown).
+        EMA-200 trend filter + 20% box + breakout confirmation.
       </p>
       <div class="flex flex-wrap gap-5 text-sm text-slate-300">
-        <span><i class="fas fa-clock mr-1"></i>Scan: <strong class="text-white">25 Sep 2026, 10:58 PM IST</strong></span>
+        <span><i class="fas fa-clock mr-1"></i>Scan: <strong class="text-white">25 Sep 2026, 11:34 PM IST</strong></span>
         <span><i class="fas fa-eye mr-1"></i>Scanned: <strong class="text-white">1</strong></span>
         <span><i class="fas fa-fire mr-1 text-amber-400"></i>Setups: <strong class="text-amber-300">0</strong></span>
         <span class="text-xs text-slate-400">
@@ -89,18 +89,22 @@
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-lg font-bold text-gray-800">
         <i class="fas fa-trophy mr-1 text-amber-500"></i>
-        Top 0 Fortress Breakout Candidates
+        0 Fortress Candidates
+        <span class="text-sm font-normal text-gray-500 ml-2">
+          <span class="text-green-700">0 Active Breakout</span>
+          &nbsp;·&nbsp;
+          <span class="text-amber-600">0 Near-Breakout</span>
+        </span>
       </h2>
-      <span class="text-xs text-gray-400">All 4 BRD filters + EMA-200 + 20% box passed</span>
+      <span class="text-xs text-gray-400">EMA compressed 14d+ | RSI 40-55 | EMA-200 trend | Box 20%+</span>
     </div>
     
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-          <div class="text-5xl mb-4">No active setups</div>
-          <h3 class="text-xl font-bold text-gray-700 mb-2">No Fortress Breakout Setups Today</h3>
+          <h3 class="text-xl font-bold text-gray-700 mb-2">No Fortress Setups Today</h3>
           <p class="text-gray-400 text-sm max-w-lg mx-auto">
-            No NSE stock passed all 4 BRD filters simultaneously:
-            DP% 3-6%, EMA compressed 14+ days, Volume &gt;= 1.5x SMA, RSI 40-55,
-            plus EMA-200 uptrend + 20% box breakout.
+            No NSE stock currently has EMA(20/50) compressed 14+ days, RSI 40-55, price above EMA-200,
+            and a 20%+ box structure with price within 2% of the box ceiling.
+            Check back after next market session.
           </p>
         </div>
   </main>
