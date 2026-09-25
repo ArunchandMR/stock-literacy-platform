@@ -32,16 +32,24 @@ async function loadDashboardData() {
                 // support both field names: performance (new) and deviance (legacy)
                 const perf = s.performance ?? s.deviance ?? 0;
 
+                // map fetchStatus to clean display labels
+                const statusMap = {
+                    "Live":    { label: "Live",    level: "low" },
+                    "Success": { label: "Live",    level: "low" },
+                    "Cached":  { label: "Cached",  level: "medium" },
+                    "Pending": { label: "Pending", level: "pending" },
+                    "Fallback":{ label: "Pending", level: "pending" },
+                };
+                const statusInfo = statusMap[s.fetchStatus] || { label: s.fetchStatus || "—", level: "medium" };
+
                 return {
                     ...s,
                     currentPrice: s.currentPrice,
                     performance: perf,
                     deviance: perf,
                     deviancePercent: `${perf >= 0 ? '+' : ''}${perf.toFixed(2)}%`,
-
-                    riskFlag: s.fetchStatus === "Success" ? "Normal" : "Fallback",
-                    riskLevel: s.fetchStatus === "Success" ? "low" : "medium",
-
+                    riskFlag:  statusInfo.label,
+                    riskLevel: statusInfo.level,
                     lastChecked: raw.lastUpdated
                 };
             })
@@ -151,15 +159,23 @@ function renderStockTable() {
             <td class="text-right">₹${stock.entryPrice}</td>
 
             <td class="text-right">
-                ${isLive ? "₹" + stock.currentPrice : "—"}
+                ${isLive
+                    ? `₹${Number(stock.currentPrice).toLocaleString("en-IN")}`
+                    : `<span class="text-xs text-gray-400 italic">Pending</span>`}
             </td>
 
             <td class="text-center ${perfClass}">
                 ${perf.toFixed(2)}%
             </td>
 
-            <td class="text-center ${stock.fetchStatus === "Success" ? "text-green-600" : "text-orange-500"}">
-                ${stock.fetchStatus || "—"}
+            <td class="text-center ${
+                stock.riskLevel === "low"
+                    ? "text-green-600"
+                    : stock.riskLevel === "pending"
+                    ? "text-gray-400 italic"
+                    : "text-orange-500"
+            }">
+                ${stock.riskFlag || "—"}
             </td>
         `;
 
