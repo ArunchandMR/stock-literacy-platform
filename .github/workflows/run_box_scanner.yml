@@ -1,4 +1,4 @@
-name: Daily Range Breakout Box Scanner
+name: Daily Fortress Breakout Scanner
 
 on:
   # 4:45 PM IST = 11:15 UTC, Mon-Fri (runs after update-dashboard at 11:00)
@@ -14,8 +14,8 @@ permissions:
 jobs:
   box-scan:
     runs-on: ubuntu-latest
-    # Allow up to 20 minutes — scans 500 tickers
-    timeout-minutes: 20
+    # Allow up to 35 minutes — scans 500 tickers with 3y data + 36-month backtest
+    timeout-minutes: 35
 
     steps:
       - name: Checkout repository
