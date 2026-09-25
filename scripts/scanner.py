@@ -15,6 +15,7 @@ Output: data/swing_scanner.json  +  swing-dashboard.html
 
 import json
 import os
+import time
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -439,6 +440,7 @@ def main():
         result = analyse_stock(item)
         results.append(result)
         print(f"    → {result['alertLevel'].upper()} | {result['alert'][:70]}")
+        time.sleep(1.5)   # avoid Yahoo rate-limiting in CI
 
     # ── Save JSON ────────────────────────────────────────────────────────────
     output = {
