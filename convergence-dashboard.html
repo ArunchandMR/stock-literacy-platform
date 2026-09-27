@@ -22,11 +22,27 @@
   .hero { background:linear-gradient(135deg,#1e293b 0%,#1e3a8a 100%); color:#fff; padding:32px 24px; }
   .hero h1 { font-size:26px; font-weight:700; margin-bottom:8px; }
   .hero p { color:#94a3b8; font-size:14px; max-width:640px; margin-bottom:16px; }
+  .hero .meta { display:flex; flex-wrap:wrap; gap:20px; font-size:12px; color:#94a3b8; }
+  .hero .meta b { color:#fff; }
   .page { max-width:1200px; margin:0 auto; padding:32px 24px; }
-  .pending { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:48px; text-align:center; }
-  .pending h2 { color:var(--title); font-size:20px; margin-bottom:12px; }
-  .pending p { color:var(--muted); font-size:14px; max-width:480px; margin:0 auto 16px; }
-  .pending .badge { display:inline-block; background:#eff6ff; color:#1d4ed8; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; }
+  .section-title { font-size:18px; font-weight:700; color:var(--title); margin-bottom:16px; padding-bottom:8px; border-bottom:2px solid var(--border); }
+  .kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:32px; }
+  .kpi { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
+  .kpi .label { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-bottom:6px; }
+  .kpi .value { font-size:28px; font-weight:700; color:var(--title); }
+  .kpi .sub { font-size:11px; color:var(--muted); margin-top:4px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:32px; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+  .card-header { padding:16px 20px; border-bottom:1px solid var(--border); font-weight:700; font-size:16px; color:var(--title); }
+  table { width:100%; border-collapse:collapse; }
+  th { background:#f8fafc; padding:12px 12px; font-size:12px; font-weight:600; color:var(--muted); text-align:left; border-bottom:2px solid var(--border); white-space:nowrap; }
+  .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:32px; }
+  .info-box { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
+  .info-box h3 { font-size:14px; font-weight:700; color:var(--title); margin-bottom:8px; }
+  .info-box ul { list-style:none; font-size:13px; color:var(--body); }
+  .info-box ul li { padding:3px 0; border-bottom:1px solid #f1f5f9; }
+  .info-box ul li:last-child { border:none; }
+  @media(max-width:768px) { .info-grid { grid-template-columns:1fr; } nav .links { display:none; } }
+  .mae-note { background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:14px 18px; font-size:13px; color:#991b1b; margin-top:8px; }
   footer { background:#1e293b; color:#94a3b8; text-align:center; padding:24px; font-size:12px; border-top:1px solid #334155; }
 </style>
 </head>
@@ -51,23 +67,2510 @@
 
 <div class="hero">
   <h1>📊 Institutional Convergence &amp; Evidence Dashboard</h1>
-  <p>Three strict layers: Scanner → Trade Rules → Evidence. Profit Factor, Expectancy, MAE &amp; MFE are the hero metrics. All 4 stop-loss methods tested side-by-side.</p>
+  <p>Three strict layers: Scanner → Trade Rules → Evidence.
+     Profit Factor, Expectancy, MAE &amp; MFE are the hero metrics — not win rate.
+     All 4 stop-loss methods tested side-by-side. No look-ahead bias.</p>
+  <div class="meta">
+    <span>🕐 Updated: <b>27 Sep 2026, 01:24 PM IST</b></span>
+    <span>📈 Nifty: <b>₹23140.5</b> | 200-SMA: <b>₹24423.17</b></span>
+    <span>🏳 Regime: <b style="color:#dc2626;">WEAK</b></span>
+  </div>
 </div>
 
 <div class="page">
-  <div class="pending">
-    <div style="font-size:48px; margin-bottom:16px;">⏳</div>
-    <h2>Awaiting First Automated Run</h2>
-    <p>
-      This page is populated by the <strong>Automated Convergence Engine Scanner</strong> workflow.
-      Trigger a manual run to generate the first evidence report.
-    </p>
-    <p>
-      Go to your GitHub repository → <strong>Actions</strong> →
-      <strong>Automated Convergence Engine Scanner</strong> → <strong>Run workflow</strong>.
-    </p>
-    <span class="badge">Runs automatically at 4:15 PM IST on trading days</span>
+
+  <!-- KPI scorecard -->
+  <h2 class="section-title">🏆 System Evidence Scorecard (A ∩ B Cohort)</h2>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="label">A ∩ B Profit Factor</div><div class="value" style="color:#dc2626;">0.973</div><div class="sub">Target threshold: ≥ 1.75 | ATR stop</div></div><div class="kpi"><div class="label">A ∩ B Win Rate</div><div class="value" style="color:#0f172a;">25.4%</div><div class="sub">ATR stop basis</div></div><div class="kpi"><div class="label">A ∩ B Median T+20</div><div class="value" style="color:#16a34a;">0.18%</div><div class="sub">Bypasses look-ahead bias</div></div><div class="kpi"><div class="label">A ∩ B Max Drawdown</div><div class="value" style="color:#dc2626;">27.85%</div><div class="sub">Largest MAE across signals</div></div><div class="kpi"><div class="label">A ∩ B Expectancy</div><div class="value" style="color:#0f172a;">-0.0931</div><div class="sub">Avg ₹ per unit risked. Positive = edge.</div></div><div class="kpi"><div class="label">Total Signals Tracked</div><div class="value" style="color:#0f172a;">22368</div><div class="sub">All cohorts combined</div></div>
   </div>
+
+  <!-- MAE/MFE explanation -->
+  <div class="mae-note">
+    <b>What MAE tells you about your 2% stop:</b> If winning trades show an average MAE of −3.2%
+    before reaching their target, a fixed 2% stop is <em>prematurely exiting winning setups</em>.
+    Compare the ATR stop vs Fixed 2% columns in the table below to see this empirically.
+  </div>
+
+  <!-- Cohort comparison table -->
+  <div class="card" style="margin-top:24px;">
+    <div class="card-header">📐 Historical Evidence Ledger — Cohort Comparison (36-Month Back-Test)</div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Cohort</th>
+            <th>Signals</th>
+            <th>Profit Factor</th>
+            <th>Expectancy</th>
+            <th>Win Rate</th>
+            <th>Med T+5</th>
+            <th>Med T+20</th>
+            <th>Avg MAE</th>
+            <th>Avg MFE</th>
+            <th>Max Drawdown</th>
+            <th>Stop Method Comparison</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:4px 10px;border-radius:12px;
+                  background:#dcfce7;color:#166534;font-weight:700;font-size:13px;">💎 A ∩ B Convergence</span>
+              </td>
+              <td style="padding:14px 12px;font-weight:600;">299</td>
+              <td style="padding:14px 12px;font-size:22px;font-weight:700;color:#dc2626;">0.973</td>
+              <td style="padding:14px 12px;font-weight:600;">-0.0931</td>
+              <td style="padding:14px 12px;">25.4%</td>
+              <td style="padding:14px 12px;color:#16a34a;font-weight:600;">-0.343%</td>
+              <td style="padding:14px 12px;color:#16a34a;font-weight:600;">0.18%</td>
+              <td style="padding:14px 12px;color:#dc2626;">7.518%</td>
+              <td style="padding:14px 12px;color:#2563eb;">9.386%</td>
+              <td style="padding:14px 12px;color:#dc2626;">27.85%</td>
+              <td style="padding:14px 12px;font-size:11px;"><span style="margin-right:12px;font-size:11px;">
+                  <b style="color:#dc2626">Fixed 2%</b>:
+                  PF 0.903 | WR 13.0%
+                </span><span style="margin-right:12px;font-size:11px;">
+                  <b style="color:#dc2626">1.5×ATR</b>:
+                  PF 0.973 | WR 25.4%
+                </span><span style="margin-right:12px;font-size:11px;">
+                  <b style="color:#dc2626">20-EMA</b>:
+                  PF 0.424 | WR 11.4%
+                </span><span style="margin-right:12px;font-size:11px;">
+                  <b style="color:#ca8a04">Swing Low</b>:
+                  PF 1.498 | WR 24.7%
+                </span></td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:4px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:13px;">⚡ Strategy A Only</span>
+              </td>
+              <td style="padding:14px 12px;font-weight:600;">20145</td>
+              <td style="padding:14px 12px;font-size:22px;font-weight:700;color:#dc2626;">0.611</td>
+              <td style="padding:14px 12px;font-weight:600;">-1.2149</td>
+              <td style="padding:14px 12px;">15.6%</td>
+              <td style="padding:14px 12px;color:#16a34a;font-weight:600;">-0.291%</td>
+              <td style="padding:14px 12px;color:#16a34a;font-weight:600;">-1.256%</td>
+              <td style="padding:14px 12px;color:#dc2626;">7.013%</td>
+              <td style="padding:14px 12px;color:#2563eb;">7.357%</td>
+              <td style="padding:14px 12px;color:#dc2626;">61.06%</td>
+              <td style="padding:14px 12px;font-size:11px;"><span style="margin-right:12px;font-size:11px;">
+                  <b style="color:#dc2626">Fixed 2%</b>:
+                  PF 0.619 | WR 9.3%
+                </span><span style="margin-right:12px;font-size:11px;">
+                  <b style="color:#dc2626">1.5×ATR</b>:
+                  PF 0.611 | WR 15.6%
+                </span><span style="margin-right:12px;font-size:11px;">
+                  <b style="color:#dc2626">20-EMA</b>:
+                  PF 0.289 | WR 4.8%
+                </span><span style="margin-right:12px;font-size:11px;">
+                  <b style="color:#dc2626">Swing Low</b>:
+                  PF 0.603 | WR 14.6%
+                </span></td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:4px 10px;border-radius:12px;
+                  background:#dbeafe;color:#1e40af;font-weight:700;font-size:13px;">📐 Strategy B Only</span>
+              </td>
+              <td style="padding:14px 12px;font-weight:600;">1924</td>
+              <td style="padding:14px 12px;font-size:22px;font-weight:700;color:#dc2626;">0.851</td>
+              <td style="padding:14px 12px;font-weight:600;">-0.5355</td>
+              <td style="padding:14px 12px;">24.6%</td>
+              <td style="padding:14px 12px;color:#16a34a;font-weight:600;">-0.249%</td>
+              <td style="padding:14px 12px;color:#16a34a;font-weight:600;">0.97%</td>
+              <td style="padding:14px 12px;color:#dc2626;">8.063%</td>
+              <td style="padding:14px 12px;color:#2563eb;">9.621%</td>
+              <td style="padding:14px 12px;color:#dc2626;">65.27%</td>
+              <td style="padding:14px 12px;font-size:11px;"><span style="margin-right:12px;font-size:11px;">
+                  <b style="color:#dc2626">Fixed 2%</b>:
+                  PF 0.873 | WR 12.3%
+                </span><span style="margin-right:12px;font-size:11px;">
+                  <b style="color:#dc2626">1.5×ATR</b>:
+                  PF 0.851 | WR 24.6%
+                </span><span style="margin-right:12px;font-size:11px;">
+                  <b style="color:#dc2626">20-EMA</b>:
+                  PF 0.326 | WR 11.3%
+                </span><span style="margin-right:12px;font-size:11px;">
+                  <b style="color:#ca8a04">Swing Low</b>:
+                  PF 1.015 | WR 22.3%
+                </span></td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Live scan table -->
+  <h2 class="section-title" style="margin-top:32px;">🎯 Today's Active Convergence Signals</h2>
+  <div class="card">
+    <div class="card-header">Active Cohort Overlap Monitor — Post-Market Scan</div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Stock</th>
+            <th>Price</th>
+            <th>Strategy A (Momentum)</th>
+            <th>Strategy B (Structural Box)</th>
+            <th>Convergence Status</th>
+            <th>EMA Spread | RSI</th>
+            <th>Dynamic Risk Anchors</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TATATECH</td>
+              <td style="padding:14px 12px;font-weight:700;">₹703.05</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#dcfce7;color:#166534;font-weight:700;font-size:12px;">💎 A ∩ B</span>
+              </td>
+              <td style="padding:14px 12px;">1.46% | RSI 29.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹669.50</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹753.57</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹700.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">PATANJALI</td>
+              <td style="padding:14px 12px;font-weight:700;">₹403.95</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#dcfce7;color:#166534;font-weight:700;font-size:12px;">💎 A ∩ B</span>
+              </td>
+              <td style="padding:14px 12px;">0.62% | RSI 73.8</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹387.19</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹370.93</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹335.75</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">UTIAMC</td>
+              <td style="padding:14px 12px;font-weight:700;">₹901.85</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.58% | RSI 49.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹873.55</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹903.88</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹866.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">AWL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹184.34</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.16% | RSI 43.5</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹178.79</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹186.58</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹180.47</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">SUNPHARMA</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,852.20</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.90% | RSI 43.8</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,810.10</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,870.41</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,828.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">IFCI</td>
+              <td style="padding:14px 12px;font-weight:700;">₹73.95</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.40% | RSI 40.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹66.92</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹80.44</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹73.01</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">BANKINDIA</td>
+              <td style="padding:14px 12px;font-weight:700;">₹137.94</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.00% | RSI 42.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹134.38</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹139.86</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹136.85</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">BEL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹393.55</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.15% | RSI 43.1</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹382.45</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹398.96</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹382.10</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">CANBK</td>
+              <td style="padding:14px 12px;font-weight:700;">₹124.99</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.22% | RSI 48.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹122.21</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹125.07</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹121.81</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ABSLAMC</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,014.50</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.34% | RSI 43.1</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹953.63</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,044.25</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,001.50</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">M&MFIN</td>
+              <td style="padding:14px 12px;font-weight:700;">₹333.10</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.96% | RSI 30.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹318.69</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹355.86</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹330.20</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">MRPL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹164.60</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.01% | RSI 42.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹154.14</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹169.16</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹162.40</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">LODHA</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,165.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.13% | RSI 49.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,106.15</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,160.93</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,047.50</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ANANTRAJ</td>
+              <td style="padding:14px 12px;font-weight:700;">₹617.40</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.42% | RSI 53.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹592.37</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹610.13</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹571.35</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">CONCOR</td>
+              <td style="padding:14px 12px;font-weight:700;">₹461.50</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.39% | RSI 33.1</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹442.69</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹488.99</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹457.55</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">SWIGGY</td>
+              <td style="padding:14px 12px;font-weight:700;">₹264.85</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.18% | RSI 40.8</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹252.30</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹275.13</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹261.35</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">MGL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,071.30</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.08% | RSI 44.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,038.38</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,084.69</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,047.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">AARTIIND</td>
+              <td style="padding:14px 12px;font-weight:700;">₹489.25</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.37% | RSI 45.1</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹468.16</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹495.89</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹459.55</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TATACHEM</td>
+              <td style="padding:14px 12px;font-weight:700;">₹643.75</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.56% | RSI 45.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹582.58</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹664.36</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹600.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">HAL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹4,800.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.13% | RSI 47.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹4,640.86</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹4,827.99</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹4,615.80</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">CHOICEIN</td>
+              <td style="padding:14px 12px;font-weight:700;">₹751.05</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.07% | RSI 44.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹722.43</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹761.67</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹721.60</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">DIXON</td>
+              <td style="padding:14px 12px;font-weight:700;">₹13,390.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.48% | RSI 43.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹12,868.65</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹13,583.92</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹12,850.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">GROWW</td>
+              <td style="padding:14px 12px;font-weight:700;">₹187.06</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.12% | RSI 40.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹179.57</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹191.88</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹184.25</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">PIDILITIND</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,517.20</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.00% | RSI 35.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,470.49</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,576.44</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,495.70</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">SARDAEN</td>
+              <td style="padding:14px 12px;font-weight:700;">₹493.15</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.59% | RSI 41.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹469.10</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹506.99</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹489.50</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TECHM</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,548.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.01% | RSI 45.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,492.14</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,562.17</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,498.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ICICIAMC</td>
+              <td style="padding:14px 12px;font-weight:700;">₹3,184.60</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.24% | RSI 58.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹3,075.11</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹3,121.05</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹2,933.30</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">INDUSINDBK</td>
+              <td style="padding:14px 12px;font-weight:700;">₹912.20</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.33% | RSI 29.1</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹883.61</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹966.59</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹906.90</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">RRKABEL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹2,528.30</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.32% | RSI 49.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹2,427.73</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹2,516.14</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹2,340.20</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TVSMOTOR</td>
+              <td style="padding:14px 12px;font-weight:700;">₹4,157.30</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.20% | RSI 49.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹4,030.39</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹4,156.34</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹4,002.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">INDHOTEL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹726.80</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.58% | RSI 49.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹706.62</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹727.59</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹701.55</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">NETWEB</td>
+              <td style="padding:14px 12px;font-weight:700;">₹4,545.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.20% | RSI 38.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹4,293.16</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹4,832.27</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹4,388.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">KARURVYSYA</td>
+              <td style="padding:14px 12px;font-weight:700;">₹327.95</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.64% | RSI 44.8</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹315.56</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹332.19</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹318.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TIMKEN</td>
+              <td style="padding:14px 12px;font-weight:700;">₹3,206.10</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.75% | RSI 50.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹3,038.20</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹3,200.47</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹3,080.20</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">EXIDEIND</td>
+              <td style="padding:14px 12px;font-weight:700;">₹423.65</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.46% | RSI 45.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹406.58</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹428.02</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹405.10</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ADANIPOWER</td>
+              <td style="padding:14px 12px;font-weight:700;">₹202.75</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.25% | RSI 44.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹194.98</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹205.98</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹196.10</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ONGC</td>
+              <td style="padding:14px 12px;font-weight:700;">₹235.86</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.38% | RSI 49.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹229.44</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹235.76</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹231.25</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">HCLTECH</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,258.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.29% | RSI 47.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,205.37</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,265.73</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,195.70</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">SAREGAMA</td>
+              <td style="padding:14px 12px;font-weight:700;">₹496.90</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.60% | RSI 48.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹471.31</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹498.34</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹475.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">BALKRISIND</td>
+              <td style="padding:14px 12px;font-weight:700;">₹2,185.30</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.21% | RSI 43.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹2,108.19</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹2,225.20</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹2,100.10</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">GVT&D</td>
+              <td style="padding:14px 12px;font-weight:700;">₹4,280.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.66% | RSI 45.5</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹4,045.68</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹4,368.53</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹4,149.70</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">SUNTV</td>
+              <td style="padding:14px 12px;font-weight:700;">₹513.20</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.01% | RSI 66.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹486.34</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹477.77</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹447.20</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">KPRMILL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,106.40</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.99% | RSI 45.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,054.59</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,125.65</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,080.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">JMFINANCIL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹127.68</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.22% | RSI 52.5</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹123.35</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹126.58</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹118.05</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">BANDHANBNK</td>
+              <td style="padding:14px 12px;font-weight:700;">₹187.70</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.63% | RSI 62.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹178.66</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹177.29</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹159.24</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">INDIGO</td>
+              <td style="padding:14px 12px;font-weight:700;">₹4,940.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.21% | RSI 45.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹4,785.23</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹4,979.74</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹4,701.50</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ONESOURCE</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,602.60</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.41% | RSI 56.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,519.84</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,579.62</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,504.10</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">COROMANDEL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,963.90</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.01% | RSI 50.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,903.77</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,955.76</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,890.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">HEROMOTOCO</td>
+              <td style="padding:14px 12px;font-weight:700;">₹5,360.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.09% | RSI 49.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹5,210.54</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹5,355.29</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹5,166.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">SBICARD</td>
+              <td style="padding:14px 12px;font-weight:700;">₹611.20</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.35% | RSI 38.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹586.20</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹638.61</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹606.70</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">KFINTECH</td>
+              <td style="padding:14px 12px;font-weight:700;">₹888.80</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.59% | RSI 41.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹858.03</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹910.98</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹872.50</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ADANIENT</td>
+              <td style="padding:14px 12px;font-weight:700;">₹2,916.50</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.26% | RSI 43.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹2,804.68</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹2,977.67</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹2,830.50</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">EICHERMOT</td>
+              <td style="padding:14px 12px;font-weight:700;">₹7,360.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.05% | RSI 31.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹7,211.71</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹7,579.56</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹7,305.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">AIIL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹559.60</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.68% | RSI 55.5</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹530.56</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹544.46</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹503.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">SBFC</td>
+              <td style="padding:14px 12px;font-weight:700;">₹88.86</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.52% | RSI 31.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹85.35</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹93.72</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹88.10</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ASHOKLEY</td>
+              <td style="padding:14px 12px;font-weight:700;">₹159.08</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.97% | RSI 40.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹153.44</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹163.64</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹154.75</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">NTPCGREEN</td>
+              <td style="padding:14px 12px;font-weight:700;">₹93.47</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.85% | RSI 61.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹90.59</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹90.75</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹85.16</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">AJANTPHARM</td>
+              <td style="padding:14px 12px;font-weight:700;">₹3,547.80</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.33% | RSI 51.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹3,438.75</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹3,537.32</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹3,425.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">KIRLOSENG</td>
+              <td style="padding:14px 12px;font-weight:700;">₹2,137.20</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.45% | RSI 48.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,995.04</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹2,152.29</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,934.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">SUPREMEIND</td>
+              <td style="padding:14px 12px;font-weight:700;">₹3,550.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.27% | RSI 54.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹3,415.72</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹3,478.58</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹3,270.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">LT</td>
+              <td style="padding:14px 12px;font-weight:700;">₹3,876.20</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.94% | RSI 43.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹3,780.26</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹3,918.21</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹3,799.90</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ABBOTINDIA</td>
+              <td style="padding:14px 12px;font-weight:700;">₹26,955.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.44% | RSI 56.1</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹26,100.54</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹26,512.93</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹25,135.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TMCV</td>
+              <td style="padding:14px 12px;font-weight:700;">₹441.50</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.37% | RSI 47.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹422.51</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹445.06</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹416.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ZFCVINDIA</td>
+              <td style="padding:14px 12px;font-weight:700;">₹2,354.20</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.36% | RSI 32.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹2,266.34</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹2,450.89</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹2,312.90</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">MPHASIS</td>
+              <td style="padding:14px 12px;font-weight:700;">₹2,234.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.33% | RSI 34.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹2,152.61</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹2,323.24</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹2,203.60</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">NH</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,861.40</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.51% | RSI 45.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,794.07</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,887.54</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,811.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">CENTRALBK</td>
+              <td style="padding:14px 12px;font-weight:700;">₹31.18</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.61% | RSI 52.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹30.37</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹31.04</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹29.89</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">MANKIND</td>
+              <td style="padding:14px 12px;font-weight:700;">₹2,474.90</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.48% | RSI 61.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹2,393.54</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹2,383.05</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹2,222.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">COALINDIA</td>
+              <td style="padding:14px 12px;font-weight:700;">₹426.10</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.20% | RSI 56.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹414.39</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹419.62</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹397.50</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">NUVOCO</td>
+              <td style="padding:14px 12px;font-weight:700;">₹335.45</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.14% | RSI 52.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹320.85</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹331.86</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹307.95</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">GRASIM</td>
+              <td style="padding:14px 12px;font-weight:700;">₹3,191.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.16% | RSI 45.5</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹3,117.18</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹3,221.82</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹3,125.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">BLUESTARCO</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,565.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.47% | RSI 55.5</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,490.45</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,525.43</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,432.30</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TATAPOWER</td>
+              <td style="padding:14px 12px;font-weight:700;">₹367.50</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.40% | RSI 49.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹357.01</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹366.93</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹347.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">COHANCE</td>
+              <td style="padding:14px 12px;font-weight:700;">₹459.25</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.84% | RSI 55.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹434.35</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹449.39</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹416.20</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">MINDACORP</td>
+              <td style="padding:14px 12px;font-weight:700;">₹678.85</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.04% | RSI 42.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹655.15</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹692.53</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹661.80</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TATACOMM</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,666.50</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.17% | RSI 38.1</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,596.96</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,727.07</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,650.10</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ELGIEQUIP</td>
+              <td style="padding:14px 12px;font-weight:700;">₹603.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.98% | RSI 45.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹576.28</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹612.07</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹585.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">NAM-INDIA</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,157.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.21% | RSI 47.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,114.25</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,164.42</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,106.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">BLUEDART</td>
+              <td style="padding:14px 12px;font-weight:700;">₹4,746.50</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.45% | RSI 31.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹4,633.48</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹4,877.39</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹4,712.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">3MINDIA</td>
+              <td style="padding:14px 12px;font-weight:700;">₹33,925.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.59% | RSI 51.5</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹32,487.15</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹33,693.89</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹31,500.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">BBTC</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,435.20</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.22% | RSI 45.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,372.08</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,458.83</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,393.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">HDFCLIFE</td>
+              <td style="padding:14px 12px;font-weight:700;">₹531.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.12% | RSI 45.5</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹504.54</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹540.98</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹508.70</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">YESBANK</td>
+              <td style="padding:14px 12px;font-weight:700;">₹22.50</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.04% | RSI 45.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹21.68</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹22.84</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹21.82</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">CGPOWER</td>
+              <td style="padding:14px 12px;font-weight:700;">₹886.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.19% | RSI 48.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹848.65</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹890.79</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹838.55</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">USHAMART</td>
+              <td style="padding:14px 12px;font-weight:700;">₹518.80</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.35% | RSI 56.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹495.64</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹508.80</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹464.15</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">DLF</td>
+              <td style="padding:14px 12px;font-weight:700;">₹683.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.66% | RSI 59.5</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹659.64</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹661.85</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹611.50</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">SUNDARMFIN</td>
+              <td style="padding:14px 12px;font-weight:700;">₹4,508.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.77% | RSI 40.1</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹4,330.86</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹4,640.57</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹4,455.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TATASTEEL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹187.97</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.68% | RSI 53.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹181.76</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹186.13</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹180.28</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">AFFLE</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,578.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.17% | RSI 47.1</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,516.69</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,589.58</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,489.20</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ACUTAAS</td>
+              <td style="padding:14px 12px;font-weight:700;">₹3,272.50</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.70% | RSI 49.1</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹3,073.48</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹3,292.27</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹3,120.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ADANIPORTS</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,788.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.85% | RSI 56.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,731.32</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,754.47</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,593.10</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">LLOYDSME</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,838.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.55% | RSI 49.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,774.20</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,834.39</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,741.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">PETRONET</td>
+              <td style="padding:14px 12px;font-weight:700;">₹286.50</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.59% | RSI 50.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹278.25</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹286.68</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹278.25</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">HINDALCO</td>
+              <td style="padding:14px 12px;font-weight:700;">₹977.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.85% | RSI 43.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹945.46</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹994.06</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹956.40</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">JINDALSTEL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,164.80</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.96% | RSI 57.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,121.73</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,139.64</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,058.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">GABRIEL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,386.70</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.87% | RSI 51.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,298.86</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,370.49</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,268.20</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">HINDCOPPER</td>
+              <td style="padding:14px 12px;font-weight:700;">₹494.65</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.22% | RSI 42.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹471.41</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹510.02</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹477.50</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">DATAPATTNS</td>
+              <td style="padding:14px 12px;font-weight:700;">₹4,418.80</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.45% | RSI 44.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹4,136.69</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹4,533.14</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹4,140.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">RHIM</td>
+              <td style="padding:14px 12px;font-weight:700;">₹386.45</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.16% | RSI 57.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹370.56</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹376.58</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹360.50</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">MARICO</td>
+              <td style="padding:14px 12px;font-weight:700;">₹819.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.97% | RSI 47.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹795.75</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹821.60</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹791.25</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">BAJAJ-AUTO</td>
+              <td style="padding:14px 12px;font-weight:700;">₹11,281.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.19% | RSI 40.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹11,032.54</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹11,543.85</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹11,201.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">DRREDDY</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,201.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.88% | RSI 58.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,167.61</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,180.14</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,130.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">BPCL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹308.50</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.39% | RSI 47.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹298.42</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹310.44</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹296.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TITAGARH</td>
+              <td style="padding:14px 12px;font-weight:700;">₹822.60</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.27% | RSI 44.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹783.76</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹837.12</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹789.45</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">UNIONBANK</td>
+              <td style="padding:14px 12px;font-weight:700;">₹180.20</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.51% | RSI 49.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹174.89</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹180.32</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹174.74</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TECHNOE</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,006.20</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.21% | RSI 53.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹959.48</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹992.84</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹936.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">NHPC</td>
+              <td style="padding:14px 12px;font-weight:700;">₹76.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.76% | RSI 47.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹74.26</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹76.26</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹74.30</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TATAINVEST</td>
+              <td style="padding:14px 12px;font-weight:700;">₹651.60</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.42% | RSI 46.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹605.12</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹665.28</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹616.10</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">LTM</td>
+              <td style="padding:14px 12px;font-weight:700;">₹4,083.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.00% | RSI 34.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹3,894.47</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹4,289.21</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹3,996.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">UNOMINDA</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,218.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.92% | RSI 47.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,169.70</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,227.26</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,159.70</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">CEMPRO</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,257.20</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.41% | RSI 46.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,190.24</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,271.21</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,196.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">PERSISTENT</td>
+              <td style="padding:14px 12px;font-weight:700;">₹5,372.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.60% | RSI 45.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹5,165.31</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹5,450.71</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹5,188.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">MAHABANK</td>
+              <td style="padding:14px 12px;font-weight:700;">₹84.88</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.63% | RSI 56.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹81.47</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹82.93</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹79.20</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">CANHLIFE</td>
+              <td style="padding:14px 12px;font-weight:700;">₹150.70</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.11% | RSI 45.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹142.16</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹152.56</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹135.68</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">BAJFINANCE</td>
+              <td style="padding:14px 12px;font-weight:700;">₹996.90</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.82% | RSI 40.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹961.63</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,031.50</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹974.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">JSWSTEEL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,277.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.02% | RSI 48.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,242.53</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,280.72</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,227.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">SAIL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹185.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.00% | RSI 54.8</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹177.44</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹181.50</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹170.50</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TITAN</td>
+              <td style="padding:14px 12px;font-weight:700;">₹4,884.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.99% | RSI 45.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹4,767.85</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹4,931.39</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹4,772.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ZYDUSWELL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹520.60</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.16% | RSI 43.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹497.05</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹534.20</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹512.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">HDFCBANK</td>
+              <td style="padding:14px 12px;font-weight:700;">₹735.60</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.30% | RSI 56.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹715.31</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹723.56</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹681.90</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">HDBFS</td>
+              <td style="padding:14px 12px;font-weight:700;">₹648.15</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.20% | RSI 35.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹627.84</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹675.24</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹647.15</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">FSL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹259.45</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.12% | RSI 44.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹246.23</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹266.41</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹246.65</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">GAIL</td>
+              <td style="padding:14px 12px;font-weight:700;">₹172.70</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.10% | RSI 48.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹169.17</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹173.19</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹168.72</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ABB</td>
+              <td style="padding:14px 12px;font-weight:700;">₹7,052.50</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.71% | RSI 37.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹6,829.06</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹7,246.07</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹6,905.50</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">INDUSTOWER</td>
+              <td style="padding:14px 12px;font-weight:700;">₹374.65</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.19% | RSI 45.7</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹362.72</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹379.32</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹368.70</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">BLUEJET</td>
+              <td style="padding:14px 12px;font-weight:700;">₹570.65</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.79% | RSI 46.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹546.68</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹576.32</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹543.75</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">SCHAEFFLER</td>
+              <td style="padding:14px 12px;font-weight:700;">₹4,007.70</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.45% | RSI 48.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹3,858.03</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹4,021.68</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹3,818.10</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">ALKEM</td>
+              <td style="padding:14px 12px;font-weight:700;">₹5,274.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.20% | RSI 47.4</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹5,091.48</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹5,299.19</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹5,051.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">BELRISE</td>
+              <td style="padding:14px 12px;font-weight:700;">₹247.92</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.01% | RSI 63.1</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹239.04</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹237.51</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹222.75</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">SIEMENS</td>
+              <td style="padding:14px 12px;font-weight:700;">₹3,877.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.72% | RSI 48.1</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹3,742.20</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹3,895.87</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹3,682.40</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">PNBHOUSING</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,094.90</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.94% | RSI 39.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,047.01</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,136.61</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,077.20</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">KIMS</td>
+              <td style="padding:14px 12px;font-weight:700;">₹780.15</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.01% | RSI 49.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹750.79</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹782.53</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹748.30</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">NATIONALUM</td>
+              <td style="padding:14px 12px;font-weight:700;">₹358.70</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.44% | RSI 44.8</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹344.06</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹363.79</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹348.10</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">UNITDSPR</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,423.80</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.80% | RSI 46.8</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,384.92</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,427.98</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,368.10</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">HINDZINC</td>
+              <td style="padding:14px 12px;font-weight:700;">₹588.95</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.13% | RSI 51.6</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹567.58</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹586.66</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹560.90</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">POLYMED</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,724.40</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.86% | RSI 50.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,667.88</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,724.01</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹1,681.70</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">NSLNISP</td>
+              <td style="padding:14px 12px;font-weight:700;">₹42.17</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.65% | RSI 44.9</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹40.10</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹43.12</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹40.23</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">BAJAJHLDNG</td>
+              <td style="padding:14px 12px;font-weight:700;">₹10,940.00</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.57% | RSI 44.8</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹10,606.57</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹11,153.06</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹10,738.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">TEJASNET</td>
+              <td style="padding:14px 12px;font-weight:700;">₹503.85</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#fef9c3;color:#854d0e;font-weight:700;font-size:12px;">⚡ A Only</span>
+              </td>
+              <td style="padding:14px 12px;">0.63% | RSI 39.2</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹473.82</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹530.29</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹495.50</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">SOLARINDS</td>
+              <td style="padding:14px 12px;font-weight:700;">₹19,745.00</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#dbeafe;color:#1e40af;font-weight:700;font-size:12px;">📐 B Only</span>
+              </td>
+              <td style="padding:14px 12px;">1.89% | RSI 47.0</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹18,605.00</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹20,067.82</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹18,480.00</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">AEGISVOPAK</td>
+              <td style="padding:14px 12px;font-weight:700;">₹287.50</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#dbeafe;color:#1e40af;font-weight:700;font-size:12px;">📐 B Only</span>
+              </td>
+              <td style="padding:14px 12px;">4.20% | RSI 47.5</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹266.81</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹294.08</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹260.70</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">EIDPARRY</td>
+              <td style="padding:14px 12px;font-weight:700;">₹704.75</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#dbeafe;color:#1e40af;font-weight:700;font-size:12px;">📐 B Only</span>
+              </td>
+              <td style="padding:14px 12px;">3.20% | RSI 35.8</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹678.65</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹728.05</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹682.75</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">JUBLPHARMA</td>
+              <td style="padding:14px 12px;font-weight:700;">₹1,071.95</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#dbeafe;color:#1e40af;font-weight:700;font-size:12px;">📐 B Only</span>
+              </td>
+              <td style="padding:14px 12px;">3.63% | RSI 70.3</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹1,018.22</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹1,010.69</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹864.70</div>
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid #e5e7eb;">
+              <td style="padding:14px 12px;font-weight:700;">PFIZER</td>
+              <td style="padding:14px 12px;font-weight:700;">₹4,000.80</td>
+              <td style="padding:14px 12px;">🔴 —</td>
+              <td style="padding:14px 12px;">🟢 Active</td>
+              <td style="padding:14px 12px;">
+                <span style="display:inline-block;padding:3px 10px;border-radius:12px;
+                  background:#dbeafe;color:#1e40af;font-weight:700;font-size:12px;">📐 B Only</span>
+              </td>
+              <td style="padding:14px 12px;">5.16% | RSI 24.1</td>
+              <td style="padding:14px 12px;">
+                <div style="font-size:12px;color:#dc2626;">ATR: ₹3,864.77</div>
+                <div style="font-size:12px;color:#d97706;">EMA20: ₹4,213.33</div>
+                <div style="font-size:12px;color:#7c3aed;">SwingLow: ₹3,955.50</div>
+              </td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Educational callouts -->
+  <div class="info-grid">
+    <div class="info-box">
+      <h3>📖 The 4 Stop-Loss Methods Explained</h3>
+      <ul>
+        <li><b>Fixed 2%</b> — Legacy reference. Often too tight for Indian equities.</li>
+        <li><b>1.5× ATR</b> — Volatility-adjusted. Recommended primary method.</li>
+        <li><b>20-EMA Line</b> — Structural trend anchor. Dynamic, moves with price.</li>
+        <li><b>Swing Low</b> — Absolute floor of the 21-session consolidation box.</li>
+      </ul>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px;">
+        Compare the Stop Method columns above. The ATR stop empirically captures more winners
+        by giving volatile Indian equities room to breathe before moving up.
+      </p>
+    </div>
+    <div class="info-box">
+      <h3>📖 MAE &amp; MFE — What They Mean</h3>
+      <ul>
+        <li><b>MAE (Max Adverse Excursion)</b> — How far a trade went against you before recovering. Use to calibrate your stop.</li>
+        <li><b>MFE (Max Favorable Excursion)</b> — The peak profit a trade reached. Use to calibrate your GTT target.</li>
+        <li><b>Profit Factor ≥ 1.75</b> — Target threshold. PF = gross wins ÷ gross losses.</li>
+        <li><b>Expectancy &gt; 0</b> — Expected return per unit risked. This is the real edge metric.</li>
+      </ul>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px;">
+        A 70% win-rate strategy can lose money (70×1% − 30×4% = −50). A 45% strategy with
+        good R:R can make money. Expectancy and Profit Factor are the only metrics that matter.
+      </p>
+    </div>
+  </div>
+
+  <!-- Architecture note -->
+  <div class="info-box" style="margin-bottom:32px;">
+    <h3>🏛 Research Architecture — 3 Strict Layers (No Cross-Contamination)</h3>
+    <ul>
+      <li><b>Layer 1 — Scanner:</b> Raw detection. EMA ≤1.5% + Vol dry-up (Strategy A). 21-session box ≥20% depth with 3+ touches (Strategy B). RSI is BUCKETED, not filtered.</li>
+      <li><b>Layer 2 — Trade Rules:</b> All 4 stop-loss methods calculated. ATR×1.5 is the primary. Fixed 2% is the comparison legacy baseline.</li>
+      <li><b>Layer 3 — Evidence:</b> This page. 36-month back-test. T+1 to T+20 distributions. MAE/MFE per signal. No look-ahead bias — signals are frozen at T=0 before future prices are revealed.</li>
+    </ul>
+  </div>
+
 </div>
 
 <footer>
