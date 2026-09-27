@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fortress Breakout Scanner - NSE</title>
+  <title>Range Breakout Box Scanner — NSE</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 min-h-screen">
 
-  <!-- SEBI Banner -->
+  <!-- Disclaimer Banner -->
   <div class="bg-yellow-50 border-b border-yellow-300 py-2 px-4 text-xs text-yellow-800 text-center">
     <i class="fas fa-exclamation-triangle mr-1"></i>
-    <strong>Educational use only.</strong> Fortress Breakout signals are for learning -- not investment advice.
+    <strong>Educational use only.</strong> Range Breakout signals are for personal study purposes only and must not be considered as investment advice by any means whatsoever.
     <a href="disclaimer.html" class="underline ml-1">Full Disclaimer</a>
   </div>
 
@@ -24,327 +24,153 @@
         Financial Literacy Hub
       </a>
       <div class="hidden md:flex items-center gap-6 text-sm">
-        <a href="index.html"           class="text-gray-600 hover:text-blue-600">Home</a>
-        <a href="dashboard.html"       class="text-gray-600 hover:text-blue-600">Dashboard</a>
-        <a href="swing-dashboard.html" class="text-gray-600 hover:text-blue-600">Swing Scanner</a>
-        <a href="box-dashboard.html"   class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-0.5">Box Scanner</a>
-        <a href="discussions.html"     class="text-gray-600 hover:text-blue-600">
-          <i class="fas fa-tasks mr-1"></i>Stock Manager
-        </a>
+        <a href="index.html"                 class="text-gray-600 hover:text-blue-600 transition">Home</a>
+        <a href="dashboard.html"             class="text-gray-600 hover:text-blue-600 transition">Dashboard</a>
+        <a href="swing-dashboard.html"       class="text-gray-600 hover:text-blue-600 transition">Momentum Scanner</a>
+        <a href="convergence-dashboard.html" class="text-gray-600 hover:text-blue-600 transition">Evidence Engine</a>
+        <a href="box-dashboard.html"         class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-0.5">Box Scanner</a>
+        <a href="discussions.html"           class="text-gray-600 hover:text-blue-600 transition"><i class="fas fa-tasks mr-1"></i>Stock Manager</a>
       </div>
     </div>
   </nav>
 
   <!-- Header -->
-  <section class="bg-gradient-to-r from-slate-800 to-slate-700 text-white py-10">
+  <section class="bg-gradient-to-r from-slate-800 to-slate-600 text-white py-10">
     <div class="max-w-5xl mx-auto px-4">
       <h1 class="text-3xl font-bold mb-2">
-        <i class="fas fa-fort-awesome mr-2 text-amber-400"></i>
-        Institutional Fortress Breakout Scanner
+        <i class="fas fa-box-open mr-2 text-amber-400"></i>
+        Range Breakout Box Scanner
       </h1>
       <p class="text-slate-300 text-sm max-w-2xl mb-4">
-        Scans the NSE universe using all 4 BRD quantitative filters simultaneously.
-        Replaces wide box-low stops with tight 2% institutional invalidation anchors.
-        EMA-200 trend filter + 20% box + breakout confirmation.
+        Scans the NSE universe every trading day after market close.
+        Finds stocks with a 20%+ consolidation box that just broke out with high volume,
+        sitting above their EMA-200 uptrend with Risk:Reward ≥ 1.5.
       </p>
       <div class="flex flex-wrap gap-5 text-sm text-slate-300">
-        <span><i class="fas fa-clock mr-1"></i>Scan: <strong class="text-white">27 Sep 2026, 02:18 PM IST</strong></span>
-        <span><i class="fas fa-eye mr-1"></i>Scanned: <strong class="text-white">498</strong></span>
-        <span><i class="fas fa-fire mr-1 text-amber-400"></i>Setups: <strong class="text-amber-300">2</strong></span>
-        <span class="text-xs text-slate-400">
-          Filters: DP% 1.5-8.0% | EMA compressed 5d+ | Vol &gt;= 1.2x | RSI 35-65 | EMA-200 trend | Box &gt;= 8.0%
-        </span>
+        <span><i class="fas fa-clock mr-1"></i>Runs automatically every trading day at <strong class="text-white">4:45 PM IST</strong></span>
+        <span><i class="fas fa-database mr-1"></i>Scans <strong class="text-white">Nifty 500</strong> universe</span>
+        <span><i class="fas fa-trophy mr-1 text-amber-400"></i>Returns <strong class="text-amber-300">Top 5</strong> by RSI strength</span>
       </div>
     </div>
   </section>
 
-  <!-- BRD Filter Legend -->
+  <!-- Strategy cards -->
   <section class="max-w-5xl mx-auto px-4 py-4">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 grid md:grid-cols-4 gap-3 text-xs text-center">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 grid md:grid-cols-5 gap-3 text-xs text-center">
       <div class="p-3 bg-blue-50 rounded-lg">
-        <p class="text-lg mb-1">BRD 2.1</p>
-        <p class="font-bold text-gray-700">Price Momentum</p>
-        <p class="text-gray-500">+1.5% to +8.0% daily change. Blocks FOMO spikes (&gt;8.0%) and dead candles (&lt;1.5%).</p>
-      </div>
-      <div class="p-3 bg-indigo-50 rounded-lg">
-        <p class="text-lg mb-1">BRD 2.2</p>
-        <p class="font-bold text-gray-700">EMA Compression</p>
-        <p class="text-gray-500">EMA(20/50) spread &lt;= 2.5% for 5+ consecutive sessions. The coiled spring.</p>
-      </div>
-      <div class="p-3 bg-green-50 rounded-lg">
-        <p class="text-lg mb-1">BRD 2.3</p>
-        <p class="font-bold text-gray-700">Institutional Volume</p>
-        <p class="text-gray-500">Volume &gt;= 1.2x SMA(20). Confirms programmatic desk participation.</p>
+        <p class="text-2xl mb-1">📈</p>
+        <p class="font-bold text-gray-700">EMA-200</p>
+        <p class="text-gray-500">Close above 200-day MA — bull structure only</p>
       </div>
       <div class="p-3 bg-amber-50 rounded-lg">
-        <p class="text-lg mb-1">BRD 2.4</p>
-        <p class="font-bold text-gray-700">RSI Shield</p>
-        <p class="text-gray-500">RSI(14) between 35 and 65. Disqualifies overbought (&gt;75) entries.</p>
+        <p class="text-2xl mb-1">📦</p>
+        <p class="font-bold text-gray-700">Box ≥ 20%</p>
+        <p class="text-gray-500">60-day consolidation range at least 20% tall</p>
+      </div>
+      <div class="p-3 bg-green-50 rounded-lg">
+        <p class="text-2xl mb-1">🚀</p>
+        <p class="font-bold text-gray-700">Breakout</p>
+        <p class="text-gray-500">Close &gt; box high with 1.2× volume surge</p>
+      </div>
+      <div class="p-3 bg-purple-50 rounded-lg">
+        <p class="text-2xl mb-1">🎯</p>
+        <p class="font-bold text-gray-700">GTT Order</p>
+        <p class="text-gray-500">Limit order above box — auto triggers on retest</p>
+      </div>
+      <div class="p-3 bg-red-50 rounded-lg">
+        <p class="text-2xl mb-1">⚖️</p>
+        <p class="font-bold text-gray-700">R:R ≥ 1.5</p>
+        <p class="text-gray-500">Only setups with reward 1.5× the risk</p>
       </div>
     </div>
   </section>
 
-  <!-- Results -->
-  <main class="max-w-5xl mx-auto px-4 py-2 pb-12">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-lg font-bold text-gray-800">
-        <i class="fas fa-trophy mr-1 text-amber-500"></i>
-        2 Fortress Candidates
-        <span class="text-sm font-normal text-gray-500 ml-2">
-          <span class="text-green-700">0 Active Breakout</span>
-          &nbsp;·&nbsp;
-          <span class="text-amber-600">2 Near-Breakout</span>
-        </span>
-      </h2>
-      <span class="text-xs text-gray-400">EMA compressed 5d+ | RSI 35-65 | EMA-200 trend | Box 8.0%+</span>
+  <!-- Awaiting first scan -->
+  <main class="max-w-5xl mx-auto px-4 py-4 pb-12">
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+      <div class="text-5xl mb-4">⏳</div>
+      <h2 class="text-xl font-bold text-gray-800 mb-2">Awaiting First Automated Scan</h2>
+      <p class="text-gray-500 text-sm max-w-lg mx-auto mb-6">
+        The scanner runs automatically every Monday–Friday at <strong>4:45 PM IST</strong> after NSE market close.
+        It downloads 1 year of daily data for the Nifty 500 universe (500 stocks), applies the Box Theory rules,
+        and updates this page with the top 5 high-probability breakout candidates.
+      </p>
+      <div class="mt-4 text-xs text-gray-400 bg-gray-50 rounded-lg p-4 max-w-md mx-auto text-left space-y-1">
+        <p>📊 Scans: Nifty 500 universe (~500 tickers)</p>
+        <p>⏱ Runtime: ~8–12 minutes (1 batch download)</p>
+        <p>🔁 Schedule: Mon–Fri 4:45 PM IST</p>
+        <p>🖥 Manual trigger: Actions → Daily Range Breakout Box Scanner → Run workflow</p>
+      </div>
     </div>
-    
-        <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden mb-6">
 
-          <!-- Card Header -->
-          <div class="bg-gradient-to-r from-slate-800 to-slate-700 text-white px-5 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <span class="text-xl font-bold bg-amber-500 text-slate-900 px-2 py-0.5 rounded">#1</span>
-              <div>
-                <h3 class="text-lg font-bold">LGEINDIA</h3>
-                <div class="flex items-center gap-2 mt-0.5">
-                  <span class="text-xs text-slate-300 font-mono">LGEINDIA.NS</span>
-                  <span class="bg-amber-400 text-amber-900 text-xs font-bold px-2 py-0.5 rounded">NEAR-BREAKOUT</span>
-                  <span class="text-amber-300 text-xs">1.7% below box ceiling</span>
-                </div>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="text-2xl font-bold">Rs.1,725.40</p>
-              <p class="text-xs text-slate-300">
-                Box ceiling: <span class="font-semibold text-amber-300">Rs.1,755.00</span>
-              </p>
-            </div>
-          </div>
-
-          <!-- BRD §2 filter status row -->
-          <div class="px-5 py-2 bg-slate-50 border-b border-gray-100 flex flex-wrap gap-2 text-xs">
-            <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-semibold">
-              BRD §2.1 DP% 1.6% (needs 3-6% on breakout day)
-            </span>
-            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">
-              BRD §2.2 EMA compressed 17d (>= 14d)
-            </span>
-            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">
-              BRD §2.3 Vol 1.77x (>=1.5x OK)
-            </span>
-            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">
-              BRD §2.4 RSI 63.54 (40-55)
-            </span>
-          </div>
-
-          <!-- BRD §3 Trade Lifecycle Grid -->
-          <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-y divide-gray-100 border-b border-gray-100">
-            <div class="p-4 text-center">
-              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">GTT Entry</p>
-              <p class="text-lg font-bold text-blue-600">Rs.1,755.00</p>
-              <p class="text-xs text-gray-400">Box ceiling retest</p>
-            </div>
-            <div class="p-4 text-center">
-              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Stop-Loss (2%)</p>
-              <p class="text-lg font-bold text-red-600">Rs.1,665.39</p>
-              <p class="text-xs text-gray-400">Tight institutional anchor</p>
-            </div>
-            <div class="p-4 text-center">
-              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Tranche 1 (50%)</p>
-              <p class="text-lg font-bold text-green-600">Rs.2,025.20</p>
-              <p class="text-xs text-gray-400">Full box projection exit</p>
-            </div>
-            <div class="p-4 text-center">
-              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Tranche 2 (50%)</p>
-              <p class="text-lg font-bold text-amber-500">Trail EMA-20</p>
-              <p class="text-xs text-gray-400">Ref: Rs.1,665.39 today</p>
-            </div>
-          </div>
-
-          <!-- Secondary metrics -->
-          <div class="px-5 py-4 grid grid-cols-2 md:grid-cols-6 gap-4 text-sm">
-            <div>
-              <p class="text-xs text-gray-400 mb-0.5">EMA Spread</p>
-              <p class="font-semibold text-green-700">1.96%</p>
-              <p class="text-xs text-gray-400">&lt;= 1.5% (compressed)</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 mb-0.5">Compression</p>
-              <p class="font-semibold text-green-700">17 sessions</p>
-              <div class="mt-1 h-1.5 bg-gray-100 rounded-full">
-                <div class="h-full bg-indigo-400 rounded-full" style="width:56%"></div>
-              </div>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 mb-0.5">Box Height</p>
-              <p class="font-semibold text-gray-800">18.2%</p>
-              <p class="text-xs text-gray-400">&gt;= 20% required</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 mb-0.5">Volume Surge</p>
-              <p class="font-semibold text-green-700">1.77x</p>
-              <p class="text-xs text-gray-400">&gt;= 1.50x required</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 mb-0.5">RSI (14)</p>
-              <p class="font-semibold text-green-700">63.54</p>
-              <p class="text-xs text-gray-400">Zone: 40-55</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 mb-0.5">R:R Ratio</p>
-              <p class="text-green-700 font-bold">1:3.02</p>
-              <p class="text-xs text-gray-400">vs Tranche 1</p>
-            </div>
-          </div>
-
-          <!-- SL detail row -->
-          <div class="px-5 pb-3 text-xs text-gray-400 border-t border-gray-50">
-            <span class="font-semibold text-gray-600">Stop-Loss Logic (BRD §3.2):</span>
-            2% below entry = Rs.1,719.90 |
-            EMA-20 = Rs.1,665.39 |
-            <span class="text-red-600 font-semibold">Active SL = Rs.1,665.39 (lower of the two)</span>
-          </div>
-
-        </div>
-        <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden mb-6">
-
-          <!-- Card Header -->
-          <div class="bg-gradient-to-r from-slate-800 to-slate-700 text-white px-5 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <span class="text-xl font-bold bg-amber-500 text-slate-900 px-2 py-0.5 rounded">#2</span>
-              <div>
-                <h3 class="text-lg font-bold">DLF</h3>
-                <div class="flex items-center gap-2 mt-0.5">
-                  <span class="text-xs text-slate-300 font-mono">DLF.NS</span>
-                  <span class="bg-amber-400 text-amber-900 text-xs font-bold px-2 py-0.5 rounded">NEAR-BREAKOUT</span>
-                  <span class="text-amber-300 text-xs">1.3% below box ceiling</span>
-                </div>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="text-2xl font-bold">Rs.683.00</p>
-              <p class="text-xs text-slate-300">
-                Box ceiling: <span class="font-semibold text-amber-300">Rs.692.00</span>
-              </p>
-            </div>
-          </div>
-
-          <!-- BRD §2 filter status row -->
-          <div class="px-5 py-2 bg-slate-50 border-b border-gray-100 flex flex-wrap gap-2 text-xs">
-            <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-semibold">
-              BRD §2.1 DP% 1.9% (needs 3-6% on breakout day)
-            </span>
-            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">
-              BRD §2.2 EMA compressed 37d (>= 14d)
-            </span>
-            <span class="bg-orange-100 text-orange-800 px-2 py-0.5 rounded font-semibold">
-              BRD §2.3 Vol 0.97x (building up)
-            </span>
-            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold">
-              BRD §2.4 RSI 59.48 (40-55)
-            </span>
-          </div>
-
-          <!-- BRD §3 Trade Lifecycle Grid -->
-          <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-y divide-gray-100 border-b border-gray-100">
-            <div class="p-4 text-center">
-              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">GTT Entry</p>
-              <p class="text-lg font-bold text-blue-600">Rs.692.00</p>
-              <p class="text-xs text-gray-400">Box ceiling retest</p>
-            </div>
-            <div class="p-4 text-center">
-              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Stop-Loss (2%)</p>
-              <p class="text-lg font-bold text-red-600">Rs.661.85</p>
-              <p class="text-xs text-gray-400">Tight institutional anchor</p>
-            </div>
-            <div class="p-4 text-center">
-              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Tranche 1 (50%)</p>
-              <p class="text-lg font-bold text-green-600">Rs.772.50</p>
-              <p class="text-xs text-gray-400">Full box projection exit</p>
-            </div>
-            <div class="p-4 text-center">
-              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Tranche 2 (50%)</p>
-              <p class="text-lg font-bold text-amber-500">Trail EMA-20</p>
-              <p class="text-xs text-gray-400">Ref: Rs.661.85 today</p>
-            </div>
-          </div>
-
-          <!-- Secondary metrics -->
-          <div class="px-5 py-4 grid grid-cols-2 md:grid-cols-6 gap-4 text-sm">
-            <div>
-              <p class="text-xs text-gray-400 mb-0.5">EMA Spread</p>
-              <p class="font-semibold text-green-700">0.66%</p>
-              <p class="text-xs text-gray-400">&lt;= 1.5% (compressed)</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 mb-0.5">Compression</p>
-              <p class="font-semibold text-green-700">37 sessions</p>
-              <div class="mt-1 h-1.5 bg-gray-100 rounded-full">
-                <div class="h-full bg-indigo-400 rounded-full" style="width:100%"></div>
-              </div>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 mb-0.5">Box Height</p>
-              <p class="font-semibold text-gray-800">13.2%</p>
-              <p class="text-xs text-gray-400">&gt;= 20% required</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 mb-0.5">Volume Surge</p>
-              <p class="font-semibold text-green-700">0.97x</p>
-              <p class="text-xs text-gray-400">&gt;= 1.50x required</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 mb-0.5">RSI (14)</p>
-              <p class="font-semibold text-green-700">59.48</p>
-              <p class="text-xs text-gray-400">Zone: 40-55</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 mb-0.5">R:R Ratio</p>
-              <p class="text-blue-600 font-semibold">1:2.67</p>
-              <p class="text-xs text-gray-400">vs Tranche 1</p>
-            </div>
-          </div>
-
-          <!-- SL detail row -->
-          <div class="px-5 pb-3 text-xs text-gray-400 border-t border-gray-50">
-            <span class="font-semibold text-gray-600">Stop-Loss Logic (BRD §3.2):</span>
-            2% below entry = Rs.678.16 |
-            EMA-20 = Rs.661.85 |
-            <span class="text-red-600 font-semibold">Active SL = Rs.661.85 (lower of the two)</span>
-          </div>
-
-        </div>
+    <!-- Strategy table preview -->
+    <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="bg-slate-700 text-white px-5 py-3 text-sm font-semibold">
+        <i class="fas fa-table mr-2"></i>What Each Result Will Show
+      </div>
+      <table class="w-full text-xs">
+        <thead class="bg-gray-50 text-gray-500 uppercase text-xs tracking-wide border-b">
+          <tr>
+            <th class="px-4 py-2 text-left">Field</th>
+            <th class="px-4 py-2 text-left">What It Means</th>
+            <th class="px-4 py-2 text-left">How to Use It</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 text-gray-600">
+          <tr><td class="px-4 py-2 font-semibold text-blue-600">GTT Entry</td><td class="px-4 py-2">Box upper breakout level</td><td class="px-4 py-2">Place Good-Till-Triggered limit order here</td></tr>
+          <tr><td class="px-4 py-2 font-semibold text-red-500">Stop Loss</td><td class="px-4 py-2">Box low / ATR floor</td><td class="px-4 py-2">Hard exit if structure breaks down</td></tr>
+          <tr><td class="px-4 py-2 font-semibold text-amber-500">50% Target</td><td class="px-4 py-2">Half box height above entry</td><td class="px-4 py-2">Book partial profits here</td></tr>
+          <tr><td class="px-4 py-2 font-semibold text-green-600">100% Target</td><td class="px-4 py-2">Full box height above entry</td><td class="px-4 py-2">Full swing profit objective</td></tr>
+          <tr><td class="px-4 py-2 font-semibold">Box Height %</td><td class="px-4 py-2">Range of consolidation box</td><td class="px-4 py-2">Must be ≥ 20% to qualify</td></tr>
+          <tr><td class="px-4 py-2 font-semibold">Volume Surge</td><td class="px-4 py-2">Today's vol ÷ 60-day avg vol</td><td class="px-4 py-2">Must be ≥ 1.2× to confirm genuine breakout</td></tr>
+          <tr><td class="px-4 py-2 font-semibold">Risk : Reward</td><td class="px-4 py-2">Reward ÷ Risk ratio</td><td class="px-4 py-2">Only shown if ≥ 1.5 — skips false setups</td></tr>
+        </tbody>
+      </table>
+    </div>
   </main>
 
-  <!-- BRD §3 Risk Engine Explainer -->
+  <!-- How to use -->
   <section class="max-w-5xl mx-auto px-4 pb-10">
     <div class="bg-slate-800 text-white rounded-xl p-6 text-sm">
-      <h3 class="font-bold text-amber-400 mb-4 text-base">
-        <i class="fas fa-shield-alt mr-2"></i>BRD §3 Fortress Risk Engine
-      </h3>
+      <h3 class="font-bold text-amber-400 mb-4 text-base"><i class="fas fa-graduation-cap mr-2"></i>How to Execute This Strategy</h3>
       <div class="grid md:grid-cols-3 gap-5 text-slate-300">
         <div>
-          <p class="font-bold text-white mb-2">Entry (GTT Limit)</p>
-          <p>Configured exactly at the box upper resistance ceiling. Catches the retest automatically. Market-order chasing at the open is blocked by design.</p>
+          <p class="font-bold text-white mb-2">1. NSE Stock Selection</p>
+          <p>Filter for Advances → sort by Total Volume → pick 5%+ movers. These are your momentum candidates already in active uptrends.</p>
         </div>
         <div>
-          <p class="font-bold text-red-400 mb-2">Stop-Loss (Tight 2%)</p>
-          <p>Hard 2% below the breakout line -- or directly below the EMA-20, whichever is lower. Completely eliminates the traditional 20%+ wide box-low stop. Capital block preserved on false bull traps.</p>
+          <p class="font-bold text-white mb-2">2. Box Setup on Chart</p>
+          <p>Open daily chart. Draw horizontal rectangle between swing high and swing low with ≥20% range. Breakout above upper band = entry signal.</p>
         </div>
         <div>
-          <p class="font-bold text-green-400 mb-2">Exits (Symmetric Tranches)</p>
-          <p><strong class="text-white">Tranche 1 (50%):</strong> Static exit at full box-height projected upward from entry. Mathematical symmetry.<br>
-          <strong class="text-white">Tranche 2 (50%):</strong> Trails via rising EMA-20. No static target -- exits only on daily close below EMA-20.</p>
+          <p class="font-bold text-white mb-2">3. GTT Order (Stress-Free)</p>
+          <p>Place limit order just above box high after breakout candle closes. It fires automatically on retest. No intraday monitoring needed.</p>
         </div>
+        <div>
+          <p class="font-bold text-white mb-2">4. Profit Targets</p>
+          <p>50% of box height = conservative partial booking. 100% clone of the box = full swing target. Pure price symmetry — mathematically objective.</p>
+        </div>
+        <div>
+          <p class="font-bold text-white mb-2">5. Stop Loss</p>
+          <p>Hard stop at box low. Use small allocation per trade (e.g. ₹5,000) so a full loss never damages overall portfolio.</p>
+        </div>
+        <div>
+          <p class="font-bold text-white mb-2">6. Capital Allocation</p>
+          <p>Split into small pots. Deploy only a fraction per breakout. Equity only — never leverage or F&amp;O with this strategy.</p>
+        </div>
+      </div>
+      <div class="mt-5 pt-4 border-t border-slate-600 grid md:grid-cols-2 gap-4 text-xs text-slate-400">
+        <div><strong class="text-green-400">Advantages:</strong> Mathematically objective targets, stress-free GTT execution, no time decay (equity only), predefined risk per trade.</div>
+        <div><strong class="text-red-400">Risks:</strong> Capital locked 40–100+ days; wide nominal drawdowns before the move fires. Only use surplus funds you can afford to hold.</div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="bg-gray-800 text-gray-400 text-center py-6 text-xs">
-    <p>&copy; 2026 Financial Literacy Platform -- Educational only, not SEBI investment advice.</p>
-    <p class="mt-1"><a href="disclaimer.html" class="underline">Full Disclaimer</a></p>
+    <p>© 2026 Financial Literacy Platform — Personal study tool. Solely owned &amp; independently operated.</p>
+    <p class="mt-1">For educational purposes only. Not investment advice by any means. <a href="disclaimer.html" class="underline">Disclaimer</a></p>
   </footer>
 
 </body>
