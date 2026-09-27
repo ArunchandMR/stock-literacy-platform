@@ -1,148 +1,37 @@
-name: 📈 Add New Stock
-description: Add a new stock to the tracking dashboard
-title: "[STOCK] Add: "
-labels: ["stock-entry", "pending-review"]
+name: ➕ Add Stock to Watchlist
+description: Just enter the company name and your buy price. Everything else is calculated automatically.
+title: "[ADD] "
+labels: ["pending-review"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## Add a New Stock to Dashboard
-        Fill in the details below to add a new stock to the tracking system.
-        
+        ### 📈 Add a Stock — 2 Fields Required
+        Enter the company name and your purchase price. The robot will look up the NSE ticker, sector, current price, ATR-based stop-loss, and unrealised P&L automatically.
+
   - type: input
-    id: ticker
+    id: stock_name
     attributes:
-      label: Stock Ticker Symbol
-      description: Enter the stock ticker (e.g., RELIANCE.NS for NSE, RELIANCE.BO for BSE)
-      placeholder: "RELIANCE.NS"
+      label: 🏢 Company Name
+      description: Type the company name as you know it (e.g., Reliance, HDFC Bank, Infosys, Coal India).
+      placeholder: "e.g., Reliance Industries  or  HDFC Bank  or  Infosys"
     validations:
       required: true
-      
-  - type: input
-    id: name
-    attributes:
-      label: Company Name
-      description: Full name of the company
-      placeholder: "Reliance Industries Limited"
-    validations:
-      required: true
-      
-  - type: dropdown
-    id: sector
-    attributes:
-      label: Sector
-      description: Select the sector
-      options:
-        - Auto
-        - Banking
-        - Cement
-        - Conglomerate
-        - Consumer
-        - Energy
-        - Finance
-        - FMCG
-        - IT
-        - Mining
-        - Pharma
-        - Power
-        - Telecom
-        - Infrastructure
-        - Metals
-        - Realty
-        - Other
-    validations:
-      required: true
-      
-  - type: dropdown
-    id: strategy
-    attributes:
-      label: Investment Strategy
-      description: Is this a swing trade or long-term investment?
-      options:
-        - swing
-        - long-term
-    validations:
-      required: true
-      
-  - type: input
-    id: entry_date
-    attributes:
-      label: Entry Date
-      description: Date of entry (YYYY-MM-DD format)
-      placeholder: "2026-06-24"
-    validations:
-      required: true
-      
-  - type: input
-    id: entry_time
-    attributes:
-      label: Entry Time
-      description: Time of entry (HH:MM:SS format, 24-hour)
-      placeholder: "10:15:00"
-    validations:
-      required: true
-      
+
   - type: input
     id: entry_price
     attributes:
-      label: Entry Price (₹)
-      description: Price at which you're recommending entry
-      placeholder: "2450.00"
+      label: 💰 Your Purchase Price (₹)
+      description: The price per share at which you bought this stock.
+      placeholder: "e.g., 2450.00"
     validations:
       required: true
-      
-  - type: input
-    id: target_min
-    attributes:
-      label: Target Exit Price - Minimum (₹)
-      description: Minimum target price
-      placeholder: "2700.00"
-    validations:
-      required: true
-      
-  - type: input
-    id: target_max
-    attributes:
-      label: Target Exit Price - Maximum (₹)
-      description: Maximum target price
-      placeholder: "2900.00"
-    validations:
-      required: true
-      
-  - type: input
-    id: stop_loss
-    attributes:
-      label: Stop Loss (₹)
-      description: Stop loss price
-      placeholder: "2300.00"
-    validations:
-      required: true
-      
-  - type: input
-    id: discussion_url
-    attributes:
-      label: Discussion URL (Optional)
-      description: Link to GitHub Discussion with detailed analysis
-      placeholder: "https://github.com/ArunchandMR/stock-literacy-platform/discussions/1"
-    validations:
-      required: false
-      
-  - type: textarea
-    id: notes
-    attributes:
-      label: Trading Notes / Rationale
-      description: Why are you entering this trade? Technical setup? Fundamental reasons?
-      placeholder: "Breakout above resistance with strong volume. RSI showing bullish divergence."
-    validations:
-      required: false
-      
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: Confirmation
-      description: Please confirm you understand this is for educational purposes only
-      options:
-        - label: I understand this is for educational purposes and not investment advice
-          required: true
 
-# Made with Bob
+  - type: input
+    id: entry_date
+    attributes:
+      label: 📅 Date of Purchase (optional)
+      description: When did you buy it? Leave blank to use today's date. Format YYYY-MM-DD.
+      placeholder: "e.g., 2025-03-15  (leave blank for today)"
+    validations:
+      required: false
