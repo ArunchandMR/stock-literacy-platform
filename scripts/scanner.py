@@ -1256,7 +1256,26 @@ def main() -> int:
         json.dump(out, f, indent=2)
     print(f"\n✅ {SCANNER_JSON}")
 
-    # ── 8. Save HTML ───────────────────────────────────────────────────────────
+    # ── 8. Write currentPrice back into stocks.json for live P&L in Stock Manager ──
+    try:
+        price_lookup = {r["ticker"]: r.get("currentPrice") for r in results if r.get("currentPrice")}
+        if price_lookup and STOCKS_JSON.exists():
+            with open(STOCKS_JSON, "r", encoding="utf-8") as f:
+                sdata = json.load(f)
+            updated = False
+            for s in sdata.get("stocks", []):
+                t = s.get("ticker", "")
+                if t in price_lookup and price_lookup[t] is not None:
+                    s["currentPrice"] = round(float(price_lookup[t]), 2)
+                    updated = True
+            if updated:
+                with open(STOCKS_JSON, "w", encoding="utf-8") as f:
+                    json.dump(sdata, f, indent=2, ensure_ascii=False)
+                print(f"✅ currentPrice written back to stocks.json for {sum(1 for s in sdata['stocks'] if 'currentPrice' in s)} holdings")
+    except Exception as e:
+        print(f"⚠ currentPrice write-back failed: {e}")
+
+    # ── 9. Save HTML ───────────────────────────────────────────────────────────
     with open(DASHBOARD_HTML, "w", encoding="utf-8") as f:
         f.write(build_html(results, run_time, regime_info))
     print(f"✅ {DASHBOARD_HTML}")
