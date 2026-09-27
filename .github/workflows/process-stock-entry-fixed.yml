@@ -1,0 +1,242 @@
+name: Process Stock Add Request
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  add-stock:
+    # Triggers only when admin applies the 'approved' label
+    if: github.event.label.name == 'approved'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install yfinance pandas numpy
+
+      - name: Parse issue and add stock
+        id: parse
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE:  ${{ github.event.issue.title }}
+          ISSUE_BODY:   ${{ github.event.issue.body }}
+        run: |
+          python3 << 'PYTHON_EOF'
+          import json, os, re
+          from datetime import datetime, timezone
+
+          issue_number = os.environ['ISSUE_NUMBER']
+          issue_title  = os.environ['ISSUE_TITLE']
+          issue_body   = os.environ['ISSUE_BODY']
+
+          print(f"Processing add request: issue #{issue_number}")
+
+          # ── Parse the 3 user-supplied fields ──────────────────────────────
+          def extract(body, label):
+              """Extract value after a markdown label line."""
+              # Handles GitHub issue form output: ### Label\n\nvalue
+              pattern = rf'###[^\S\r\n]*{re.escape(label)}[^\S\r\n]*\n+([^\n#]+)'
+              m = re.search(pattern, body, re.IGNORECASE)
+              if m:
+                  v = m.group(1).strip()
+                  return v if v and v != '_No response_' else None
+              return None
+
+          ticker      = extract(issue_body, '🔤 Stock Ticker Symbol')
+          entry_price = extract(issue_body, '💰 Your Entry Price (₹)')
+          target_price= extract(issue_body, '🎯 Your Target Price (₹)')
+
+          # Fallback: scan raw lines for obvious values
+          if not ticker:
+              for line in issue_body.splitlines():
+                  m = re.search(r'\b([A-Z]{2,}(?:[\-][A-Z]+)?\.(?:NS|BO))\b', line.upper())
+                  if m:
+                      ticker = m.group(1)
+                      break
+
+          def clean_price(val):
+              if val is None:
+                  return None
+              return float(re.sub(r'[^\d.]', '', val))
+
+          ticker       = ticker.strip().upper() if ticker else None
+          entry_price  = clean_price(entry_price)
+          target_price = clean_price(target_price)
+
+          if not ticker or entry_price is None or target_price is None:
+              print(f"ERROR: Could not parse required fields.")
+              print(f"  ticker={ticker}  entry={entry_price}  target={target_price}")
+              exit(1)
+
+          print(f"  Ticker: {ticker}")
+          print(f"  Entry:  ₹{entry_price}")
+          print(f"  Target: ₹{target_price}")
+
+          # ── Auto-fill via yfinance ─────────────────────────────────────────
+          import yfinance as yf
+          import numpy as np
+          import pandas as pd
+
+          name   = ticker.replace('.NS','').replace('.BO','')
+          sector = 'NSE'
+          strategy = 'swing'
+          atr_stop = round(entry_price * 0.95, 2)   # 5% fallback stop
+
+          try:
+              info = yf.Ticker(ticker).info
+              name   = info.get('longName') or info.get('shortName') or name
+              sector = info.get('sector') or info.get('industry') or sector
+              print(f"  Name:   {name}")
+              print(f"  Sector: {sector}")
+          except Exception as e:
+              print(f"  yfinance info failed: {e} — using defaults")
+
+          # Auto-calculate ATR-based stop-loss
+          try:
+              hist = yf.download(ticker, period='3mo', auto_adjust=False, progress=False)
+              if not hist.empty and len(hist) >= 14:
+                  # Flatten MultiIndex if present
+                  if isinstance(hist.columns, pd.MultiIndex):
+                      hist.columns = [f"{f}_{t}" for f, t in hist.columns]
+                  def col(field):
+                      for c in [field, f'{field}_{ticker}', f'Adj {field}']:
+                          if c in hist.columns: return c
+                      return None
+                  hc = col('High'); lc = col('Low'); cc = col('Close')
+                  if hc and lc and cc:
+                      h = hist[hc]; l = hist[lc]; c = hist[cc].shift(1)
+                      tr = pd.concat([h-l, (h-c).abs(), (l-c).abs()], axis=1).max(axis=1)
+                      atr = float(tr.rolling(14).mean().iloc[-1])
+                      if not np.isnan(atr):
+                          atr_stop = round(entry_price - 1.5 * atr, 2)
+                          print(f"  ATR(14): ₹{atr:.2f}  →  ATR Stop: ₹{atr_stop}")
+
+              # Strategy: if EMA spread is tight → swing, else long-term
+              if cc and len(hist) >= 50:
+                  close = hist[cc].squeeze().dropna()
+                  ema20 = float(close.ewm(span=20, adjust=False).mean().iloc[-1])
+                  ema50 = float(close.ewm(span=50, adjust=False).mean().iloc[-1])
+                  spread = abs(ema20 - ema50) / ema50 * 100
+                  strategy = 'swing' if spread <= 3.0 else 'long-term'
+                  print(f"  EMA spread: {spread:.2f}%  →  Strategy: {strategy}")
+          except Exception as e:
+              print(f"  ATR/strategy calc failed: {e} — using fallback stop ₹{atr_stop}")
+
+          entry_date = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+          entry_time = datetime.now(timezone.utc).strftime('%H:%M')
+
+          # ── Build stock object ────────────────────────────────────────────
+          stock_id  = ticker.replace('.NS','').replace('.BO','') + '001'
+          new_stock = {
+              "id":           stock_id,
+              "ticker":       ticker,
+              "name":         name,
+              "sector":       sector,
+              "strategy":     strategy,
+              "entryDate":    entry_date,
+              "entryTime":    entry_time,
+              "entryPrice":   entry_price,
+              "targetExitMin":round(target_price * 0.97, 2),
+              "targetExitMax":target_price,
+              "stopLoss":     atr_stop,
+              "discussionUrl":f"https://github.com/{os.environ.get('GITHUB_REPOSITORY','')}/issues/{issue_number}",
+              "notes":        f"Added via Issue #{issue_number}. Stop-loss auto-calculated at 1.5×ATR."
+          }
+
+          # ── Load and update stocks.json ───────────────────────────────────
+          stocks_file = 'data/stocks.json'
+          try:
+              with open(stocks_file, 'r', encoding='utf-8') as f:
+                  data = json.load(f)
+          except FileNotFoundError:
+              data = {"stocks": []}
+
+          existing = [s['ticker'].upper() for s in data.get('stocks', [])]
+          if ticker.upper() in existing:
+              for i, s in enumerate(data['stocks']):
+                  if s['ticker'].upper() == ticker.upper():
+                      data['stocks'][i] = new_stock
+                      print(f"  Updated existing entry for {ticker}")
+                      break
+          else:
+              data['stocks'].append(new_stock)
+              print(f"  ✅ Added {ticker} to stocks.json")
+
+          with open(stocks_file, 'w', encoding='utf-8') as f:
+              json.dump(data, f, indent=2, ensure_ascii=False)
+
+          # ── Write outputs for later steps ─────────────────────────────────
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"ticker={ticker}\n")
+              f.write(f"name={name}\n")
+              f.write(f"strategy={strategy}\n")
+              f.write(f"atr_stop={atr_stop}\n")
+              f.write(f"entry_price={entry_price}\n")
+              f.write(f"target_price={target_price}\n")
+
+          PYTHON_EOF
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/stocks.json
+          git diff --staged --quiet || git commit -m "Add stock: ${{ steps.parse.outputs.ticker }} (${{ steps.parse.outputs.name }}) via Issue #${{ github.event.issue.number }}"
+          git push
+
+      - name: Comment on issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ **Stock Added Successfully!**
+
+**${{ steps.parse.outputs.ticker }}** — ${{ steps.parse.outputs.name }} has been added to the dashboard.
+
+| Field | Value |
+|---|---|
+| Entry Price | ₹${{ steps.parse.outputs.entry_price }} |
+| Target Price | ₹${{ steps.parse.outputs.target_price }} |
+| ATR Stop-Loss | ₹${{ steps.parse.outputs.atr_stop }} *(auto-calculated at 1.5× ATR — more protective than a fixed 2%)* |
+| Strategy | ${{ steps.parse.outputs.strategy }} *(auto-detected from EMA compression)* |
+
+The scanner will include this stock in tonight's automated run (4:15 PM IST).
+
+[View Dashboard →](https://${context.repo.owner}.github.io/${context.repo.repo}/dashboard.html)`
+            });
+
+      - name: Add completed label and close issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.issues.addLabels({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: ['completed']
+              });
+            } catch(e) { /* label may not exist yet */ }
+            await github.rest.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed'
+            });
