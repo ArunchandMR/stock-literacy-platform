@@ -1151,7 +1151,7 @@ def build_html(results: list[dict], run_time: str, regime_info: dict) -> str:
   </section>
 
   <footer class="bg-gray-800 text-gray-400 text-center py-6 text-xs">
-    <p>© 2026 Financial Literacy Platform — Educational research only, not SEBI registered advice.</p>
+    <p>© 2026 Financial Literacy Platform — Personal study tool. Solely owned &amp; independently operated. For educational purposes only. Not investment advice by any means.</p>
   </footer>
 </body>
 </html>"""

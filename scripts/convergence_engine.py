@@ -829,7 +829,7 @@ def build_html(data: dict) -> str:
 </div>
 
 <footer>
-  <p>© 2026 Financial Literacy Platform — Educational research only. Not SEBI registered investment advice.</p>
+  <p>© 2026 Financial Literacy Platform — Personal study tool. Solely owned &amp; independently operated. For educational purposes only. Not investment advice by any means.</p>
 </footer>
 </body>
 </html>"""
