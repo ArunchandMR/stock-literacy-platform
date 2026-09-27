@@ -190,10 +190,16 @@ def get_market_regime() -> dict:
         raw = yf.download(REGIME_TICKER, period="2y", progress=False, auto_adjust=True)
         if raw.empty or len(raw) < 200:
             return result
+        # .squeeze() converts a single-column DataFrame → Series before float()
+        # .item() extracts the Python scalar safely regardless of yfinance version
         close = raw["Close"] if "Close" in raw.columns else raw.iloc[:, 0]
-        close = close.dropna()
-        sma200 = float(close.rolling(200).mean().iloc[-1])
-        price  = float(close.iloc[-1])
+        close = close.squeeze().dropna()
+        sma200 = float(close.rolling(200).mean().iloc[-1].item()
+                       if hasattr(close.rolling(200).mean().iloc[-1], "item")
+                       else close.rolling(200).mean().iloc[-1])
+        price  = float(close.iloc[-1].item()
+                       if hasattr(close.iloc[-1], "item")
+                       else close.iloc[-1])
         result["regime"]      = "positive" if price > sma200 else "weak"
         result["nifty_price"] = round(price, 2)
         result["nifty_sma200"]= round(sma200, 2)
@@ -1008,7 +1014,7 @@ def build_html(results: list[dict], run_time: str, regime_info: dict) -> str:
       <div class="hidden md:flex items-center gap-6 text-sm">
         <a href="index.html"                    class="text-gray-600 hover:text-blue-600">Home</a>
         <a href="dashboard.html"                class="text-gray-600 hover:text-blue-600">Dashboard</a>
-        <a href="swing-dashboard.html"          class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-0.5">Convergence Scanner</a>
+        <a href="swing-dashboard.html"          class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-0.5">Momentum Scanner</a>
         <a href="convergence-dashboard.html"    class="text-gray-600 hover:text-blue-600">Evidence Engine</a>
         <a href="box-dashboard.html"            class="text-gray-600 hover:text-blue-600">Box Scanner</a>
         <a href="discussions.html"              class="text-gray-600 hover:text-blue-600"><i class="fas fa-tasks mr-1"></i>Stock Manager</a>
