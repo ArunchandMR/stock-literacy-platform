@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-09-27T07:54:02.126314Z",
-  "runTimeIST": "27 Sep 2026, 01:22 PM IST",
+  "lastUpdated": "2026-09-27T17:26:48.083538Z",
+  "runTimeIST": "27 Sep 2026, 10:55 PM IST",
   "totalScanned": 501,
   "marketRegime": {
     "regime": "weak",
@@ -2635,9 +2635,9 @@
     },
     {
       "ticker": "HDFCBANK.NS",
-      "name": "HDFCBANK",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "HDFC Bank",
+      "sector": "Banking",
+      "isSeed": true,
       "status": "ok",
       "alert": "Strategy A: EMA compressed (1.30%) + Vol dry-up (0.65x). RSI 56.33 [RSI 55\u201360]",
       "alertLevel": "setup",
@@ -8306,200 +8306,6 @@
       "marketRegime": "weak"
     },
     {
-      "ticker": "HEROMOTOCO.NS",
-      "name": "HEROMOTOCO",
-      "sector": "NSE",
-      "isSeed": false,
-      "status": "ok",
-      "alert": "Strategy A: EMA compressed (0.09%) + Vol dry-up (0.55x). RSI 49.61 [RSI 40\u201350]",
-      "alertLevel": "setup",
-      "currentPrice": 5360.0,
-      "ema20": 5355.29,
-      "ema50": 5350.3,
-      "emaSpread": 0.093,
-      "rsi": 49.61,
-      "rsiBucket": "RSI 40\u201350",
-      "volumeRatio": 0.549,
-      "momBucket": "Move <3%",
-      "atr": 99.64,
-      "atrStopFloor": 5210.54,
-      "ema20StopFloor": 5355.29,
-      "swingLowFloor": 5166.0,
-      "isCompressed": true,
-      "isVolumeDryUp": true,
-      "stratA_active": true,
-      "stratB_active": false,
-      "box": {
-        "stratB_active": false,
-        "boxHigh": 5659.0,
-        "boxLow": 5166.0,
-        "boxDepth": 9.54,
-        "boxDuration": 0,
-        "ceilTouches": 0,
-        "floorTouches": 0,
-        "closeViolations": 0,
-        "boxNote": "Range too narrow: 9.5% < 20.0% required"
-      },
-      "cohort": "A_ONLY",
-      "cohortLabel": "\u26a1 Strategy A \u2014 Momentum Compression",
-      "framework": "A",
-      "frameworkDesc": "Framework A \u2014 Swing Breakout (5\u201315 sessions). Price above EMA-50.",
-      "backtest": {
-        "btEvents": 91,
-        "btWinRate": 42.9,
-        "btProfitFactor": 2.462,
-        "btExpectancy": 2.9211,
-        "btMaxDrawdown": 16.79,
-        "btAvgMAE": 5.231,
-        "btAvgMFE": 10.749,
-        "btAvgWin": 11.453,
-        "btAvgLoss": 3.489,
-        "btMedT5": 0.629,
-        "btMedT20": 3.71,
-        "btMeetsRR": false,
-        "btNote": "91 events (ATR stop) | 36-month window",
-        "btStopComparison": {
-          "fixed2pct": {
-            "events": 91,
-            "wins": 29,
-            "losses": 62,
-            "winRate": 31.9,
-            "avgWin": 11.607,
-            "avgLoss": 2.0,
-            "profitFactor": 2.715,
-            "expectancy": 2.3406
-          },
-          "atr1_5x": {
-            "events": 91,
-            "wins": 39,
-            "losses": 52,
-            "winRate": 42.9,
-            "avgWin": 11.453,
-            "avgLoss": 3.489,
-            "profitFactor": 2.462,
-            "expectancy": 2.9211
-          },
-          "ema20": {
-            "events": 91,
-            "wins": 8,
-            "losses": 83,
-            "winRate": 8.8,
-            "avgWin": 11.361,
-            "avgLoss": 2.257,
-            "profitFactor": 0.485,
-            "expectancy": -1.0586
-          },
-          "swingLow": {
-            "events": 91,
-            "wins": 37,
-            "losses": 54,
-            "winRate": 40.7,
-            "avgWin": 11.521,
-            "avgLoss": 2.806,
-            "profitFactor": 2.813,
-            "expectancy": 3.0251
-          }
-        },
-        "btRSIBuckets": {
-          "RSI <40": {
-            "events": 24,
-            "wins": 4,
-            "losses": 20,
-            "winRate": 16.7,
-            "avgWin": 10.996,
-            "avgLoss": 3.57,
-            "profitFactor": 0.616,
-            "expectancy": -1.1375
-          },
-          "RSI 40\u201350": {
-            "events": 37,
-            "wins": 14,
-            "losses": 23,
-            "winRate": 37.8,
-            "avgWin": 11.925,
-            "avgLoss": 3.564,
-            "profitFactor": 2.037,
-            "expectancy": 2.2908
-          },
-          "RSI 50\u201355": {
-            "events": 13,
-            "wins": 11,
-            "losses": 2,
-            "winRate": 84.6,
-            "avgWin": 11.117,
-            "avgLoss": 3.721,
-            "profitFactor": 16.43,
-            "expectancy": 8.8319
-          },
-          "RSI 55\u201360": {
-            "events": 11,
-            "wins": 7,
-            "losses": 4,
-            "winRate": 63.6,
-            "avgWin": 11.017,
-            "avgLoss": 3.362,
-            "profitFactor": 5.734,
-            "expectancy": 5.783
-          },
-          "RSI 60\u201365": {
-            "events": 2,
-            "wins": 2,
-            "losses": 0,
-            "winRate": 100.0,
-            "avgWin": 10.251,
-            "avgLoss": 0,
-            "profitFactor": null,
-            "expectancy": 10.251
-          },
-          "RSI >65": {
-            "events": 4,
-            "wins": 1,
-            "losses": 3,
-            "winRate": 25.0,
-            "avgWin": 15.821,
-            "avgLoss": 2.392,
-            "profitFactor": 2.205,
-            "expectancy": 2.1612
-          }
-        },
-        "btMomBuckets": {
-          "Move <3%": {
-            "events": 87,
-            "wins": 37,
-            "losses": 50,
-            "winRate": 42.5,
-            "avgWin": 11.509,
-            "avgLoss": 3.467,
-            "profitFactor": 2.456,
-            "expectancy": 2.8978
-          },
-          "Move 3\u20134%": {
-            "events": 4,
-            "wins": 2,
-            "losses": 2,
-            "winRate": 50.0,
-            "avgWin": 10.411,
-            "avgLoss": 4.036,
-            "profitFactor": 2.58,
-            "expectancy": 3.1875
-          }
-        },
-        "btRegimeSplit": {
-          "weak": {
-            "events": 91,
-            "wins": 39,
-            "losses": 52,
-            "winRate": 42.9,
-            "avgWin": 11.453,
-            "avgLoss": 3.489,
-            "profitFactor": 2.462,
-            "expectancy": 2.9211
-          }
-        }
-      },
-      "marketRegime": "weak"
-    },
-    {
       "ticker": "LODHA.NS",
       "name": "LODHA",
       "sector": "NSE",
@@ -8708,6 +8514,200 @@
             "avgLoss": 4.131,
             "profitFactor": 1.277,
             "expectancy": 0.7902
+          }
+        }
+      },
+      "marketRegime": "weak"
+    },
+    {
+      "ticker": "HEROMOTOCO.NS",
+      "name": "HEROMOTOCO",
+      "sector": "NSE",
+      "isSeed": false,
+      "status": "ok",
+      "alert": "Strategy A: EMA compressed (0.09%) + Vol dry-up (0.55x). RSI 49.61 [RSI 40\u201350]",
+      "alertLevel": "setup",
+      "currentPrice": 5360.0,
+      "ema20": 5355.29,
+      "ema50": 5350.3,
+      "emaSpread": 0.093,
+      "rsi": 49.61,
+      "rsiBucket": "RSI 40\u201350",
+      "volumeRatio": 0.549,
+      "momBucket": "Move <3%",
+      "atr": 99.64,
+      "atrStopFloor": 5210.54,
+      "ema20StopFloor": 5355.29,
+      "swingLowFloor": 5166.0,
+      "isCompressed": true,
+      "isVolumeDryUp": true,
+      "stratA_active": true,
+      "stratB_active": false,
+      "box": {
+        "stratB_active": false,
+        "boxHigh": 5659.0,
+        "boxLow": 5166.0,
+        "boxDepth": 9.54,
+        "boxDuration": 0,
+        "ceilTouches": 0,
+        "floorTouches": 0,
+        "closeViolations": 0,
+        "boxNote": "Range too narrow: 9.5% < 20.0% required"
+      },
+      "cohort": "A_ONLY",
+      "cohortLabel": "\u26a1 Strategy A \u2014 Momentum Compression",
+      "framework": "A",
+      "frameworkDesc": "Framework A \u2014 Swing Breakout (5\u201315 sessions). Price above EMA-50.",
+      "backtest": {
+        "btEvents": 91,
+        "btWinRate": 42.9,
+        "btProfitFactor": 2.462,
+        "btExpectancy": 2.9211,
+        "btMaxDrawdown": 16.79,
+        "btAvgMAE": 5.231,
+        "btAvgMFE": 10.749,
+        "btAvgWin": 11.453,
+        "btAvgLoss": 3.489,
+        "btMedT5": 0.629,
+        "btMedT20": 3.71,
+        "btMeetsRR": false,
+        "btNote": "91 events (ATR stop) | 36-month window",
+        "btStopComparison": {
+          "fixed2pct": {
+            "events": 91,
+            "wins": 29,
+            "losses": 62,
+            "winRate": 31.9,
+            "avgWin": 11.607,
+            "avgLoss": 2.0,
+            "profitFactor": 2.715,
+            "expectancy": 2.3406
+          },
+          "atr1_5x": {
+            "events": 91,
+            "wins": 39,
+            "losses": 52,
+            "winRate": 42.9,
+            "avgWin": 11.453,
+            "avgLoss": 3.489,
+            "profitFactor": 2.462,
+            "expectancy": 2.9211
+          },
+          "ema20": {
+            "events": 91,
+            "wins": 8,
+            "losses": 83,
+            "winRate": 8.8,
+            "avgWin": 11.361,
+            "avgLoss": 2.257,
+            "profitFactor": 0.485,
+            "expectancy": -1.0586
+          },
+          "swingLow": {
+            "events": 91,
+            "wins": 37,
+            "losses": 54,
+            "winRate": 40.7,
+            "avgWin": 11.521,
+            "avgLoss": 2.806,
+            "profitFactor": 2.813,
+            "expectancy": 3.0251
+          }
+        },
+        "btRSIBuckets": {
+          "RSI <40": {
+            "events": 24,
+            "wins": 4,
+            "losses": 20,
+            "winRate": 16.7,
+            "avgWin": 10.996,
+            "avgLoss": 3.57,
+            "profitFactor": 0.616,
+            "expectancy": -1.1375
+          },
+          "RSI 40\u201350": {
+            "events": 37,
+            "wins": 14,
+            "losses": 23,
+            "winRate": 37.8,
+            "avgWin": 11.925,
+            "avgLoss": 3.564,
+            "profitFactor": 2.037,
+            "expectancy": 2.2908
+          },
+          "RSI 50\u201355": {
+            "events": 13,
+            "wins": 11,
+            "losses": 2,
+            "winRate": 84.6,
+            "avgWin": 11.117,
+            "avgLoss": 3.721,
+            "profitFactor": 16.43,
+            "expectancy": 8.8319
+          },
+          "RSI 55\u201360": {
+            "events": 11,
+            "wins": 7,
+            "losses": 4,
+            "winRate": 63.6,
+            "avgWin": 11.017,
+            "avgLoss": 3.362,
+            "profitFactor": 5.734,
+            "expectancy": 5.783
+          },
+          "RSI 60\u201365": {
+            "events": 2,
+            "wins": 2,
+            "losses": 0,
+            "winRate": 100.0,
+            "avgWin": 10.251,
+            "avgLoss": 0,
+            "profitFactor": null,
+            "expectancy": 10.251
+          },
+          "RSI >65": {
+            "events": 4,
+            "wins": 1,
+            "losses": 3,
+            "winRate": 25.0,
+            "avgWin": 15.821,
+            "avgLoss": 2.392,
+            "profitFactor": 2.205,
+            "expectancy": 2.1612
+          }
+        },
+        "btMomBuckets": {
+          "Move <3%": {
+            "events": 87,
+            "wins": 37,
+            "losses": 50,
+            "winRate": 42.5,
+            "avgWin": 11.509,
+            "avgLoss": 3.467,
+            "profitFactor": 2.456,
+            "expectancy": 2.8978
+          },
+          "Move 3\u20134%": {
+            "events": 4,
+            "wins": 2,
+            "losses": 2,
+            "winRate": 50.0,
+            "avgWin": 10.411,
+            "avgLoss": 4.036,
+            "profitFactor": 2.58,
+            "expectancy": 3.1875
+          }
+        },
+        "btRegimeSplit": {
+          "weak": {
+            "events": 91,
+            "wins": 39,
+            "losses": 52,
+            "winRate": 42.9,
+            "avgWin": 11.453,
+            "avgLoss": 3.489,
+            "profitFactor": 2.462,
+            "expectancy": 2.9211
           }
         }
       },
@@ -15108,6 +15108,200 @@
       "marketRegime": "weak"
     },
     {
+      "ticker": "CANHLIFE.NS",
+      "name": "CANHLIFE",
+      "sector": "NSE",
+      "isSeed": false,
+      "status": "ok",
+      "alert": "Strategy A: EMA compressed (1.11%) + Vol dry-up (0.55x). RSI 45.7 [RSI 40\u201350]",
+      "alertLevel": "setup",
+      "currentPrice": 150.7,
+      "ema20": 152.56,
+      "ema50": 150.88,
+      "emaSpread": 1.113,
+      "rsi": 45.7,
+      "rsiBucket": "RSI 40\u201350",
+      "volumeRatio": 0.552,
+      "momBucket": "Move <3%",
+      "atr": 5.69,
+      "atrStopFloor": 142.16,
+      "ema20StopFloor": 152.56,
+      "swingLowFloor": 135.68,
+      "isCompressed": true,
+      "isVolumeDryUp": true,
+      "stratA_active": true,
+      "stratB_active": false,
+      "box": {
+        "stratB_active": false,
+        "boxHigh": 162.9,
+        "boxLow": 135.68,
+        "boxDepth": 20.06,
+        "boxDuration": 21,
+        "ceilTouches": 2,
+        "floorTouches": 1,
+        "closeViolations": 0,
+        "boxNote": "Box 20.1% deep | 21d | Ceil touches: 2 | Floor touches: 1 | Close violations: 0 \u2190 need 3 ceiling touches \u2190 need 3 floor touches"
+      },
+      "cohort": "A_ONLY",
+      "cohortLabel": "\u26a1 Strategy A \u2014 Momentum Compression",
+      "framework": "B",
+      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
+      "backtest": {
+        "btEvents": 52,
+        "btWinRate": 9.6,
+        "btProfitFactor": 0.328,
+        "btExpectancy": -2.3998,
+        "btMaxDrawdown": 12.19,
+        "btAvgMAE": 5.514,
+        "btAvgMFE": 7.296,
+        "btAvgWin": 12.17,
+        "btAvgLoss": 3.947,
+        "btMedT5": 0.134,
+        "btMedT20": 0.156,
+        "btMeetsRR": false,
+        "btNote": "52 events (ATR stop) | 36-month window",
+        "btStopComparison": {
+          "fixed2pct": {
+            "events": 52,
+            "wins": 3,
+            "losses": 49,
+            "winRate": 5.8,
+            "avgWin": 13.263,
+            "avgLoss": 2.0,
+            "profitFactor": 0.406,
+            "expectancy": -1.1147
+          },
+          "atr1_5x": {
+            "events": 52,
+            "wins": 5,
+            "losses": 47,
+            "winRate": 9.6,
+            "avgWin": 12.17,
+            "avgLoss": 3.947,
+            "profitFactor": 0.328,
+            "expectancy": -2.3998
+          },
+          "ema20": {
+            "events": 52,
+            "wins": 0,
+            "losses": 52,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 1.529,
+            "profitFactor": 0.0,
+            "expectancy": -1.529
+          },
+          "swingLow": {
+            "events": 52,
+            "wins": 5,
+            "losses": 47,
+            "winRate": 9.6,
+            "avgWin": 12.17,
+            "avgLoss": 4.348,
+            "profitFactor": 0.298,
+            "expectancy": -2.7623
+          }
+        },
+        "btRSIBuckets": {
+          "RSI <40": {
+            "events": 3,
+            "wins": 0,
+            "losses": 3,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 2.0,
+            "profitFactor": 0.0,
+            "expectancy": -2.0
+          },
+          "RSI 40\u201350": {
+            "events": 34,
+            "wins": 5,
+            "losses": 29,
+            "winRate": 14.7,
+            "avgWin": 12.17,
+            "avgLoss": 3.945,
+            "profitFactor": 0.532,
+            "expectancy": -1.5761
+          },
+          "RSI 50\u201355": {
+            "events": 9,
+            "wins": 0,
+            "losses": 9,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 4.076,
+            "profitFactor": 0.0,
+            "expectancy": -4.076
+          },
+          "RSI 55\u201360": {
+            "events": 4,
+            "wins": 0,
+            "losses": 4,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 4.599,
+            "profitFactor": 0.0,
+            "expectancy": -4.599
+          },
+          "RSI 60\u201365": {
+            "events": 1,
+            "wins": 0,
+            "losses": 1,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 4.848,
+            "profitFactor": 0.0,
+            "expectancy": -4.848
+          },
+          "RSI >65": {
+            "events": 1,
+            "wins": 0,
+            "losses": 1,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 5.166,
+            "profitFactor": 0.0,
+            "expectancy": -5.166
+          }
+        },
+        "btMomBuckets": {
+          "Move <3%": {
+            "events": 49,
+            "wins": 5,
+            "losses": 44,
+            "winRate": 10.2,
+            "avgWin": 12.17,
+            "avgLoss": 4.08,
+            "profitFactor": 0.339,
+            "expectancy": -2.4225
+          },
+          "Move 3\u20134%": {
+            "events": 3,
+            "wins": 0,
+            "losses": 3,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 2.0,
+            "profitFactor": 0.0,
+            "expectancy": -2.0
+          }
+        },
+        "btRegimeSplit": {
+          "weak": {
+            "events": 52,
+            "wins": 5,
+            "losses": 47,
+            "winRate": 9.6,
+            "avgWin": 12.17,
+            "avgLoss": 3.947,
+            "profitFactor": 0.328,
+            "expectancy": -2.3998
+          }
+        }
+      },
+      "marketRegime": "weak"
+    },
+    {
       "ticker": "KPRMILL.NS",
       "name": "KPRMILL",
       "sector": "NSE",
@@ -15316,200 +15510,6 @@
             "avgLoss": 4.346,
             "profitFactor": 0.874,
             "expectancy": -0.4062
-          }
-        }
-      },
-      "marketRegime": "weak"
-    },
-    {
-      "ticker": "CANHLIFE.NS",
-      "name": "CANHLIFE",
-      "sector": "NSE",
-      "isSeed": false,
-      "status": "ok",
-      "alert": "Strategy A: EMA compressed (1.11%) + Vol dry-up (0.55x). RSI 45.7 [RSI 40\u201350]",
-      "alertLevel": "setup",
-      "currentPrice": 150.7,
-      "ema20": 152.56,
-      "ema50": 150.88,
-      "emaSpread": 1.113,
-      "rsi": 45.7,
-      "rsiBucket": "RSI 40\u201350",
-      "volumeRatio": 0.552,
-      "momBucket": "Move <3%",
-      "atr": 5.69,
-      "atrStopFloor": 142.16,
-      "ema20StopFloor": 152.56,
-      "swingLowFloor": 135.68,
-      "isCompressed": true,
-      "isVolumeDryUp": true,
-      "stratA_active": true,
-      "stratB_active": false,
-      "box": {
-        "stratB_active": false,
-        "boxHigh": 162.9,
-        "boxLow": 135.68,
-        "boxDepth": 20.06,
-        "boxDuration": 21,
-        "ceilTouches": 2,
-        "floorTouches": 1,
-        "closeViolations": 0,
-        "boxNote": "Box 20.1% deep | 21d | Ceil touches: 2 | Floor touches: 1 | Close violations: 0 \u2190 need 3 ceiling touches \u2190 need 3 floor touches"
-      },
-      "cohort": "A_ONLY",
-      "cohortLabel": "\u26a1 Strategy A \u2014 Momentum Compression",
-      "framework": "B",
-      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
-      "backtest": {
-        "btEvents": 52,
-        "btWinRate": 9.6,
-        "btProfitFactor": 0.328,
-        "btExpectancy": -2.3998,
-        "btMaxDrawdown": 12.19,
-        "btAvgMAE": 5.514,
-        "btAvgMFE": 7.296,
-        "btAvgWin": 12.17,
-        "btAvgLoss": 3.947,
-        "btMedT5": 0.134,
-        "btMedT20": 0.156,
-        "btMeetsRR": false,
-        "btNote": "52 events (ATR stop) | 36-month window",
-        "btStopComparison": {
-          "fixed2pct": {
-            "events": 52,
-            "wins": 3,
-            "losses": 49,
-            "winRate": 5.8,
-            "avgWin": 13.263,
-            "avgLoss": 2.0,
-            "profitFactor": 0.406,
-            "expectancy": -1.1147
-          },
-          "atr1_5x": {
-            "events": 52,
-            "wins": 5,
-            "losses": 47,
-            "winRate": 9.6,
-            "avgWin": 12.17,
-            "avgLoss": 3.947,
-            "profitFactor": 0.328,
-            "expectancy": -2.3998
-          },
-          "ema20": {
-            "events": 52,
-            "wins": 0,
-            "losses": 52,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 1.529,
-            "profitFactor": 0.0,
-            "expectancy": -1.529
-          },
-          "swingLow": {
-            "events": 52,
-            "wins": 5,
-            "losses": 47,
-            "winRate": 9.6,
-            "avgWin": 12.17,
-            "avgLoss": 4.348,
-            "profitFactor": 0.298,
-            "expectancy": -2.7623
-          }
-        },
-        "btRSIBuckets": {
-          "RSI <40": {
-            "events": 3,
-            "wins": 0,
-            "losses": 3,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 2.0,
-            "profitFactor": 0.0,
-            "expectancy": -2.0
-          },
-          "RSI 40\u201350": {
-            "events": 34,
-            "wins": 5,
-            "losses": 29,
-            "winRate": 14.7,
-            "avgWin": 12.17,
-            "avgLoss": 3.945,
-            "profitFactor": 0.532,
-            "expectancy": -1.5761
-          },
-          "RSI 50\u201355": {
-            "events": 9,
-            "wins": 0,
-            "losses": 9,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 4.076,
-            "profitFactor": 0.0,
-            "expectancy": -4.076
-          },
-          "RSI 55\u201360": {
-            "events": 4,
-            "wins": 0,
-            "losses": 4,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 4.599,
-            "profitFactor": 0.0,
-            "expectancy": -4.599
-          },
-          "RSI 60\u201365": {
-            "events": 1,
-            "wins": 0,
-            "losses": 1,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 4.848,
-            "profitFactor": 0.0,
-            "expectancy": -4.848
-          },
-          "RSI >65": {
-            "events": 1,
-            "wins": 0,
-            "losses": 1,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 5.166,
-            "profitFactor": 0.0,
-            "expectancy": -5.166
-          }
-        },
-        "btMomBuckets": {
-          "Move <3%": {
-            "events": 49,
-            "wins": 5,
-            "losses": 44,
-            "winRate": 10.2,
-            "avgWin": 12.17,
-            "avgLoss": 4.08,
-            "profitFactor": 0.339,
-            "expectancy": -2.4225
-          },
-          "Move 3\u20134%": {
-            "events": 3,
-            "wins": 0,
-            "losses": 3,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 2.0,
-            "profitFactor": 0.0,
-            "expectancy": -2.0
-          }
-        },
-        "btRegimeSplit": {
-          "weak": {
-            "events": 52,
-            "wins": 5,
-            "losses": 47,
-            "winRate": 9.6,
-            "avgWin": 12.17,
-            "avgLoss": 3.947,
-            "profitFactor": 0.328,
-            "expectancy": -2.3998
           }
         }
       },
@@ -16527,9 +16527,9 @@
     },
     {
       "ticker": "TITAN.NS",
-      "name": "TITAN",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "Titan Company",
+      "sector": "Consumer",
+      "isSeed": true,
       "status": "ok",
       "alert": "Strategy A: EMA compressed (0.99%) + Vol dry-up (0.68x). RSI 45.45 [RSI 40\u201350]",
       "alertLevel": "setup",
@@ -16711,9 +16711,9 @@
     },
     {
       "ticker": "TECHM.NS",
-      "name": "TECHM",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "Tech Mahindra",
+      "sector": "IT",
+      "isSeed": true,
       "status": "ok",
       "alert": "Strategy A: EMA compressed (0.02%) + Vol dry-up (0.56x). RSI 45.44 [RSI 40\u201350]",
       "alertLevel": "setup",
@@ -20189,9 +20189,9 @@
     },
     {
       "ticker": "SUNPHARMA.NS",
-      "name": "SUNPHARMA",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "Sun Pharmaceutical",
+      "sector": "Pharma",
+      "isSeed": true,
       "status": "ok",
       "alert": "Strategy A: EMA compressed (0.90%) + Vol dry-up (0.45x). RSI 43.77 [RSI 40\u201350]",
       "alertLevel": "setup",
@@ -20771,9 +20771,9 @@
     },
     {
       "ticker": "ADANIENT.NS",
-      "name": "ADANIENT",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "Adani Enterprises",
+      "sector": "Conglomerate",
+      "isSeed": true,
       "status": "ok",
       "alert": "Strategy A: EMA compressed (0.26%) + Vol dry-up (0.29x). RSI 43.58 [RSI 40\u201350]",
       "alertLevel": "setup",
@@ -24045,9 +24045,9 @@
     },
     {
       "ticker": "BAJFINANCE.NS",
-      "name": "BAJFINANCE",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "Bajaj Finance",
+      "sector": "Finance",
+      "isSeed": true,
       "status": "ok",
       "alert": "Strategy A: EMA compressed (0.82%) + Vol dry-up (0.95x). RSI 40.32 [RSI 40\u201350]",
       "alertLevel": "setup",
@@ -38578,210 +38578,6 @@
       "marketRegime": "weak"
     },
     {
-      "ticker": "ENRIN.NS",
-      "name": "ENRIN",
-      "sector": "NSE",
-      "isSeed": false,
-      "status": "ok",
-      "alert": "No signal. EMA spread 2.01% | RSI 56.4",
-      "alertLevel": "normal",
-      "currentPrice": 3313.0,
-      "ema20": 3216.85,
-      "ema50": 3282.8,
-      "emaSpread": 2.009,
-      "rsi": 56.4,
-      "rsiBucket": "RSI 55\u201360",
-      "volumeRatio": 1.268,
-      "momBucket": "Move 3\u20134%",
-      "atr": 103.82,
-      "atrStopFloor": 3157.27,
-      "ema20StopFloor": 3216.85,
-      "swingLowFloor": 2968.0,
-      "isCompressed": false,
-      "isVolumeDryUp": false,
-      "stratA_active": false,
-      "stratB_active": false,
-      "box": {
-        "stratB_active": false,
-        "boxHigh": 3348.0,
-        "boxLow": 2968.0,
-        "boxDepth": 12.8,
-        "boxDuration": 0,
-        "ceilTouches": 0,
-        "floorTouches": 0,
-        "closeViolations": 0,
-        "boxNote": "Range too narrow: 12.8% < 20.0% required"
-      },
-      "cohort": "NONE",
-      "cohortLabel": "No convergence signal",
-      "framework": "A",
-      "frameworkDesc": "Framework A \u2014 Swing Breakout (5\u201315 sessions). Price above EMA-50.",
-      "backtest": {
-        "btEvents": 62,
-        "btWinRate": 11.3,
-        "btProfitFactor": 0.355,
-        "btExpectancy": -2.551,
-        "btMaxDrawdown": 20.48,
-        "btAvgMAE": 9.167,
-        "btAvgMFE": 7.259,
-        "btAvgWin": 12.465,
-        "btAvgLoss": 4.464,
-        "btMedT5": -0.31,
-        "btMedT20": -2.301,
-        "btMeetsRR": false,
-        "btNote": "62 events (ATR stop) | 36-month window",
-        "btStopComparison": {
-          "fixed2pct": {
-            "events": 62,
-            "wins": 4,
-            "losses": 58,
-            "winRate": 6.5,
-            "avgWin": 11.214,
-            "avgLoss": 2.0,
-            "profitFactor": 0.387,
-            "expectancy": -1.1411
-          },
-          "atr1_5x": {
-            "events": 62,
-            "wins": 7,
-            "losses": 55,
-            "winRate": 11.3,
-            "avgWin": 12.465,
-            "avgLoss": 4.464,
-            "profitFactor": 0.355,
-            "expectancy": -2.551
-          },
-          "ema20": {
-            "events": 62,
-            "wins": 2,
-            "losses": 60,
-            "winRate": 3.2,
-            "avgWin": 11.063,
-            "avgLoss": 3.249,
-            "profitFactor": 0.114,
-            "expectancy": -2.791
-          },
-          "swingLow": {
-            "events": 62,
-            "wins": 4,
-            "losses": 58,
-            "winRate": 6.5,
-            "avgWin": 11.214,
-            "avgLoss": 3.911,
-            "profitFactor": 0.198,
-            "expectancy": -2.9279
-          }
-        },
-        "btRSIBuckets": {
-          "RSI <40": {
-            "events": 19,
-            "wins": 3,
-            "losses": 16,
-            "winRate": 15.8,
-            "avgWin": 14.133,
-            "avgLoss": 3.269,
-            "profitFactor": 0.811,
-            "expectancy": -0.5195
-          },
-          "RSI 40\u201350": {
-            "events": 21,
-            "wins": 2,
-            "losses": 19,
-            "winRate": 9.5,
-            "avgWin": 11.366,
-            "avgLoss": 5.411,
-            "profitFactor": 0.221,
-            "expectancy": -3.8172
-          },
-          "RSI 50\u201355": {
-            "events": 5,
-            "wins": 0,
-            "losses": 5,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 4.792,
-            "profitFactor": 0.0,
-            "expectancy": -4.792
-          },
-          "RSI 55\u201360": {
-            "events": 10,
-            "wins": 1,
-            "losses": 9,
-            "winRate": 10.0,
-            "avgWin": 11.548,
-            "avgLoss": 4.973,
-            "profitFactor": 0.258,
-            "expectancy": -3.3209
-          },
-          "RSI 60\u201365": {
-            "events": 5,
-            "wins": 1,
-            "losses": 4,
-            "winRate": 20.0,
-            "avgWin": 10.578,
-            "avgLoss": 3.7,
-            "profitFactor": 0.715,
-            "expectancy": -0.8444
-          },
-          "RSI >65": {
-            "events": 2,
-            "wins": 0,
-            "losses": 2,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 3.458,
-            "profitFactor": 0.0,
-            "expectancy": -3.458
-          }
-        },
-        "btMomBuckets": {
-          "Move <3%": {
-            "events": 58,
-            "wins": 7,
-            "losses": 51,
-            "winRate": 12.1,
-            "avgWin": 12.465,
-            "avgLoss": 4.367,
-            "profitFactor": 0.392,
-            "expectancy": -2.3303
-          },
-          "Move 3\u20134%": {
-            "events": 3,
-            "wins": 0,
-            "losses": 3,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 5.597,
-            "profitFactor": 0.0,
-            "expectancy": -5.597
-          },
-          "Move 4\u20135%": {
-            "events": 1,
-            "wins": 0,
-            "losses": 1,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 6.025,
-            "profitFactor": 0.0,
-            "expectancy": -6.025
-          }
-        },
-        "btRegimeSplit": {
-          "weak": {
-            "events": 62,
-            "wins": 7,
-            "losses": 55,
-            "winRate": 11.3,
-            "avgWin": 12.465,
-            "avgLoss": 4.464,
-            "profitFactor": 0.355,
-            "expectancy": -2.551
-          }
-        }
-      },
-      "marketRegime": "weak"
-    },
-    {
       "ticker": "MOTHERSON.NS",
       "name": "MOTHERSON",
       "sector": "NSE",
@@ -38996,172 +38792,182 @@
       "marketRegime": "weak"
     },
     {
-      "ticker": "MCX.NS",
-      "name": "MCX",
+      "ticker": "ENRIN.NS",
+      "name": "ENRIN",
       "sector": "NSE",
       "isSeed": false,
       "status": "ok",
-      "alert": "No signal. EMA spread 4.26% | RSI 56.32",
+      "alert": "No signal. EMA spread 2.01% | RSI 56.4",
       "alertLevel": "normal",
-      "currentPrice": 3324.9,
-      "ema20": 3263.94,
-      "ema50": 3130.61,
-      "emaSpread": 4.259,
-      "rsi": 56.32,
+      "currentPrice": 3313.0,
+      "ema20": 3216.85,
+      "ema50": 3282.8,
+      "emaSpread": 2.009,
+      "rsi": 56.4,
       "rsiBucket": "RSI 55\u201360",
-      "volumeRatio": 1.233,
-      "momBucket": "Move <3%",
-      "atr": 106.51,
-      "atrStopFloor": 3165.14,
-      "ema20StopFloor": 3263.94,
-      "swingLowFloor": 3056.6,
+      "volumeRatio": 1.268,
+      "momBucket": "Move 3\u20134%",
+      "atr": 103.82,
+      "atrStopFloor": 3157.27,
+      "ema20StopFloor": 3216.85,
+      "swingLowFloor": 2968.0,
       "isCompressed": false,
       "isVolumeDryUp": false,
       "stratA_active": false,
       "stratB_active": false,
       "box": {
         "stratB_active": false,
-        "boxHigh": 3481.4,
-        "boxLow": 3056.6,
-        "boxDepth": 13.9,
+        "boxHigh": 3348.0,
+        "boxLow": 2968.0,
+        "boxDepth": 12.8,
         "boxDuration": 0,
         "ceilTouches": 0,
         "floorTouches": 0,
         "closeViolations": 0,
-        "boxNote": "Range too narrow: 13.9% < 20.0% required"
+        "boxNote": "Range too narrow: 12.8% < 20.0% required"
       },
       "cohort": "NONE",
       "cohortLabel": "No convergence signal",
       "framework": "A",
       "frameworkDesc": "Framework A \u2014 Swing Breakout (5\u201315 sessions). Price above EMA-50.",
       "backtest": {
-        "btEvents": 81,
-        "btWinRate": 35.8,
-        "btProfitFactor": 1.666,
-        "btExpectancy": 1.7501,
-        "btMaxDrawdown": 19.65,
-        "btAvgMAE": 4.76,
-        "btAvgMFE": 13.417,
-        "btAvgWin": 12.232,
-        "btAvgLoss": 4.095,
-        "btMedT5": 1.521,
-        "btMedT20": 8.525,
+        "btEvents": 62,
+        "btWinRate": 11.3,
+        "btProfitFactor": 0.355,
+        "btExpectancy": -2.551,
+        "btMaxDrawdown": 20.48,
+        "btAvgMAE": 9.167,
+        "btAvgMFE": 7.259,
+        "btAvgWin": 12.465,
+        "btAvgLoss": 4.464,
+        "btMedT5": -0.31,
+        "btMedT20": -2.301,
         "btMeetsRR": false,
-        "btNote": "81 events (ATR stop) | 36-month window",
+        "btNote": "62 events (ATR stop) | 36-month window",
         "btStopComparison": {
           "fixed2pct": {
-            "events": 81,
-            "wins": 21,
-            "losses": 60,
-            "winRate": 25.9,
-            "avgWin": 12.343,
+            "events": 62,
+            "wins": 4,
+            "losses": 58,
+            "winRate": 6.5,
+            "avgWin": 11.214,
             "avgLoss": 2.0,
-            "profitFactor": 2.16,
-            "expectancy": 1.7148
+            "profitFactor": 0.387,
+            "expectancy": -1.1411
           },
           "atr1_5x": {
-            "events": 81,
-            "wins": 29,
-            "losses": 52,
-            "winRate": 35.8,
-            "avgWin": 12.232,
-            "avgLoss": 4.095,
-            "profitFactor": 1.666,
-            "expectancy": 1.7501
+            "events": 62,
+            "wins": 7,
+            "losses": 55,
+            "winRate": 11.3,
+            "avgWin": 12.465,
+            "avgLoss": 4.464,
+            "profitFactor": 0.355,
+            "expectancy": -2.551
           },
           "ema20": {
-            "events": 81,
-            "wins": 11,
-            "losses": 70,
-            "winRate": 13.6,
-            "avgWin": 12.697,
-            "avgLoss": 2.351,
-            "profitFactor": 0.849,
-            "expectancy": -0.3045
+            "events": 62,
+            "wins": 2,
+            "losses": 60,
+            "winRate": 3.2,
+            "avgWin": 11.063,
+            "avgLoss": 3.249,
+            "profitFactor": 0.114,
+            "expectancy": -2.791
           },
           "swingLow": {
-            "events": 81,
-            "wins": 31,
-            "losses": 50,
-            "winRate": 38.3,
-            "avgWin": 12.182,
-            "avgLoss": 4.37,
-            "profitFactor": 1.728,
-            "expectancy": 1.9694
+            "events": 62,
+            "wins": 4,
+            "losses": 58,
+            "winRate": 6.5,
+            "avgWin": 11.214,
+            "avgLoss": 3.911,
+            "profitFactor": 0.198,
+            "expectancy": -2.9279
           }
         },
         "btRSIBuckets": {
           "RSI <40": {
-            "events": 4,
-            "wins": 2,
-            "losses": 2,
-            "winRate": 50.0,
-            "avgWin": 11.605,
-            "avgLoss": 3.562,
-            "profitFactor": 3.258,
-            "expectancy": 4.0215
+            "events": 19,
+            "wins": 3,
+            "losses": 16,
+            "winRate": 15.8,
+            "avgWin": 14.133,
+            "avgLoss": 3.269,
+            "profitFactor": 0.811,
+            "expectancy": -0.5195
           },
           "RSI 40\u201350": {
-            "events": 46,
-            "wins": 11,
-            "losses": 35,
-            "winRate": 23.9,
-            "avgWin": 11.864,
-            "avgLoss": 4.452,
-            "profitFactor": 0.837,
-            "expectancy": -0.5525
+            "events": 21,
+            "wins": 2,
+            "losses": 19,
+            "winRate": 9.5,
+            "avgWin": 11.366,
+            "avgLoss": 5.411,
+            "profitFactor": 0.221,
+            "expectancy": -3.8172
           },
           "RSI 50\u201355": {
-            "events": 10,
-            "wins": 4,
-            "losses": 6,
-            "winRate": 40.0,
-            "avgWin": 12.372,
-            "avgLoss": 3.496,
-            "profitFactor": 2.359,
-            "expectancy": 2.8512
+            "events": 5,
+            "wins": 0,
+            "losses": 5,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 4.792,
+            "profitFactor": 0.0,
+            "expectancy": -4.792
           },
           "RSI 55\u201360": {
-            "events": 17,
-            "wins": 8,
+            "events": 10,
+            "wins": 1,
             "losses": 9,
-            "winRate": 47.1,
-            "avgWin": 12.538,
-            "avgLoss": 3.223,
-            "profitFactor": 3.458,
-            "expectancy": 4.2004
+            "winRate": 10.0,
+            "avgWin": 11.548,
+            "avgLoss": 4.973,
+            "profitFactor": 0.258,
+            "expectancy": -3.3209
           },
           "RSI 60\u201365": {
-            "events": 4,
-            "wins": 4,
-            "losses": 0,
-            "winRate": 100.0,
-            "avgWin": 12.807,
-            "avgLoss": 0,
-            "profitFactor": null,
-            "expectancy": 12.807
-          }
-        },
-        "btMomBuckets": {
-          "Move <3%": {
-            "events": 78,
-            "wins": 29,
-            "losses": 49,
-            "winRate": 37.2,
-            "avgWin": 12.232,
-            "avgLoss": 4.167,
-            "profitFactor": 1.737,
-            "expectancy": 1.9334
+            "events": 5,
+            "wins": 1,
+            "losses": 4,
+            "winRate": 20.0,
+            "avgWin": 10.578,
+            "avgLoss": 3.7,
+            "profitFactor": 0.715,
+            "expectancy": -0.8444
           },
-          "Move 3\u20134%": {
+          "RSI >65": {
             "events": 2,
             "wins": 0,
             "losses": 2,
             "winRate": 0.0,
             "avgWin": 0,
-            "avgLoss": 3.364,
+            "avgLoss": 3.458,
             "profitFactor": 0.0,
-            "expectancy": -3.364
+            "expectancy": -3.458
+          }
+        },
+        "btMomBuckets": {
+          "Move <3%": {
+            "events": 58,
+            "wins": 7,
+            "losses": 51,
+            "winRate": 12.1,
+            "avgWin": 12.465,
+            "avgLoss": 4.367,
+            "profitFactor": 0.392,
+            "expectancy": -2.3303
+          },
+          "Move 3\u20134%": {
+            "events": 3,
+            "wins": 0,
+            "losses": 3,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 5.597,
+            "profitFactor": 0.0,
+            "expectancy": -5.597
           },
           "Move 4\u20135%": {
             "events": 1,
@@ -39169,21 +38975,21 @@
             "losses": 1,
             "winRate": 0.0,
             "avgWin": 0,
-            "avgLoss": 2.0,
+            "avgLoss": 6.025,
             "profitFactor": 0.0,
-            "expectancy": -2.0
+            "expectancy": -6.025
           }
         },
         "btRegimeSplit": {
           "weak": {
-            "events": 81,
-            "wins": 29,
-            "losses": 52,
-            "winRate": 35.8,
-            "avgWin": 12.232,
-            "avgLoss": 4.095,
-            "profitFactor": 1.666,
-            "expectancy": 1.7501
+            "events": 62,
+            "wins": 7,
+            "losses": 55,
+            "winRate": 11.3,
+            "avgWin": 12.465,
+            "avgLoss": 4.464,
+            "profitFactor": 0.355,
+            "expectancy": -2.551
           }
         }
       },
@@ -39378,6 +39184,200 @@
             "avgLoss": 3.188,
             "profitFactor": 0.74,
             "expectancy": -0.6762
+          }
+        }
+      },
+      "marketRegime": "weak"
+    },
+    {
+      "ticker": "MCX.NS",
+      "name": "MCX",
+      "sector": "NSE",
+      "isSeed": false,
+      "status": "ok",
+      "alert": "No signal. EMA spread 4.26% | RSI 56.32",
+      "alertLevel": "normal",
+      "currentPrice": 3324.9,
+      "ema20": 3263.94,
+      "ema50": 3130.61,
+      "emaSpread": 4.259,
+      "rsi": 56.32,
+      "rsiBucket": "RSI 55\u201360",
+      "volumeRatio": 1.233,
+      "momBucket": "Move <3%",
+      "atr": 106.51,
+      "atrStopFloor": 3165.14,
+      "ema20StopFloor": 3263.94,
+      "swingLowFloor": 3056.6,
+      "isCompressed": false,
+      "isVolumeDryUp": false,
+      "stratA_active": false,
+      "stratB_active": false,
+      "box": {
+        "stratB_active": false,
+        "boxHigh": 3481.4,
+        "boxLow": 3056.6,
+        "boxDepth": 13.9,
+        "boxDuration": 0,
+        "ceilTouches": 0,
+        "floorTouches": 0,
+        "closeViolations": 0,
+        "boxNote": "Range too narrow: 13.9% < 20.0% required"
+      },
+      "cohort": "NONE",
+      "cohortLabel": "No convergence signal",
+      "framework": "A",
+      "frameworkDesc": "Framework A \u2014 Swing Breakout (5\u201315 sessions). Price above EMA-50.",
+      "backtest": {
+        "btEvents": 81,
+        "btWinRate": 35.8,
+        "btProfitFactor": 1.666,
+        "btExpectancy": 1.7501,
+        "btMaxDrawdown": 19.65,
+        "btAvgMAE": 4.76,
+        "btAvgMFE": 13.417,
+        "btAvgWin": 12.232,
+        "btAvgLoss": 4.095,
+        "btMedT5": 1.521,
+        "btMedT20": 8.525,
+        "btMeetsRR": false,
+        "btNote": "81 events (ATR stop) | 36-month window",
+        "btStopComparison": {
+          "fixed2pct": {
+            "events": 81,
+            "wins": 21,
+            "losses": 60,
+            "winRate": 25.9,
+            "avgWin": 12.343,
+            "avgLoss": 2.0,
+            "profitFactor": 2.16,
+            "expectancy": 1.7148
+          },
+          "atr1_5x": {
+            "events": 81,
+            "wins": 29,
+            "losses": 52,
+            "winRate": 35.8,
+            "avgWin": 12.232,
+            "avgLoss": 4.095,
+            "profitFactor": 1.666,
+            "expectancy": 1.7501
+          },
+          "ema20": {
+            "events": 81,
+            "wins": 11,
+            "losses": 70,
+            "winRate": 13.6,
+            "avgWin": 12.697,
+            "avgLoss": 2.351,
+            "profitFactor": 0.849,
+            "expectancy": -0.3045
+          },
+          "swingLow": {
+            "events": 81,
+            "wins": 31,
+            "losses": 50,
+            "winRate": 38.3,
+            "avgWin": 12.182,
+            "avgLoss": 4.37,
+            "profitFactor": 1.728,
+            "expectancy": 1.9694
+          }
+        },
+        "btRSIBuckets": {
+          "RSI <40": {
+            "events": 4,
+            "wins": 2,
+            "losses": 2,
+            "winRate": 50.0,
+            "avgWin": 11.605,
+            "avgLoss": 3.562,
+            "profitFactor": 3.258,
+            "expectancy": 4.0215
+          },
+          "RSI 40\u201350": {
+            "events": 46,
+            "wins": 11,
+            "losses": 35,
+            "winRate": 23.9,
+            "avgWin": 11.864,
+            "avgLoss": 4.452,
+            "profitFactor": 0.837,
+            "expectancy": -0.5525
+          },
+          "RSI 50\u201355": {
+            "events": 10,
+            "wins": 4,
+            "losses": 6,
+            "winRate": 40.0,
+            "avgWin": 12.372,
+            "avgLoss": 3.496,
+            "profitFactor": 2.359,
+            "expectancy": 2.8512
+          },
+          "RSI 55\u201360": {
+            "events": 17,
+            "wins": 8,
+            "losses": 9,
+            "winRate": 47.1,
+            "avgWin": 12.538,
+            "avgLoss": 3.223,
+            "profitFactor": 3.458,
+            "expectancy": 4.2004
+          },
+          "RSI 60\u201365": {
+            "events": 4,
+            "wins": 4,
+            "losses": 0,
+            "winRate": 100.0,
+            "avgWin": 12.807,
+            "avgLoss": 0,
+            "profitFactor": null,
+            "expectancy": 12.807
+          }
+        },
+        "btMomBuckets": {
+          "Move <3%": {
+            "events": 78,
+            "wins": 29,
+            "losses": 49,
+            "winRate": 37.2,
+            "avgWin": 12.232,
+            "avgLoss": 4.167,
+            "profitFactor": 1.737,
+            "expectancy": 1.9334
+          },
+          "Move 3\u20134%": {
+            "events": 2,
+            "wins": 0,
+            "losses": 2,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 3.364,
+            "profitFactor": 0.0,
+            "expectancy": -3.364
+          },
+          "Move 4\u20135%": {
+            "events": 1,
+            "wins": 0,
+            "losses": 1,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 2.0,
+            "profitFactor": 0.0,
+            "expectancy": -2.0
+          }
+        },
+        "btRegimeSplit": {
+          "weak": {
+            "events": 81,
+            "wins": 29,
+            "losses": 52,
+            "winRate": 35.8,
+            "avgWin": 12.232,
+            "avgLoss": 4.095,
+            "profitFactor": 1.666,
+            "expectancy": 1.7501
           }
         }
       },
@@ -49454,6 +49454,190 @@
       "marketRegime": "weak"
     },
     {
+      "ticker": "IDBI.NS",
+      "name": "IDBI",
+      "sector": "NSE",
+      "isSeed": false,
+      "status": "ok",
+      "alert": "No signal. EMA spread 0.18% | RSI 49.4",
+      "alertLevel": "normal",
+      "currentPrice": 84.4,
+      "ema20": 84.32,
+      "ema50": 84.47,
+      "emaSpread": 0.178,
+      "rsi": 49.4,
+      "rsiBucket": "RSI 40\u201350",
+      "volumeRatio": 1.192,
+      "momBucket": "Move <3%",
+      "atr": 3.15,
+      "atrStopFloor": 79.68,
+      "ema20StopFloor": 84.32,
+      "swingLowFloor": 79.05,
+      "isCompressed": true,
+      "isVolumeDryUp": false,
+      "stratA_active": false,
+      "stratB_active": false,
+      "box": {
+        "stratB_active": false,
+        "boxHigh": 94.15,
+        "boxLow": 79.05,
+        "boxDepth": 19.1,
+        "boxDuration": 0,
+        "ceilTouches": 0,
+        "floorTouches": 0,
+        "closeViolations": 0,
+        "boxNote": "Range too narrow: 19.1% < 20.0% required"
+      },
+      "cohort": "NONE",
+      "cohortLabel": "No convergence signal",
+      "framework": "B",
+      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
+      "backtest": {
+        "btEvents": 171,
+        "btWinRate": 43.9,
+        "btProfitFactor": 2.393,
+        "btExpectancy": 3.4844,
+        "btMaxDrawdown": 38.26,
+        "btAvgMAE": 6.163,
+        "btAvgMFE": 13.413,
+        "btAvgWin": 13.62,
+        "btAvgLoss": 4.447,
+        "btMedT5": 0.37,
+        "btMedT20": 2.087,
+        "btMeetsRR": false,
+        "btNote": "171 events (ATR stop) | 36-month window",
+        "btStopComparison": {
+          "fixed2pct": {
+            "events": 171,
+            "wins": 58,
+            "losses": 113,
+            "winRate": 33.9,
+            "avgWin": 13.62,
+            "avgLoss": 2.0,
+            "profitFactor": 3.496,
+            "expectancy": 3.2952
+          },
+          "atr1_5x": {
+            "events": 171,
+            "wins": 75,
+            "losses": 96,
+            "winRate": 43.9,
+            "avgWin": 13.62,
+            "avgLoss": 4.447,
+            "profitFactor": 2.393,
+            "expectancy": 3.4844
+          },
+          "ema20": {
+            "events": 171,
+            "wins": 16,
+            "losses": 155,
+            "winRate": 9.4,
+            "avgWin": 13.115,
+            "avgLoss": 2.108,
+            "profitFactor": 0.642,
+            "expectancy": -0.677
+          },
+          "swingLow": {
+            "events": 171,
+            "wins": 70,
+            "losses": 101,
+            "winRate": 40.9,
+            "avgWin": 13.34,
+            "avgLoss": 3.037,
+            "profitFactor": 3.044,
+            "expectancy": 3.6612
+          }
+        },
+        "btRSIBuckets": {
+          "RSI <40": {
+            "events": 21,
+            "wins": 7,
+            "losses": 14,
+            "winRate": 33.3,
+            "avgWin": 15.889,
+            "avgLoss": 4.264,
+            "profitFactor": 1.863,
+            "expectancy": 2.4469
+          },
+          "RSI 40\u201350": {
+            "events": 75,
+            "wins": 36,
+            "losses": 39,
+            "winRate": 48.0,
+            "avgWin": 14.05,
+            "avgLoss": 4.441,
+            "profitFactor": 2.92,
+            "expectancy": 4.4347
+          },
+          "RSI 50\u201355": {
+            "events": 53,
+            "wins": 20,
+            "losses": 33,
+            "winRate": 37.7,
+            "avgWin": 12.937,
+            "avgLoss": 4.577,
+            "profitFactor": 1.713,
+            "expectancy": 2.0258
+          },
+          "RSI 55\u201360": {
+            "events": 21,
+            "wins": 12,
+            "losses": 9,
+            "winRate": 57.1,
+            "avgWin": 12.146,
+            "avgLoss": 4.557,
+            "profitFactor": 3.554,
+            "expectancy": 4.9804
+          },
+          "RSI 60\u201365": {
+            "events": 1,
+            "wins": 0,
+            "losses": 1,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 2.0,
+            "profitFactor": 0.0,
+            "expectancy": -2.0
+          }
+        },
+        "btMomBuckets": {
+          "Move <3%": {
+            "events": 165,
+            "wins": 75,
+            "losses": 90,
+            "winRate": 45.5,
+            "avgWin": 13.62,
+            "avgLoss": 4.415,
+            "profitFactor": 2.571,
+            "expectancy": 3.7909
+          },
+          "Move 3\u20134%": {
+            "events": 6,
+            "wins": 0,
+            "losses": 6,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 4.935,
+            "profitFactor": 0.0,
+            "expectancy": -4.935
+          }
+        },
+        "btRegimeSplit": {
+          "weak": {
+            "events": 171,
+            "wins": 75,
+            "losses": 96,
+            "winRate": 43.9,
+            "avgWin": 13.62,
+            "avgLoss": 4.447,
+            "profitFactor": 2.393,
+            "expectancy": 3.4844
+          }
+        }
+      },
+      "marketRegime": "weak"
+    },
+    {
       "ticker": "OLAELEC.NS",
       "name": "OLAELEC",
       "sector": "NSE",
@@ -49642,190 +49826,6 @@
             "avgLoss": 6.568,
             "profitFactor": 0.338,
             "expectancy": -3.6342
-          }
-        }
-      },
-      "marketRegime": "weak"
-    },
-    {
-      "ticker": "IDBI.NS",
-      "name": "IDBI",
-      "sector": "NSE",
-      "isSeed": false,
-      "status": "ok",
-      "alert": "No signal. EMA spread 0.18% | RSI 49.4",
-      "alertLevel": "normal",
-      "currentPrice": 84.4,
-      "ema20": 84.32,
-      "ema50": 84.47,
-      "emaSpread": 0.178,
-      "rsi": 49.4,
-      "rsiBucket": "RSI 40\u201350",
-      "volumeRatio": 1.192,
-      "momBucket": "Move <3%",
-      "atr": 3.15,
-      "atrStopFloor": 79.68,
-      "ema20StopFloor": 84.32,
-      "swingLowFloor": 79.05,
-      "isCompressed": true,
-      "isVolumeDryUp": false,
-      "stratA_active": false,
-      "stratB_active": false,
-      "box": {
-        "stratB_active": false,
-        "boxHigh": 94.15,
-        "boxLow": 79.05,
-        "boxDepth": 19.1,
-        "boxDuration": 0,
-        "ceilTouches": 0,
-        "floorTouches": 0,
-        "closeViolations": 0,
-        "boxNote": "Range too narrow: 19.1% < 20.0% required"
-      },
-      "cohort": "NONE",
-      "cohortLabel": "No convergence signal",
-      "framework": "B",
-      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
-      "backtest": {
-        "btEvents": 171,
-        "btWinRate": 43.9,
-        "btProfitFactor": 2.393,
-        "btExpectancy": 3.4844,
-        "btMaxDrawdown": 38.26,
-        "btAvgMAE": 6.163,
-        "btAvgMFE": 13.413,
-        "btAvgWin": 13.62,
-        "btAvgLoss": 4.447,
-        "btMedT5": 0.37,
-        "btMedT20": 2.087,
-        "btMeetsRR": false,
-        "btNote": "171 events (ATR stop) | 36-month window",
-        "btStopComparison": {
-          "fixed2pct": {
-            "events": 171,
-            "wins": 58,
-            "losses": 113,
-            "winRate": 33.9,
-            "avgWin": 13.62,
-            "avgLoss": 2.0,
-            "profitFactor": 3.496,
-            "expectancy": 3.2952
-          },
-          "atr1_5x": {
-            "events": 171,
-            "wins": 75,
-            "losses": 96,
-            "winRate": 43.9,
-            "avgWin": 13.62,
-            "avgLoss": 4.447,
-            "profitFactor": 2.393,
-            "expectancy": 3.4844
-          },
-          "ema20": {
-            "events": 171,
-            "wins": 16,
-            "losses": 155,
-            "winRate": 9.4,
-            "avgWin": 13.115,
-            "avgLoss": 2.108,
-            "profitFactor": 0.642,
-            "expectancy": -0.677
-          },
-          "swingLow": {
-            "events": 171,
-            "wins": 70,
-            "losses": 101,
-            "winRate": 40.9,
-            "avgWin": 13.34,
-            "avgLoss": 3.037,
-            "profitFactor": 3.044,
-            "expectancy": 3.6612
-          }
-        },
-        "btRSIBuckets": {
-          "RSI <40": {
-            "events": 21,
-            "wins": 7,
-            "losses": 14,
-            "winRate": 33.3,
-            "avgWin": 15.889,
-            "avgLoss": 4.264,
-            "profitFactor": 1.863,
-            "expectancy": 2.4469
-          },
-          "RSI 40\u201350": {
-            "events": 75,
-            "wins": 36,
-            "losses": 39,
-            "winRate": 48.0,
-            "avgWin": 14.05,
-            "avgLoss": 4.441,
-            "profitFactor": 2.92,
-            "expectancy": 4.4347
-          },
-          "RSI 50\u201355": {
-            "events": 53,
-            "wins": 20,
-            "losses": 33,
-            "winRate": 37.7,
-            "avgWin": 12.937,
-            "avgLoss": 4.577,
-            "profitFactor": 1.713,
-            "expectancy": 2.0258
-          },
-          "RSI 55\u201360": {
-            "events": 21,
-            "wins": 12,
-            "losses": 9,
-            "winRate": 57.1,
-            "avgWin": 12.146,
-            "avgLoss": 4.557,
-            "profitFactor": 3.554,
-            "expectancy": 4.9804
-          },
-          "RSI 60\u201365": {
-            "events": 1,
-            "wins": 0,
-            "losses": 1,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 2.0,
-            "profitFactor": 0.0,
-            "expectancy": -2.0
-          }
-        },
-        "btMomBuckets": {
-          "Move <3%": {
-            "events": 165,
-            "wins": 75,
-            "losses": 90,
-            "winRate": 45.5,
-            "avgWin": 13.62,
-            "avgLoss": 4.415,
-            "profitFactor": 2.571,
-            "expectancy": 3.7909
-          },
-          "Move 3\u20134%": {
-            "events": 6,
-            "wins": 0,
-            "losses": 6,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 4.935,
-            "profitFactor": 0.0,
-            "expectancy": -4.935
-          }
-        },
-        "btRegimeSplit": {
-          "weak": {
-            "events": 171,
-            "wins": 75,
-            "losses": 96,
-            "winRate": 43.9,
-            "avgWin": 13.62,
-            "avgLoss": 4.447,
-            "profitFactor": 2.393,
-            "expectancy": 3.4844
           }
         }
       },
@@ -52067,9 +52067,9 @@
     },
     {
       "ticker": "ULTRACEMCO.NS",
-      "name": "ULTRACEMCO",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "UltraTech Cement",
+      "sector": "Cement",
+      "isSeed": true,
       "status": "ok",
       "alert": "No signal. EMA spread 1.90% | RSI 48.59",
       "alertLevel": "normal",
@@ -61814,200 +61814,6 @@
       "marketRegime": "weak"
     },
     {
-      "ticker": "HYUNDAI.NS",
-      "name": "HYUNDAI",
-      "sector": "NSE",
-      "isSeed": false,
-      "status": "ok",
-      "alert": "No signal. EMA spread 0.86% | RSI 44.81",
-      "alertLevel": "normal",
-      "currentPrice": 2115.0,
-      "ema20": 2150.7,
-      "ema50": 2132.41,
-      "emaSpread": 0.858,
-      "rsi": 44.81,
-      "rsiBucket": "RSI 40\u201350",
-      "volumeRatio": 2.515,
-      "momBucket": "Move <3%",
-      "atr": 53.69,
-      "atrStopFloor": 2034.46,
-      "ema20StopFloor": 2150.7,
-      "swingLowFloor": 2052.5,
-      "isCompressed": true,
-      "isVolumeDryUp": false,
-      "stratA_active": false,
-      "stratB_active": false,
-      "box": {
-        "stratB_active": false,
-        "boxHigh": 2280.0,
-        "boxLow": 2052.5,
-        "boxDepth": 11.08,
-        "boxDuration": 0,
-        "ceilTouches": 0,
-        "floorTouches": 0,
-        "closeViolations": 0,
-        "boxNote": "Range too narrow: 11.1% < 20.0% required"
-      },
-      "cohort": "NONE",
-      "cohortLabel": "No convergence signal",
-      "framework": "B",
-      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
-      "backtest": {
-        "btEvents": 108,
-        "btWinRate": 15.7,
-        "btProfitFactor": 0.593,
-        "btExpectancy": -1.1727,
-        "btMaxDrawdown": 15.51,
-        "btAvgMAE": 4.863,
-        "btAvgMFE": 6.235,
-        "btAvgWin": 10.819,
-        "btAvgLoss": 3.406,
-        "btMedT5": -0.035,
-        "btMedT20": -0.252,
-        "btMeetsRR": false,
-        "btNote": "108 events (ATR stop) | 36-month window",
-        "btStopComparison": {
-          "fixed2pct": {
-            "events": 108,
-            "wins": 12,
-            "losses": 96,
-            "winRate": 11.1,
-            "avgWin": 10.899,
-            "avgLoss": 2.0,
-            "profitFactor": 0.681,
-            "expectancy": -0.5682
-          },
-          "atr1_5x": {
-            "events": 108,
-            "wins": 17,
-            "losses": 91,
-            "winRate": 15.7,
-            "avgWin": 10.819,
-            "avgLoss": 3.406,
-            "profitFactor": 0.593,
-            "expectancy": -1.1727
-          },
-          "ema20": {
-            "events": 108,
-            "wins": 9,
-            "losses": 99,
-            "winRate": 8.3,
-            "avgWin": 10.65,
-            "avgLoss": 1.842,
-            "profitFactor": 0.525,
-            "expectancy": -0.8052
-          },
-          "swingLow": {
-            "events": 108,
-            "wins": 19,
-            "losses": 89,
-            "winRate": 17.6,
-            "avgWin": 10.745,
-            "avgLoss": 3.055,
-            "profitFactor": 0.751,
-            "expectancy": -0.6262
-          }
-        },
-        "btRSIBuckets": {
-          "RSI <40": {
-            "events": 9,
-            "wins": 0,
-            "losses": 9,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 3.066,
-            "profitFactor": 0.0,
-            "expectancy": -3.066
-          },
-          "RSI 40\u201350": {
-            "events": 40,
-            "wins": 4,
-            "losses": 36,
-            "winRate": 10.0,
-            "avgWin": 11.214,
-            "avgLoss": 3.385,
-            "profitFactor": 0.368,
-            "expectancy": -1.9251
-          },
-          "RSI 50\u201355": {
-            "events": 24,
-            "wins": 5,
-            "losses": 19,
-            "winRate": 20.8,
-            "avgWin": 10.909,
-            "avgLoss": 3.368,
-            "profitFactor": 0.852,
-            "expectancy": -0.3984
-          },
-          "RSI 55\u201360": {
-            "events": 24,
-            "wins": 7,
-            "losses": 17,
-            "winRate": 29.2,
-            "avgWin": 10.592,
-            "avgLoss": 3.815,
-            "profitFactor": 1.143,
-            "expectancy": 0.3918
-          },
-          "RSI 60\u201365": {
-            "events": 8,
-            "wins": 1,
-            "losses": 7,
-            "winRate": 12.5,
-            "avgWin": 10.387,
-            "avgLoss": 2.992,
-            "profitFactor": 0.496,
-            "expectancy": -1.3196
-          },
-          "RSI >65": {
-            "events": 3,
-            "wins": 0,
-            "losses": 3,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 3.558,
-            "profitFactor": 0.0,
-            "expectancy": -3.558
-          }
-        },
-        "btMomBuckets": {
-          "Move <3%": {
-            "events": 104,
-            "wins": 16,
-            "losses": 88,
-            "winRate": 15.4,
-            "avgWin": 10.796,
-            "avgLoss": 3.403,
-            "profitFactor": 0.577,
-            "expectancy": -1.2164
-          },
-          "Move 3\u20134%": {
-            "events": 4,
-            "wins": 1,
-            "losses": 3,
-            "winRate": 25.0,
-            "avgWin": 11.189,
-            "avgLoss": 3.475,
-            "profitFactor": 1.073,
-            "expectancy": 0.191
-          }
-        },
-        "btRegimeSplit": {
-          "weak": {
-            "events": 108,
-            "wins": 17,
-            "losses": 91,
-            "winRate": 15.7,
-            "avgWin": 10.819,
-            "avgLoss": 3.406,
-            "profitFactor": 0.593,
-            "expectancy": -1.1727
-          }
-        }
-      },
-      "marketRegime": "weak"
-    },
-    {
       "ticker": "ABCAPITAL.NS",
       "name": "ABCAPITAL",
       "sector": "NSE",
@@ -62222,10 +62028,204 @@
       "marketRegime": "weak"
     },
     {
-      "ticker": "AXISBANK.NS",
-      "name": "AXISBANK",
+      "ticker": "HYUNDAI.NS",
+      "name": "HYUNDAI",
       "sector": "NSE",
       "isSeed": false,
+      "status": "ok",
+      "alert": "No signal. EMA spread 0.86% | RSI 44.81",
+      "alertLevel": "normal",
+      "currentPrice": 2115.0,
+      "ema20": 2150.7,
+      "ema50": 2132.41,
+      "emaSpread": 0.858,
+      "rsi": 44.81,
+      "rsiBucket": "RSI 40\u201350",
+      "volumeRatio": 2.515,
+      "momBucket": "Move <3%",
+      "atr": 53.69,
+      "atrStopFloor": 2034.46,
+      "ema20StopFloor": 2150.7,
+      "swingLowFloor": 2052.5,
+      "isCompressed": true,
+      "isVolumeDryUp": false,
+      "stratA_active": false,
+      "stratB_active": false,
+      "box": {
+        "stratB_active": false,
+        "boxHigh": 2280.0,
+        "boxLow": 2052.5,
+        "boxDepth": 11.08,
+        "boxDuration": 0,
+        "ceilTouches": 0,
+        "floorTouches": 0,
+        "closeViolations": 0,
+        "boxNote": "Range too narrow: 11.1% < 20.0% required"
+      },
+      "cohort": "NONE",
+      "cohortLabel": "No convergence signal",
+      "framework": "B",
+      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
+      "backtest": {
+        "btEvents": 108,
+        "btWinRate": 15.7,
+        "btProfitFactor": 0.593,
+        "btExpectancy": -1.1727,
+        "btMaxDrawdown": 15.51,
+        "btAvgMAE": 4.863,
+        "btAvgMFE": 6.235,
+        "btAvgWin": 10.819,
+        "btAvgLoss": 3.406,
+        "btMedT5": -0.035,
+        "btMedT20": -0.252,
+        "btMeetsRR": false,
+        "btNote": "108 events (ATR stop) | 36-month window",
+        "btStopComparison": {
+          "fixed2pct": {
+            "events": 108,
+            "wins": 12,
+            "losses": 96,
+            "winRate": 11.1,
+            "avgWin": 10.899,
+            "avgLoss": 2.0,
+            "profitFactor": 0.681,
+            "expectancy": -0.5682
+          },
+          "atr1_5x": {
+            "events": 108,
+            "wins": 17,
+            "losses": 91,
+            "winRate": 15.7,
+            "avgWin": 10.819,
+            "avgLoss": 3.406,
+            "profitFactor": 0.593,
+            "expectancy": -1.1727
+          },
+          "ema20": {
+            "events": 108,
+            "wins": 9,
+            "losses": 99,
+            "winRate": 8.3,
+            "avgWin": 10.65,
+            "avgLoss": 1.842,
+            "profitFactor": 0.525,
+            "expectancy": -0.8052
+          },
+          "swingLow": {
+            "events": 108,
+            "wins": 19,
+            "losses": 89,
+            "winRate": 17.6,
+            "avgWin": 10.745,
+            "avgLoss": 3.055,
+            "profitFactor": 0.751,
+            "expectancy": -0.6262
+          }
+        },
+        "btRSIBuckets": {
+          "RSI <40": {
+            "events": 9,
+            "wins": 0,
+            "losses": 9,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 3.066,
+            "profitFactor": 0.0,
+            "expectancy": -3.066
+          },
+          "RSI 40\u201350": {
+            "events": 40,
+            "wins": 4,
+            "losses": 36,
+            "winRate": 10.0,
+            "avgWin": 11.214,
+            "avgLoss": 3.385,
+            "profitFactor": 0.368,
+            "expectancy": -1.9251
+          },
+          "RSI 50\u201355": {
+            "events": 24,
+            "wins": 5,
+            "losses": 19,
+            "winRate": 20.8,
+            "avgWin": 10.909,
+            "avgLoss": 3.368,
+            "profitFactor": 0.852,
+            "expectancy": -0.3984
+          },
+          "RSI 55\u201360": {
+            "events": 24,
+            "wins": 7,
+            "losses": 17,
+            "winRate": 29.2,
+            "avgWin": 10.592,
+            "avgLoss": 3.815,
+            "profitFactor": 1.143,
+            "expectancy": 0.3918
+          },
+          "RSI 60\u201365": {
+            "events": 8,
+            "wins": 1,
+            "losses": 7,
+            "winRate": 12.5,
+            "avgWin": 10.387,
+            "avgLoss": 2.992,
+            "profitFactor": 0.496,
+            "expectancy": -1.3196
+          },
+          "RSI >65": {
+            "events": 3,
+            "wins": 0,
+            "losses": 3,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 3.558,
+            "profitFactor": 0.0,
+            "expectancy": -3.558
+          }
+        },
+        "btMomBuckets": {
+          "Move <3%": {
+            "events": 104,
+            "wins": 16,
+            "losses": 88,
+            "winRate": 15.4,
+            "avgWin": 10.796,
+            "avgLoss": 3.403,
+            "profitFactor": 0.577,
+            "expectancy": -1.2164
+          },
+          "Move 3\u20134%": {
+            "events": 4,
+            "wins": 1,
+            "losses": 3,
+            "winRate": 25.0,
+            "avgWin": 11.189,
+            "avgLoss": 3.475,
+            "profitFactor": 1.073,
+            "expectancy": 0.191
+          }
+        },
+        "btRegimeSplit": {
+          "weak": {
+            "events": 108,
+            "wins": 17,
+            "losses": 91,
+            "winRate": 15.7,
+            "avgWin": 10.819,
+            "avgLoss": 3.406,
+            "profitFactor": 0.593,
+            "expectancy": -1.1727
+          }
+        }
+      },
+      "marketRegime": "weak"
+    },
+    {
+      "ticker": "AXISBANK.NS",
+      "name": "Axis Bank",
+      "sector": "Banking",
+      "isSeed": true,
       "status": "ok",
       "alert": "No signal. EMA spread 1.07% | RSI 44.65",
       "alertLevel": "normal",
@@ -64844,6 +64844,210 @@
       "marketRegime": "weak"
     },
     {
+      "ticker": "MAXHEALTH.NS",
+      "name": "MAXHEALTH",
+      "sector": "NSE",
+      "isSeed": false,
+      "status": "ok",
+      "alert": "No signal. EMA spread 0.42% | RSI 43.76",
+      "alertLevel": "normal",
+      "currentPrice": 1014.0,
+      "ema20": 1034.0,
+      "ema50": 1038.38,
+      "emaSpread": 0.422,
+      "rsi": 43.76,
+      "rsiBucket": "RSI 40\u201350",
+      "volumeRatio": 1.048,
+      "momBucket": "Move 3\u20134%",
+      "atr": 21.89,
+      "atrStopFloor": 981.17,
+      "ema20StopFloor": 1034.0,
+      "swingLowFloor": 974.0,
+      "isCompressed": true,
+      "isVolumeDryUp": false,
+      "stratA_active": false,
+      "stratB_active": false,
+      "box": {
+        "stratB_active": false,
+        "boxHigh": 1072.6,
+        "boxLow": 974.0,
+        "boxDepth": 10.12,
+        "boxDuration": 0,
+        "ceilTouches": 0,
+        "floorTouches": 0,
+        "closeViolations": 0,
+        "boxNote": "Range too narrow: 10.1% < 20.0% required"
+      },
+      "cohort": "NONE",
+      "cohortLabel": "No convergence signal",
+      "framework": "B",
+      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
+      "backtest": {
+        "btEvents": 142,
+        "btWinRate": 26.8,
+        "btProfitFactor": 1.105,
+        "btExpectancy": 0.3038,
+        "btMaxDrawdown": 19.63,
+        "btAvgMAE": 6.304,
+        "btAvgMFE": 9.627,
+        "btAvgWin": 11.671,
+        "btAvgLoss": 3.858,
+        "btMedT5": 0.818,
+        "btMedT20": -0.246,
+        "btMeetsRR": false,
+        "btNote": "142 events (ATR stop) | 36-month window",
+        "btStopComparison": {
+          "fixed2pct": {
+            "events": 142,
+            "wins": 25,
+            "losses": 117,
+            "winRate": 17.6,
+            "avgWin": 11.629,
+            "avgLoss": 2.0,
+            "profitFactor": 1.242,
+            "expectancy": 0.3987
+          },
+          "atr1_5x": {
+            "events": 142,
+            "wins": 38,
+            "losses": 104,
+            "winRate": 26.8,
+            "avgWin": 11.671,
+            "avgLoss": 3.858,
+            "profitFactor": 1.105,
+            "expectancy": 0.3038
+          },
+          "ema20": {
+            "events": 142,
+            "wins": 10,
+            "losses": 132,
+            "winRate": 7.0,
+            "avgWin": 11.399,
+            "avgLoss": 2.703,
+            "profitFactor": 0.32,
+            "expectancy": -1.7159
+          },
+          "swingLow": {
+            "events": 142,
+            "wins": 32,
+            "losses": 110,
+            "winRate": 22.5,
+            "avgWin": 11.691,
+            "avgLoss": 3.489,
+            "profitFactor": 0.975,
+            "expectancy": -0.0735
+          }
+        },
+        "btRSIBuckets": {
+          "RSI <40": {
+            "events": 18,
+            "wins": 6,
+            "losses": 12,
+            "winRate": 33.3,
+            "avgWin": 11.919,
+            "avgLoss": 3.288,
+            "profitFactor": 1.812,
+            "expectancy": 1.7759
+          },
+          "RSI 40\u201350": {
+            "events": 52,
+            "wins": 19,
+            "losses": 33,
+            "winRate": 36.5,
+            "avgWin": 11.487,
+            "avgLoss": 4.27,
+            "profitFactor": 1.549,
+            "expectancy": 1.4813
+          },
+          "RSI 50\u201355": {
+            "events": 30,
+            "wins": 6,
+            "losses": 24,
+            "winRate": 20.0,
+            "avgWin": 11.868,
+            "avgLoss": 3.222,
+            "profitFactor": 0.921,
+            "expectancy": -0.204
+          },
+          "RSI 55\u201360": {
+            "events": 21,
+            "wins": 6,
+            "losses": 15,
+            "winRate": 28.6,
+            "avgWin": 11.939,
+            "avgLoss": 4.543,
+            "profitFactor": 1.051,
+            "expectancy": 0.1709
+          },
+          "RSI 60\u201365": {
+            "events": 16,
+            "wins": 0,
+            "losses": 16,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 3.906,
+            "profitFactor": 0.0,
+            "expectancy": -3.906
+          },
+          "RSI >65": {
+            "events": 5,
+            "wins": 1,
+            "losses": 4,
+            "winRate": 20.0,
+            "avgWin": 10.904,
+            "avgLoss": 3.241,
+            "profitFactor": 0.841,
+            "expectancy": -0.412
+          }
+        },
+        "btMomBuckets": {
+          "Move <3%": {
+            "events": 132,
+            "wins": 34,
+            "losses": 98,
+            "winRate": 25.8,
+            "avgWin": 11.644,
+            "avgLoss": 3.825,
+            "profitFactor": 1.056,
+            "expectancy": 0.166
+          },
+          "Move 3\u20134%": {
+            "events": 7,
+            "wins": 3,
+            "losses": 4,
+            "winRate": 42.9,
+            "avgWin": 12.042,
+            "avgLoss": 3.865,
+            "profitFactor": 2.337,
+            "expectancy": 2.9591
+          },
+          "Move 4\u20135%": {
+            "events": 3,
+            "wins": 1,
+            "losses": 2,
+            "winRate": 33.3,
+            "avgWin": 11.479,
+            "avgLoss": 5.465,
+            "profitFactor": 1.05,
+            "expectancy": 0.1774
+          }
+        },
+        "btRegimeSplit": {
+          "weak": {
+            "events": 142,
+            "wins": 38,
+            "losses": 104,
+            "winRate": 26.8,
+            "avgWin": 11.671,
+            "avgLoss": 3.858,
+            "profitFactor": 1.105,
+            "expectancy": 0.3038
+          }
+        }
+      },
+      "marketRegime": "weak"
+    },
+    {
       "ticker": "CLEAN.NS",
       "name": "CLEAN",
       "sector": "NSE",
@@ -65052,210 +65256,6 @@
             "avgLoss": 4.189,
             "profitFactor": 0.507,
             "expectancy": -1.7394
-          }
-        }
-      },
-      "marketRegime": "weak"
-    },
-    {
-      "ticker": "MAXHEALTH.NS",
-      "name": "MAXHEALTH",
-      "sector": "NSE",
-      "isSeed": false,
-      "status": "ok",
-      "alert": "No signal. EMA spread 0.42% | RSI 43.76",
-      "alertLevel": "normal",
-      "currentPrice": 1014.0,
-      "ema20": 1034.0,
-      "ema50": 1038.38,
-      "emaSpread": 0.422,
-      "rsi": 43.76,
-      "rsiBucket": "RSI 40\u201350",
-      "volumeRatio": 1.048,
-      "momBucket": "Move 3\u20134%",
-      "atr": 21.89,
-      "atrStopFloor": 981.17,
-      "ema20StopFloor": 1034.0,
-      "swingLowFloor": 974.0,
-      "isCompressed": true,
-      "isVolumeDryUp": false,
-      "stratA_active": false,
-      "stratB_active": false,
-      "box": {
-        "stratB_active": false,
-        "boxHigh": 1072.6,
-        "boxLow": 974.0,
-        "boxDepth": 10.12,
-        "boxDuration": 0,
-        "ceilTouches": 0,
-        "floorTouches": 0,
-        "closeViolations": 0,
-        "boxNote": "Range too narrow: 10.1% < 20.0% required"
-      },
-      "cohort": "NONE",
-      "cohortLabel": "No convergence signal",
-      "framework": "B",
-      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
-      "backtest": {
-        "btEvents": 142,
-        "btWinRate": 26.8,
-        "btProfitFactor": 1.105,
-        "btExpectancy": 0.3038,
-        "btMaxDrawdown": 19.63,
-        "btAvgMAE": 6.304,
-        "btAvgMFE": 9.627,
-        "btAvgWin": 11.671,
-        "btAvgLoss": 3.858,
-        "btMedT5": 0.818,
-        "btMedT20": -0.246,
-        "btMeetsRR": false,
-        "btNote": "142 events (ATR stop) | 36-month window",
-        "btStopComparison": {
-          "fixed2pct": {
-            "events": 142,
-            "wins": 25,
-            "losses": 117,
-            "winRate": 17.6,
-            "avgWin": 11.629,
-            "avgLoss": 2.0,
-            "profitFactor": 1.242,
-            "expectancy": 0.3987
-          },
-          "atr1_5x": {
-            "events": 142,
-            "wins": 38,
-            "losses": 104,
-            "winRate": 26.8,
-            "avgWin": 11.671,
-            "avgLoss": 3.858,
-            "profitFactor": 1.105,
-            "expectancy": 0.3038
-          },
-          "ema20": {
-            "events": 142,
-            "wins": 10,
-            "losses": 132,
-            "winRate": 7.0,
-            "avgWin": 11.399,
-            "avgLoss": 2.703,
-            "profitFactor": 0.32,
-            "expectancy": -1.7159
-          },
-          "swingLow": {
-            "events": 142,
-            "wins": 32,
-            "losses": 110,
-            "winRate": 22.5,
-            "avgWin": 11.691,
-            "avgLoss": 3.489,
-            "profitFactor": 0.975,
-            "expectancy": -0.0735
-          }
-        },
-        "btRSIBuckets": {
-          "RSI <40": {
-            "events": 18,
-            "wins": 6,
-            "losses": 12,
-            "winRate": 33.3,
-            "avgWin": 11.919,
-            "avgLoss": 3.288,
-            "profitFactor": 1.812,
-            "expectancy": 1.7759
-          },
-          "RSI 40\u201350": {
-            "events": 52,
-            "wins": 19,
-            "losses": 33,
-            "winRate": 36.5,
-            "avgWin": 11.487,
-            "avgLoss": 4.27,
-            "profitFactor": 1.549,
-            "expectancy": 1.4813
-          },
-          "RSI 50\u201355": {
-            "events": 30,
-            "wins": 6,
-            "losses": 24,
-            "winRate": 20.0,
-            "avgWin": 11.868,
-            "avgLoss": 3.222,
-            "profitFactor": 0.921,
-            "expectancy": -0.204
-          },
-          "RSI 55\u201360": {
-            "events": 21,
-            "wins": 6,
-            "losses": 15,
-            "winRate": 28.6,
-            "avgWin": 11.939,
-            "avgLoss": 4.543,
-            "profitFactor": 1.051,
-            "expectancy": 0.1709
-          },
-          "RSI 60\u201365": {
-            "events": 16,
-            "wins": 0,
-            "losses": 16,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 3.906,
-            "profitFactor": 0.0,
-            "expectancy": -3.906
-          },
-          "RSI >65": {
-            "events": 5,
-            "wins": 1,
-            "losses": 4,
-            "winRate": 20.0,
-            "avgWin": 10.904,
-            "avgLoss": 3.241,
-            "profitFactor": 0.841,
-            "expectancy": -0.412
-          }
-        },
-        "btMomBuckets": {
-          "Move <3%": {
-            "events": 132,
-            "wins": 34,
-            "losses": 98,
-            "winRate": 25.8,
-            "avgWin": 11.644,
-            "avgLoss": 3.825,
-            "profitFactor": 1.056,
-            "expectancy": 0.166
-          },
-          "Move 3\u20134%": {
-            "events": 7,
-            "wins": 3,
-            "losses": 4,
-            "winRate": 42.9,
-            "avgWin": 12.042,
-            "avgLoss": 3.865,
-            "profitFactor": 2.337,
-            "expectancy": 2.9591
-          },
-          "Move 4\u20135%": {
-            "events": 3,
-            "wins": 1,
-            "losses": 2,
-            "winRate": 33.3,
-            "avgWin": 11.479,
-            "avgLoss": 5.465,
-            "profitFactor": 1.05,
-            "expectancy": 0.1774
-          }
-        },
-        "btRegimeSplit": {
-          "weak": {
-            "events": 142,
-            "wins": 38,
-            "losses": 104,
-            "winRate": 26.8,
-            "avgWin": 11.671,
-            "avgLoss": 3.858,
-            "profitFactor": 1.105,
-            "expectancy": 0.3038
           }
         }
       },
@@ -68536,6 +68536,200 @@
       "marketRegime": "weak"
     },
     {
+      "ticker": "HINDUNILVR.NS",
+      "name": "Hindustan Unilever",
+      "sector": "FMCG",
+      "isSeed": true,
+      "status": "ok",
+      "alert": "No signal. EMA spread 2.77% | RSI 42.45",
+      "alertLevel": "normal",
+      "currentPrice": 1942.9,
+      "ema20": 1959.93,
+      "ema50": 2015.75,
+      "emaSpread": 2.769,
+      "rsi": 42.45,
+      "rsiBucket": "RSI 40\u201350",
+      "volumeRatio": 0.597,
+      "momBucket": "Move <3%",
+      "atr": 27.24,
+      "atrStopFloor": 1902.05,
+      "ema20StopFloor": 1959.93,
+      "swingLowFloor": 1915.0,
+      "isCompressed": false,
+      "isVolumeDryUp": true,
+      "stratA_active": false,
+      "stratB_active": false,
+      "box": {
+        "stratB_active": false,
+        "boxHigh": 2018.0,
+        "boxLow": 1915.0,
+        "boxDepth": 5.38,
+        "boxDuration": 0,
+        "ceilTouches": 0,
+        "floorTouches": 0,
+        "closeViolations": 0,
+        "boxNote": "Range too narrow: 5.4% < 20.0% required"
+      },
+      "cohort": "NONE",
+      "cohortLabel": "No convergence signal",
+      "framework": "B",
+      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
+      "backtest": {
+        "btEvents": 198,
+        "btWinRate": 7.6,
+        "btProfitFactor": 0.321,
+        "btExpectancy": -1.7514,
+        "btMaxDrawdown": 14.69,
+        "btAvgMAE": 5.662,
+        "btAvgMFE": 3.752,
+        "btAvgWin": 10.924,
+        "btAvgLoss": 2.794,
+        "btMedT5": -1.063,
+        "btMedT20": -3.513,
+        "btMeetsRR": false,
+        "btNote": "198 events (ATR stop) | 36-month window",
+        "btStopComparison": {
+          "fixed2pct": {
+            "events": 198,
+            "wins": 12,
+            "losses": 186,
+            "winRate": 6.1,
+            "avgWin": 11.055,
+            "avgLoss": 2.0,
+            "profitFactor": 0.357,
+            "expectancy": -1.2036
+          },
+          "atr1_5x": {
+            "events": 198,
+            "wins": 15,
+            "losses": 183,
+            "winRate": 7.6,
+            "avgWin": 10.924,
+            "avgLoss": 2.794,
+            "profitFactor": 0.321,
+            "expectancy": -1.7514
+          },
+          "ema20": {
+            "events": 198,
+            "wins": 8,
+            "losses": 190,
+            "winRate": 4.0,
+            "avgWin": 11.167,
+            "avgLoss": 1.662,
+            "profitFactor": 0.283,
+            "expectancy": -1.1488
+          },
+          "swingLow": {
+            "events": 198,
+            "wins": 14,
+            "losses": 184,
+            "winRate": 7.1,
+            "avgWin": 10.98,
+            "avgLoss": 2.648,
+            "profitFactor": 0.315,
+            "expectancy": -1.6804
+          }
+        },
+        "btRSIBuckets": {
+          "RSI <40": {
+            "events": 40,
+            "wins": 3,
+            "losses": 37,
+            "winRate": 7.5,
+            "avgWin": 10.487,
+            "avgLoss": 2.763,
+            "profitFactor": 0.308,
+            "expectancy": -1.7692
+          },
+          "RSI 40\u201350": {
+            "events": 61,
+            "wins": 2,
+            "losses": 59,
+            "winRate": 3.3,
+            "avgWin": 10.102,
+            "avgLoss": 3.047,
+            "profitFactor": 0.112,
+            "expectancy": -2.6131
+          },
+          "RSI 50\u201355": {
+            "events": 39,
+            "wins": 4,
+            "losses": 35,
+            "winRate": 10.3,
+            "avgWin": 11.494,
+            "avgLoss": 2.758,
+            "profitFactor": 0.476,
+            "expectancy": -1.29
+          },
+          "RSI 55\u201360": {
+            "events": 27,
+            "wins": 3,
+            "losses": 24,
+            "winRate": 11.1,
+            "avgWin": 11.674,
+            "avgLoss": 2.518,
+            "profitFactor": 0.58,
+            "expectancy": -0.9427
+          },
+          "RSI 60\u201365": {
+            "events": 22,
+            "wins": 3,
+            "losses": 19,
+            "winRate": 13.6,
+            "avgWin": 10.399,
+            "avgLoss": 2.739,
+            "profitFactor": 0.599,
+            "expectancy": -0.9522
+          },
+          "RSI >65": {
+            "events": 9,
+            "wins": 0,
+            "losses": 9,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 2.25,
+            "profitFactor": 0.0,
+            "expectancy": -2.25
+          }
+        },
+        "btMomBuckets": {
+          "Move <3%": {
+            "events": 196,
+            "wins": 15,
+            "losses": 181,
+            "winRate": 7.7,
+            "avgWin": 10.924,
+            "avgLoss": 2.799,
+            "profitFactor": 0.323,
+            "expectancy": -1.7423
+          },
+          "Move 3\u20134%": {
+            "events": 2,
+            "wins": 0,
+            "losses": 2,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 2.354,
+            "profitFactor": 0.0,
+            "expectancy": -2.354
+          }
+        },
+        "btRegimeSplit": {
+          "weak": {
+            "events": 198,
+            "wins": 15,
+            "losses": 183,
+            "winRate": 7.6,
+            "avgWin": 10.924,
+            "avgLoss": 2.794,
+            "profitFactor": 0.321,
+            "expectancy": -1.7514
+          }
+        }
+      },
+      "marketRegime": "weak"
+    },
+    {
       "ticker": "KALYANKJIL.NS",
       "name": "KALYANKJIL",
       "sector": "NSE",
@@ -68744,200 +68938,6 @@
             "avgLoss": 4.331,
             "profitFactor": 0.553,
             "expectancy": -1.6
-          }
-        }
-      },
-      "marketRegime": "weak"
-    },
-    {
-      "ticker": "HINDUNILVR.NS",
-      "name": "HINDUNILVR",
-      "sector": "NSE",
-      "isSeed": false,
-      "status": "ok",
-      "alert": "No signal. EMA spread 2.77% | RSI 42.45",
-      "alertLevel": "normal",
-      "currentPrice": 1942.9,
-      "ema20": 1959.93,
-      "ema50": 2015.75,
-      "emaSpread": 2.769,
-      "rsi": 42.45,
-      "rsiBucket": "RSI 40\u201350",
-      "volumeRatio": 0.597,
-      "momBucket": "Move <3%",
-      "atr": 27.24,
-      "atrStopFloor": 1902.05,
-      "ema20StopFloor": 1959.93,
-      "swingLowFloor": 1915.0,
-      "isCompressed": false,
-      "isVolumeDryUp": true,
-      "stratA_active": false,
-      "stratB_active": false,
-      "box": {
-        "stratB_active": false,
-        "boxHigh": 2018.0,
-        "boxLow": 1915.0,
-        "boxDepth": 5.38,
-        "boxDuration": 0,
-        "ceilTouches": 0,
-        "floorTouches": 0,
-        "closeViolations": 0,
-        "boxNote": "Range too narrow: 5.4% < 20.0% required"
-      },
-      "cohort": "NONE",
-      "cohortLabel": "No convergence signal",
-      "framework": "B",
-      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
-      "backtest": {
-        "btEvents": 198,
-        "btWinRate": 7.6,
-        "btProfitFactor": 0.321,
-        "btExpectancy": -1.7514,
-        "btMaxDrawdown": 14.69,
-        "btAvgMAE": 5.662,
-        "btAvgMFE": 3.752,
-        "btAvgWin": 10.924,
-        "btAvgLoss": 2.794,
-        "btMedT5": -1.063,
-        "btMedT20": -3.513,
-        "btMeetsRR": false,
-        "btNote": "198 events (ATR stop) | 36-month window",
-        "btStopComparison": {
-          "fixed2pct": {
-            "events": 198,
-            "wins": 12,
-            "losses": 186,
-            "winRate": 6.1,
-            "avgWin": 11.055,
-            "avgLoss": 2.0,
-            "profitFactor": 0.357,
-            "expectancy": -1.2036
-          },
-          "atr1_5x": {
-            "events": 198,
-            "wins": 15,
-            "losses": 183,
-            "winRate": 7.6,
-            "avgWin": 10.924,
-            "avgLoss": 2.794,
-            "profitFactor": 0.321,
-            "expectancy": -1.7514
-          },
-          "ema20": {
-            "events": 198,
-            "wins": 8,
-            "losses": 190,
-            "winRate": 4.0,
-            "avgWin": 11.167,
-            "avgLoss": 1.662,
-            "profitFactor": 0.283,
-            "expectancy": -1.1488
-          },
-          "swingLow": {
-            "events": 198,
-            "wins": 14,
-            "losses": 184,
-            "winRate": 7.1,
-            "avgWin": 10.98,
-            "avgLoss": 2.648,
-            "profitFactor": 0.315,
-            "expectancy": -1.6804
-          }
-        },
-        "btRSIBuckets": {
-          "RSI <40": {
-            "events": 40,
-            "wins": 3,
-            "losses": 37,
-            "winRate": 7.5,
-            "avgWin": 10.487,
-            "avgLoss": 2.763,
-            "profitFactor": 0.308,
-            "expectancy": -1.7692
-          },
-          "RSI 40\u201350": {
-            "events": 61,
-            "wins": 2,
-            "losses": 59,
-            "winRate": 3.3,
-            "avgWin": 10.102,
-            "avgLoss": 3.047,
-            "profitFactor": 0.112,
-            "expectancy": -2.6131
-          },
-          "RSI 50\u201355": {
-            "events": 39,
-            "wins": 4,
-            "losses": 35,
-            "winRate": 10.3,
-            "avgWin": 11.494,
-            "avgLoss": 2.758,
-            "profitFactor": 0.476,
-            "expectancy": -1.29
-          },
-          "RSI 55\u201360": {
-            "events": 27,
-            "wins": 3,
-            "losses": 24,
-            "winRate": 11.1,
-            "avgWin": 11.674,
-            "avgLoss": 2.518,
-            "profitFactor": 0.58,
-            "expectancy": -0.9427
-          },
-          "RSI 60\u201365": {
-            "events": 22,
-            "wins": 3,
-            "losses": 19,
-            "winRate": 13.6,
-            "avgWin": 10.399,
-            "avgLoss": 2.739,
-            "profitFactor": 0.599,
-            "expectancy": -0.9522
-          },
-          "RSI >65": {
-            "events": 9,
-            "wins": 0,
-            "losses": 9,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 2.25,
-            "profitFactor": 0.0,
-            "expectancy": -2.25
-          }
-        },
-        "btMomBuckets": {
-          "Move <3%": {
-            "events": 196,
-            "wins": 15,
-            "losses": 181,
-            "winRate": 7.7,
-            "avgWin": 10.924,
-            "avgLoss": 2.799,
-            "profitFactor": 0.323,
-            "expectancy": -1.7423
-          },
-          "Move 3\u20134%": {
-            "events": 2,
-            "wins": 0,
-            "losses": 2,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 2.354,
-            "profitFactor": 0.0,
-            "expectancy": -2.354
-          }
-        },
-        "btRegimeSplit": {
-          "weak": {
-            "events": 198,
-            "wins": 15,
-            "losses": 183,
-            "winRate": 7.6,
-            "avgWin": 10.924,
-            "avgLoss": 2.794,
-            "profitFactor": 0.321,
-            "expectancy": -1.7514
           }
         }
       },
@@ -74514,8 +74514,8 @@
     {
       "ticker": "NTPC.NS",
       "name": "NTPC",
-      "sector": "NSE",
-      "isSeed": false,
+      "sector": "Power",
+      "isSeed": true,
       "status": "ok",
       "alert": "No signal. EMA spread 2.15% | RSI 40.48",
       "alertLevel": "normal",
@@ -77951,9 +77951,9 @@
     },
     {
       "ticker": "ASIANPAINT.NS",
-      "name": "ASIANPAINT",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "Asian Paints",
+      "sector": "Consumer",
+      "isSeed": true,
       "status": "ok",
       "alert": "No signal. EMA spread 2.97% | RSI 39.53",
       "alertLevel": "normal",
@@ -80175,9 +80175,9 @@
     },
     {
       "ticker": "BHARTIARTL.NS",
-      "name": "BHARTIARTL",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "Bharti Airtel",
+      "sector": "Telecom",
+      "isSeed": true,
       "status": "ok",
       "alert": "No signal. EMA spread 1.56% | RSI 38.05",
       "alertLevel": "normal",
@@ -82429,9 +82429,9 @@
     },
     {
       "ticker": "RELIANCE.NS",
-      "name": "RELIANCE",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "Reliance Industries",
+      "sector": "Energy",
+      "isSeed": true,
       "status": "ok",
       "alert": "No signal. EMA spread 1.87% | RSI 37.4",
       "alertLevel": "normal",
@@ -84060,210 +84060,6 @@
       "marketRegime": "weak"
     },
     {
-      "ticker": "JBMA.NS",
-      "name": "JBMA",
-      "sector": "NSE",
-      "isSeed": false,
-      "status": "ok",
-      "alert": "No signal. EMA spread 3.12% | RSI 36.72",
-      "alertLevel": "normal",
-      "currentPrice": 586.6,
-      "ema20": 607.75,
-      "ema50": 627.32,
-      "emaSpread": 3.12,
-      "rsi": 36.72,
-      "rsiBucket": "RSI <40",
-      "volumeRatio": 0.677,
-      "momBucket": "Move <3%",
-      "atr": 14.81,
-      "atrStopFloor": 564.38,
-      "ema20StopFloor": 607.75,
-      "swingLowFloor": 578.0,
-      "isCompressed": false,
-      "isVolumeDryUp": true,
-      "stratA_active": false,
-      "stratB_active": false,
-      "box": {
-        "stratB_active": false,
-        "boxHigh": 650.7,
-        "boxLow": 578.0,
-        "boxDepth": 12.58,
-        "boxDuration": 0,
-        "ceilTouches": 0,
-        "floorTouches": 0,
-        "closeViolations": 0,
-        "boxNote": "Range too narrow: 12.6% < 20.0% required"
-      },
-      "cohort": "NONE",
-      "cohortLabel": "No convergence signal",
-      "framework": "B",
-      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
-      "backtest": {
-        "btEvents": 121,
-        "btWinRate": 12.4,
-        "btProfitFactor": 0.43,
-        "btExpectancy": -2.2868,
-        "btMaxDrawdown": 21.09,
-        "btAvgMAE": 8.861,
-        "btAvgMFE": 6.514,
-        "btAvgWin": 13.928,
-        "btAvgLoss": 4.582,
-        "btMedT5": -1.761,
-        "btMedT20": -3.343,
-        "btMeetsRR": false,
-        "btNote": "121 events (ATR stop) | 36-month window",
-        "btStopComparison": {
-          "fixed2pct": {
-            "events": 121,
-            "wins": 8,
-            "losses": 113,
-            "winRate": 6.6,
-            "avgWin": 14.456,
-            "avgLoss": 2.0,
-            "profitFactor": 0.512,
-            "expectancy": -0.9139
-          },
-          "atr1_5x": {
-            "events": 121,
-            "wins": 15,
-            "losses": 106,
-            "winRate": 12.4,
-            "avgWin": 13.928,
-            "avgLoss": 4.582,
-            "profitFactor": 0.43,
-            "expectancy": -2.2868
-          },
-          "ema20": {
-            "events": 121,
-            "wins": 3,
-            "losses": 118,
-            "winRate": 2.5,
-            "avgWin": 11.377,
-            "avgLoss": 3.21,
-            "profitFactor": 0.09,
-            "expectancy": -2.8453
-          },
-          "swingLow": {
-            "events": 121,
-            "wins": 17,
-            "losses": 104,
-            "winRate": 14.0,
-            "avgWin": 13.654,
-            "avgLoss": 3.944,
-            "profitFactor": 0.566,
-            "expectancy": -1.4803
-          }
-        },
-        "btRSIBuckets": {
-          "RSI <40": {
-            "events": 32,
-            "wins": 2,
-            "losses": 30,
-            "winRate": 6.2,
-            "avgWin": 11.27,
-            "avgLoss": 3.441,
-            "profitFactor": 0.218,
-            "expectancy": -2.5289
-          },
-          "RSI 40\u201350": {
-            "events": 62,
-            "wins": 10,
-            "losses": 52,
-            "winRate": 16.1,
-            "avgWin": 15.085,
-            "avgLoss": 4.761,
-            "profitFactor": 0.609,
-            "expectancy": -1.5658
-          },
-          "RSI 50\u201355": {
-            "events": 11,
-            "wins": 1,
-            "losses": 10,
-            "winRate": 9.1,
-            "avgWin": 12.836,
-            "avgLoss": 5.331,
-            "profitFactor": 0.241,
-            "expectancy": -3.6778
-          },
-          "RSI 55\u201360": {
-            "events": 5,
-            "wins": 1,
-            "losses": 4,
-            "winRate": 20.0,
-            "avgWin": 11.211,
-            "avgLoss": 6.286,
-            "profitFactor": 0.446,
-            "expectancy": -2.7866
-          },
-          "RSI 60\u201365": {
-            "events": 7,
-            "wins": 1,
-            "losses": 6,
-            "winRate": 14.3,
-            "avgWin": 11.481,
-            "avgLoss": 4.63,
-            "profitFactor": 0.413,
-            "expectancy": -2.3261
-          },
-          "RSI >65": {
-            "events": 4,
-            "wins": 0,
-            "losses": 4,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 7.165,
-            "profitFactor": 0.0,
-            "expectancy": -7.165
-          }
-        },
-        "btMomBuckets": {
-          "Move <3%": {
-            "events": 105,
-            "wins": 9,
-            "losses": 96,
-            "winRate": 8.6,
-            "avgWin": 13.848,
-            "avgLoss": 4.465,
-            "profitFactor": 0.291,
-            "expectancy": -2.8901
-          },
-          "Move 3\u20134%": {
-            "events": 12,
-            "wins": 5,
-            "losses": 7,
-            "winRate": 41.7,
-            "avgWin": 14.292,
-            "avgLoss": 5.942,
-            "profitFactor": 1.718,
-            "expectancy": 2.4956
-          },
-          "Move 4\u20135%": {
-            "events": 4,
-            "wins": 1,
-            "losses": 3,
-            "winRate": 25.0,
-            "avgWin": 12.836,
-            "avgLoss": 5.153,
-            "profitFactor": 0.83,
-            "expectancy": -0.6557
-          }
-        },
-        "btRegimeSplit": {
-          "weak": {
-            "events": 121,
-            "wins": 15,
-            "losses": 106,
-            "winRate": 12.4,
-            "avgWin": 13.928,
-            "avgLoss": 4.582,
-            "profitFactor": 0.43,
-            "expectancy": -2.2868
-          }
-        }
-      },
-      "marketRegime": "weak"
-    },
-    {
       "ticker": "JIOFIN.NS",
       "name": "JIOFIN",
       "sector": "NSE",
@@ -84462,6 +84258,210 @@
             "avgLoss": 3.174,
             "profitFactor": 0.195,
             "expectancy": -2.426
+          }
+        }
+      },
+      "marketRegime": "weak"
+    },
+    {
+      "ticker": "JBMA.NS",
+      "name": "JBMA",
+      "sector": "NSE",
+      "isSeed": false,
+      "status": "ok",
+      "alert": "No signal. EMA spread 3.12% | RSI 36.72",
+      "alertLevel": "normal",
+      "currentPrice": 586.6,
+      "ema20": 607.75,
+      "ema50": 627.32,
+      "emaSpread": 3.12,
+      "rsi": 36.72,
+      "rsiBucket": "RSI <40",
+      "volumeRatio": 0.677,
+      "momBucket": "Move <3%",
+      "atr": 14.81,
+      "atrStopFloor": 564.38,
+      "ema20StopFloor": 607.75,
+      "swingLowFloor": 578.0,
+      "isCompressed": false,
+      "isVolumeDryUp": true,
+      "stratA_active": false,
+      "stratB_active": false,
+      "box": {
+        "stratB_active": false,
+        "boxHigh": 650.7,
+        "boxLow": 578.0,
+        "boxDepth": 12.58,
+        "boxDuration": 0,
+        "ceilTouches": 0,
+        "floorTouches": 0,
+        "closeViolations": 0,
+        "boxNote": "Range too narrow: 12.6% < 20.0% required"
+      },
+      "cohort": "NONE",
+      "cohortLabel": "No convergence signal",
+      "framework": "B",
+      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
+      "backtest": {
+        "btEvents": 121,
+        "btWinRate": 12.4,
+        "btProfitFactor": 0.43,
+        "btExpectancy": -2.2868,
+        "btMaxDrawdown": 21.09,
+        "btAvgMAE": 8.861,
+        "btAvgMFE": 6.514,
+        "btAvgWin": 13.928,
+        "btAvgLoss": 4.582,
+        "btMedT5": -1.761,
+        "btMedT20": -3.343,
+        "btMeetsRR": false,
+        "btNote": "121 events (ATR stop) | 36-month window",
+        "btStopComparison": {
+          "fixed2pct": {
+            "events": 121,
+            "wins": 8,
+            "losses": 113,
+            "winRate": 6.6,
+            "avgWin": 14.456,
+            "avgLoss": 2.0,
+            "profitFactor": 0.512,
+            "expectancy": -0.9139
+          },
+          "atr1_5x": {
+            "events": 121,
+            "wins": 15,
+            "losses": 106,
+            "winRate": 12.4,
+            "avgWin": 13.928,
+            "avgLoss": 4.582,
+            "profitFactor": 0.43,
+            "expectancy": -2.2868
+          },
+          "ema20": {
+            "events": 121,
+            "wins": 3,
+            "losses": 118,
+            "winRate": 2.5,
+            "avgWin": 11.377,
+            "avgLoss": 3.21,
+            "profitFactor": 0.09,
+            "expectancy": -2.8453
+          },
+          "swingLow": {
+            "events": 121,
+            "wins": 17,
+            "losses": 104,
+            "winRate": 14.0,
+            "avgWin": 13.654,
+            "avgLoss": 3.944,
+            "profitFactor": 0.566,
+            "expectancy": -1.4803
+          }
+        },
+        "btRSIBuckets": {
+          "RSI <40": {
+            "events": 32,
+            "wins": 2,
+            "losses": 30,
+            "winRate": 6.2,
+            "avgWin": 11.27,
+            "avgLoss": 3.441,
+            "profitFactor": 0.218,
+            "expectancy": -2.5289
+          },
+          "RSI 40\u201350": {
+            "events": 62,
+            "wins": 10,
+            "losses": 52,
+            "winRate": 16.1,
+            "avgWin": 15.085,
+            "avgLoss": 4.761,
+            "profitFactor": 0.609,
+            "expectancy": -1.5658
+          },
+          "RSI 50\u201355": {
+            "events": 11,
+            "wins": 1,
+            "losses": 10,
+            "winRate": 9.1,
+            "avgWin": 12.836,
+            "avgLoss": 5.331,
+            "profitFactor": 0.241,
+            "expectancy": -3.6778
+          },
+          "RSI 55\u201360": {
+            "events": 5,
+            "wins": 1,
+            "losses": 4,
+            "winRate": 20.0,
+            "avgWin": 11.211,
+            "avgLoss": 6.286,
+            "profitFactor": 0.446,
+            "expectancy": -2.7866
+          },
+          "RSI 60\u201365": {
+            "events": 7,
+            "wins": 1,
+            "losses": 6,
+            "winRate": 14.3,
+            "avgWin": 11.481,
+            "avgLoss": 4.63,
+            "profitFactor": 0.413,
+            "expectancy": -2.3261
+          },
+          "RSI >65": {
+            "events": 4,
+            "wins": 0,
+            "losses": 4,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 7.165,
+            "profitFactor": 0.0,
+            "expectancy": -7.165
+          }
+        },
+        "btMomBuckets": {
+          "Move <3%": {
+            "events": 105,
+            "wins": 9,
+            "losses": 96,
+            "winRate": 8.6,
+            "avgWin": 13.848,
+            "avgLoss": 4.465,
+            "profitFactor": 0.291,
+            "expectancy": -2.8901
+          },
+          "Move 3\u20134%": {
+            "events": 12,
+            "wins": 5,
+            "losses": 7,
+            "winRate": 41.7,
+            "avgWin": 14.292,
+            "avgLoss": 5.942,
+            "profitFactor": 1.718,
+            "expectancy": 2.4956
+          },
+          "Move 4\u20135%": {
+            "events": 4,
+            "wins": 1,
+            "losses": 3,
+            "winRate": 25.0,
+            "avgWin": 12.836,
+            "avgLoss": 5.153,
+            "profitFactor": 0.83,
+            "expectancy": -0.6557
+          }
+        },
+        "btRegimeSplit": {
+          "weak": {
+            "events": 121,
+            "wins": 15,
+            "losses": 106,
+            "winRate": 12.4,
+            "avgWin": 13.928,
+            "avgLoss": 4.582,
+            "profitFactor": 0.43,
+            "expectancy": -2.2868
           }
         }
       },
@@ -89170,200 +89170,6 @@
       "marketRegime": "weak"
     },
     {
-      "ticker": "AIAENG.NS",
-      "name": "AIAENG",
-      "sector": "NSE",
-      "isSeed": false,
-      "status": "ok",
-      "alert": "No signal. EMA spread 4.30% | RSI 34.82",
-      "alertLevel": "normal",
-      "currentPrice": 3919.4,
-      "ema20": 4073.17,
-      "ema50": 4256.24,
-      "emaSpread": 4.301,
-      "rsi": 34.82,
-      "rsiBucket": "RSI <40",
-      "volumeRatio": 0.293,
-      "momBucket": "Move <3%",
-      "atr": 115.96,
-      "atrStopFloor": 3745.45,
-      "ema20StopFloor": 4073.17,
-      "swingLowFloor": 3778.0,
-      "isCompressed": false,
-      "isVolumeDryUp": true,
-      "stratA_active": false,
-      "stratB_active": false,
-      "box": {
-        "stratB_active": false,
-        "boxHigh": 4320.0,
-        "boxLow": 3778.0,
-        "boxDepth": 14.35,
-        "boxDuration": 0,
-        "ceilTouches": 0,
-        "floorTouches": 0,
-        "closeViolations": 0,
-        "boxNote": "Range too narrow: 14.3% < 20.0% required"
-      },
-      "cohort": "NONE",
-      "cohortLabel": "No convergence signal",
-      "framework": "B",
-      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
-      "backtest": {
-        "btEvents": 185,
-        "btWinRate": 21.1,
-        "btProfitFactor": 0.831,
-        "btExpectancy": -0.4961,
-        "btMaxDrawdown": 19.58,
-        "btAvgMAE": 6.835,
-        "btAvgMFE": 7.899,
-        "btAvgWin": 11.675,
-        "btAvgLoss": 3.751,
-        "btMedT5": -0.15,
-        "btMedT20": -1.557,
-        "btMeetsRR": false,
-        "btNote": "185 events (ATR stop) | 36-month window",
-        "btStopComparison": {
-          "fixed2pct": {
-            "events": 185,
-            "wins": 21,
-            "losses": 164,
-            "winRate": 11.4,
-            "avgWin": 11.938,
-            "avgLoss": 2.0,
-            "profitFactor": 0.764,
-            "expectancy": -0.4111
-          },
-          "atr1_5x": {
-            "events": 185,
-            "wins": 39,
-            "losses": 146,
-            "winRate": 21.1,
-            "avgWin": 11.675,
-            "avgLoss": 3.751,
-            "profitFactor": 0.831,
-            "expectancy": -0.4961
-          },
-          "ema20": {
-            "events": 185,
-            "wins": 8,
-            "losses": 177,
-            "winRate": 4.3,
-            "avgWin": 11.753,
-            "avgLoss": 2.468,
-            "profitFactor": 0.215,
-            "expectancy": -1.8565
-          },
-          "swingLow": {
-            "events": 185,
-            "wins": 33,
-            "losses": 152,
-            "winRate": 17.8,
-            "avgWin": 11.783,
-            "avgLoss": 2.818,
-            "profitFactor": 0.908,
-            "expectancy": -0.219
-          }
-        },
-        "btRSIBuckets": {
-          "RSI <40": {
-            "events": 33,
-            "wins": 5,
-            "losses": 28,
-            "winRate": 15.2,
-            "avgWin": 11.31,
-            "avgLoss": 4.516,
-            "profitFactor": 0.447,
-            "expectancy": -2.1104
-          },
-          "RSI 40\u201350": {
-            "events": 81,
-            "wins": 18,
-            "losses": 63,
-            "winRate": 22.2,
-            "avgWin": 11.96,
-            "avgLoss": 3.701,
-            "profitFactor": 0.923,
-            "expectancy": -0.2243
-          },
-          "RSI 50\u201355": {
-            "events": 13,
-            "wins": 4,
-            "losses": 9,
-            "winRate": 30.8,
-            "avgWin": 11.776,
-            "avgLoss": 3.279,
-            "profitFactor": 1.596,
-            "expectancy": 1.3579
-          },
-          "RSI 55\u201360": {
-            "events": 21,
-            "wins": 9,
-            "losses": 12,
-            "winRate": 42.9,
-            "avgWin": 11.156,
-            "avgLoss": 2.732,
-            "profitFactor": 3.062,
-            "expectancy": 3.226
-          },
-          "RSI 60\u201365": {
-            "events": 21,
-            "wins": 2,
-            "losses": 19,
-            "winRate": 9.5,
-            "avgWin": 11.975,
-            "avgLoss": 3.388,
-            "profitFactor": 0.372,
-            "expectancy": -1.9285
-          },
-          "RSI >65": {
-            "events": 16,
-            "wins": 1,
-            "losses": 15,
-            "winRate": 6.2,
-            "avgWin": 12.037,
-            "avgLoss": 4.09,
-            "profitFactor": 0.196,
-            "expectancy": -3.0901
-          }
-        },
-        "btMomBuckets": {
-          "Move <3%": {
-            "events": 180,
-            "wins": 38,
-            "losses": 142,
-            "winRate": 21.1,
-            "avgWin": 11.706,
-            "avgLoss": 3.719,
-            "profitFactor": 0.842,
-            "expectancy": -0.4643
-          },
-          "Move 3\u20134%": {
-            "events": 5,
-            "wins": 1,
-            "losses": 4,
-            "winRate": 20.0,
-            "avgWin": 10.497,
-            "avgLoss": 4.902,
-            "profitFactor": 0.535,
-            "expectancy": -1.8222
-          }
-        },
-        "btRegimeSplit": {
-          "weak": {
-            "events": 185,
-            "wins": 39,
-            "losses": 146,
-            "winRate": 21.1,
-            "avgWin": 11.675,
-            "avgLoss": 3.751,
-            "profitFactor": 0.831,
-            "expectancy": -0.4961
-          }
-        }
-      },
-      "marketRegime": "weak"
-    },
-    {
       "ticker": "NCC.NS",
       "name": "NCC",
       "sector": "NSE",
@@ -89562,6 +89368,200 @@
             "avgLoss": 3.995,
             "profitFactor": 0.125,
             "expectancy": -3.3448
+          }
+        }
+      },
+      "marketRegime": "weak"
+    },
+    {
+      "ticker": "AIAENG.NS",
+      "name": "AIAENG",
+      "sector": "NSE",
+      "isSeed": false,
+      "status": "ok",
+      "alert": "No signal. EMA spread 4.30% | RSI 34.82",
+      "alertLevel": "normal",
+      "currentPrice": 3919.4,
+      "ema20": 4073.17,
+      "ema50": 4256.24,
+      "emaSpread": 4.301,
+      "rsi": 34.82,
+      "rsiBucket": "RSI <40",
+      "volumeRatio": 0.293,
+      "momBucket": "Move <3%",
+      "atr": 115.96,
+      "atrStopFloor": 3745.45,
+      "ema20StopFloor": 4073.17,
+      "swingLowFloor": 3778.0,
+      "isCompressed": false,
+      "isVolumeDryUp": true,
+      "stratA_active": false,
+      "stratB_active": false,
+      "box": {
+        "stratB_active": false,
+        "boxHigh": 4320.0,
+        "boxLow": 3778.0,
+        "boxDepth": 14.35,
+        "boxDuration": 0,
+        "ceilTouches": 0,
+        "floorTouches": 0,
+        "closeViolations": 0,
+        "boxNote": "Range too narrow: 14.3% < 20.0% required"
+      },
+      "cohort": "NONE",
+      "cohortLabel": "No convergence signal",
+      "framework": "B",
+      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
+      "backtest": {
+        "btEvents": 185,
+        "btWinRate": 21.1,
+        "btProfitFactor": 0.831,
+        "btExpectancy": -0.4961,
+        "btMaxDrawdown": 19.58,
+        "btAvgMAE": 6.835,
+        "btAvgMFE": 7.899,
+        "btAvgWin": 11.675,
+        "btAvgLoss": 3.751,
+        "btMedT5": -0.15,
+        "btMedT20": -1.557,
+        "btMeetsRR": false,
+        "btNote": "185 events (ATR stop) | 36-month window",
+        "btStopComparison": {
+          "fixed2pct": {
+            "events": 185,
+            "wins": 21,
+            "losses": 164,
+            "winRate": 11.4,
+            "avgWin": 11.938,
+            "avgLoss": 2.0,
+            "profitFactor": 0.764,
+            "expectancy": -0.4111
+          },
+          "atr1_5x": {
+            "events": 185,
+            "wins": 39,
+            "losses": 146,
+            "winRate": 21.1,
+            "avgWin": 11.675,
+            "avgLoss": 3.751,
+            "profitFactor": 0.831,
+            "expectancy": -0.4961
+          },
+          "ema20": {
+            "events": 185,
+            "wins": 8,
+            "losses": 177,
+            "winRate": 4.3,
+            "avgWin": 11.753,
+            "avgLoss": 2.468,
+            "profitFactor": 0.215,
+            "expectancy": -1.8565
+          },
+          "swingLow": {
+            "events": 185,
+            "wins": 33,
+            "losses": 152,
+            "winRate": 17.8,
+            "avgWin": 11.783,
+            "avgLoss": 2.818,
+            "profitFactor": 0.908,
+            "expectancy": -0.219
+          }
+        },
+        "btRSIBuckets": {
+          "RSI <40": {
+            "events": 33,
+            "wins": 5,
+            "losses": 28,
+            "winRate": 15.2,
+            "avgWin": 11.31,
+            "avgLoss": 4.516,
+            "profitFactor": 0.447,
+            "expectancy": -2.1104
+          },
+          "RSI 40\u201350": {
+            "events": 81,
+            "wins": 18,
+            "losses": 63,
+            "winRate": 22.2,
+            "avgWin": 11.96,
+            "avgLoss": 3.701,
+            "profitFactor": 0.923,
+            "expectancy": -0.2243
+          },
+          "RSI 50\u201355": {
+            "events": 13,
+            "wins": 4,
+            "losses": 9,
+            "winRate": 30.8,
+            "avgWin": 11.776,
+            "avgLoss": 3.279,
+            "profitFactor": 1.596,
+            "expectancy": 1.3579
+          },
+          "RSI 55\u201360": {
+            "events": 21,
+            "wins": 9,
+            "losses": 12,
+            "winRate": 42.9,
+            "avgWin": 11.156,
+            "avgLoss": 2.732,
+            "profitFactor": 3.062,
+            "expectancy": 3.226
+          },
+          "RSI 60\u201365": {
+            "events": 21,
+            "wins": 2,
+            "losses": 19,
+            "winRate": 9.5,
+            "avgWin": 11.975,
+            "avgLoss": 3.388,
+            "profitFactor": 0.372,
+            "expectancy": -1.9285
+          },
+          "RSI >65": {
+            "events": 16,
+            "wins": 1,
+            "losses": 15,
+            "winRate": 6.2,
+            "avgWin": 12.037,
+            "avgLoss": 4.09,
+            "profitFactor": 0.196,
+            "expectancy": -3.0901
+          }
+        },
+        "btMomBuckets": {
+          "Move <3%": {
+            "events": 180,
+            "wins": 38,
+            "losses": 142,
+            "winRate": 21.1,
+            "avgWin": 11.706,
+            "avgLoss": 3.719,
+            "profitFactor": 0.842,
+            "expectancy": -0.4643
+          },
+          "Move 3\u20134%": {
+            "events": 5,
+            "wins": 1,
+            "losses": 4,
+            "winRate": 20.0,
+            "avgWin": 10.497,
+            "avgLoss": 4.902,
+            "profitFactor": 0.535,
+            "expectancy": -1.8222
+          }
+        },
+        "btRegimeSplit": {
+          "weak": {
+            "events": 185,
+            "wins": 39,
+            "losses": 146,
+            "winRate": 21.1,
+            "avgWin": 11.675,
+            "avgLoss": 3.751,
+            "profitFactor": 0.831,
+            "expectancy": -0.4961
           }
         }
       },
@@ -91241,9 +91241,9 @@
     },
     {
       "ticker": "WIPRO.NS",
-      "name": "WIPRO",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "Wipro",
+      "sector": "IT",
+      "isSeed": true,
       "status": "ok",
       "alert": "No signal. EMA spread 3.23% | RSI 33.75",
       "alertLevel": "normal",
@@ -93545,9 +93545,9 @@
     },
     {
       "ticker": "TCS.NS",
-      "name": "TCS",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "Tata Consultancy Services",
+      "sector": "IT",
+      "isSeed": true,
       "status": "ok",
       "alert": "No signal. EMA spread 2.44% | RSI 31.99",
       "alertLevel": "normal",
@@ -95819,9 +95819,9 @@
     },
     {
       "ticker": "INFY.NS",
-      "name": "INFY",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "Infosys",
+      "sector": "IT",
+      "isSeed": true,
       "status": "ok",
       "alert": "No signal. EMA spread 2.98% | RSI 29.9",
       "alertLevel": "normal",
@@ -96401,9 +96401,9 @@
     },
     {
       "ticker": "MARUTI.NS",
-      "name": "MARUTI",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "Maruti Suzuki",
+      "sector": "Auto",
+      "isSeed": true,
       "status": "ok",
       "alert": "No signal. EMA spread 3.86% | RSI 29.61",
       "alertLevel": "normal",
@@ -98237,9 +98237,9 @@
     },
     {
       "ticker": "ICICIBANK.NS",
-      "name": "ICICIBANK",
-      "sector": "NSE",
-      "isSeed": false,
+      "name": "ICICI Bank",
+      "sector": "Banking",
+      "isSeed": true,
       "status": "ok",
       "alert": "No signal. EMA spread 1.29% | RSI 28.6",
       "alertLevel": "normal",
@@ -101092,190 +101092,6 @@
       "marketRegime": "weak"
     },
     {
-      "ticker": "ABLBL.NS",
-      "name": "ABLBL",
-      "sector": "NSE",
-      "isSeed": false,
-      "status": "ok",
-      "alert": "No signal. EMA spread 5.00% | RSI 23.92",
-      "alertLevel": "normal",
-      "currentPrice": 78.72,
-      "ema20": 82.64,
-      "ema50": 86.99,
-      "emaSpread": 5.001,
-      "rsi": 23.92,
-      "rsiBucket": "RSI <40",
-      "volumeRatio": 0.956,
-      "momBucket": "Move <3%",
-      "atr": 1.59,
-      "atrStopFloor": 76.33,
-      "ema20StopFloor": 82.64,
-      "swingLowFloor": 77.78,
-      "isCompressed": false,
-      "isVolumeDryUp": true,
-      "stratA_active": false,
-      "stratB_active": false,
-      "box": {
-        "stratB_active": false,
-        "boxHigh": 87.4,
-        "boxLow": 77.78,
-        "boxDepth": 12.37,
-        "boxDuration": 0,
-        "ceilTouches": 0,
-        "floorTouches": 0,
-        "closeViolations": 0,
-        "boxNote": "Range too narrow: 12.4% < 20.0% required"
-      },
-      "cohort": "NONE",
-      "cohortLabel": "No convergence signal",
-      "framework": "B",
-      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
-      "backtest": {
-        "btEvents": 45,
-        "btWinRate": 13.3,
-        "btProfitFactor": 0.458,
-        "btExpectancy": -2.0893,
-        "btMaxDrawdown": 11.22,
-        "btAvgMAE": 7.091,
-        "btAvgMFE": 4.546,
-        "btAvgWin": 13.195,
-        "btAvgLoss": 4.434,
-        "btMedT5": -1.167,
-        "btMedT20": -2.887,
-        "btMeetsRR": false,
-        "btNote": "45 events (ATR stop) | 36-month window",
-        "btStopComparison": {
-          "fixed2pct": {
-            "events": 45,
-            "wins": 2,
-            "losses": 43,
-            "winRate": 4.4,
-            "avgWin": 15.013,
-            "avgLoss": 2.0,
-            "profitFactor": 0.349,
-            "expectancy": -1.2514
-          },
-          "atr1_5x": {
-            "events": 45,
-            "wins": 6,
-            "losses": 39,
-            "winRate": 13.3,
-            "avgWin": 13.195,
-            "avgLoss": 4.434,
-            "profitFactor": 0.458,
-            "expectancy": -2.0893
-          },
-          "ema20": {
-            "events": 45,
-            "wins": 0,
-            "losses": 45,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 1.856,
-            "profitFactor": 0.0,
-            "expectancy": -1.856
-          },
-          "swingLow": {
-            "events": 45,
-            "wins": 6,
-            "losses": 39,
-            "winRate": 13.3,
-            "avgWin": 13.195,
-            "avgLoss": 3.884,
-            "profitFactor": 0.523,
-            "expectancy": -1.6125
-          }
-        },
-        "btRSIBuckets": {
-          "RSI <40": {
-            "events": 2,
-            "wins": 0,
-            "losses": 2,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 2.0,
-            "profitFactor": 0.0,
-            "expectancy": -2.0
-          },
-          "RSI 40\u201350": {
-            "events": 30,
-            "wins": 0,
-            "losses": 30,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 4.445,
-            "profitFactor": 0.0,
-            "expectancy": -4.445
-          },
-          "RSI 50\u201355": {
-            "events": 9,
-            "wins": 3,
-            "losses": 6,
-            "winRate": 33.3,
-            "avgWin": 14.563,
-            "avgLoss": 5.143,
-            "profitFactor": 1.416,
-            "expectancy": 1.4191
-          },
-          "RSI 55\u201360": {
-            "events": 4,
-            "wins": 3,
-            "losses": 1,
-            "winRate": 75.0,
-            "avgWin": 11.826,
-            "avgLoss": 4.688,
-            "profitFactor": 7.568,
-            "expectancy": 7.6975
-          }
-        },
-        "btMomBuckets": {
-          "Move <3%": {
-            "events": 42,
-            "wins": 6,
-            "losses": 36,
-            "winRate": 14.3,
-            "avgWin": 13.195,
-            "avgLoss": 4.515,
-            "profitFactor": 0.487,
-            "expectancy": -1.9825
-          },
-          "Move 3\u20134%": {
-            "events": 1,
-            "wins": 0,
-            "losses": 1,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 2.0,
-            "profitFactor": 0.0,
-            "expectancy": -2.0
-          },
-          "Move 5\u20136%": {
-            "events": 2,
-            "wins": 0,
-            "losses": 2,
-            "winRate": 0.0,
-            "avgWin": 0,
-            "avgLoss": 4.191,
-            "profitFactor": 0.0,
-            "expectancy": -4.191
-          }
-        },
-        "btRegimeSplit": {
-          "weak": {
-            "events": 45,
-            "wins": 6,
-            "losses": 39,
-            "winRate": 13.3,
-            "avgWin": 13.195,
-            "avgLoss": 4.434,
-            "profitFactor": 0.458,
-            "expectancy": -2.0893
-          }
-        }
-      },
-      "marketRegime": "weak"
-    },
-    {
       "ticker": "IRCON.NS",
       "name": "IRCON",
       "sector": "NSE",
@@ -101474,6 +101290,190 @@
             "avgLoss": 4.923,
             "profitFactor": 0.0,
             "expectancy": -4.923
+          }
+        }
+      },
+      "marketRegime": "weak"
+    },
+    {
+      "ticker": "ABLBL.NS",
+      "name": "ABLBL",
+      "sector": "NSE",
+      "isSeed": false,
+      "status": "ok",
+      "alert": "No signal. EMA spread 5.00% | RSI 23.92",
+      "alertLevel": "normal",
+      "currentPrice": 78.72,
+      "ema20": 82.64,
+      "ema50": 86.99,
+      "emaSpread": 5.001,
+      "rsi": 23.92,
+      "rsiBucket": "RSI <40",
+      "volumeRatio": 0.956,
+      "momBucket": "Move <3%",
+      "atr": 1.59,
+      "atrStopFloor": 76.33,
+      "ema20StopFloor": 82.64,
+      "swingLowFloor": 77.78,
+      "isCompressed": false,
+      "isVolumeDryUp": true,
+      "stratA_active": false,
+      "stratB_active": false,
+      "box": {
+        "stratB_active": false,
+        "boxHigh": 87.4,
+        "boxLow": 77.78,
+        "boxDepth": 12.37,
+        "boxDuration": 0,
+        "ceilTouches": 0,
+        "floorTouches": 0,
+        "closeViolations": 0,
+        "boxNote": "Range too narrow: 12.4% < 20.0% required"
+      },
+      "cohort": "NONE",
+      "cohortLabel": "No convergence signal",
+      "framework": "B",
+      "frameworkDesc": "Framework B \u2014 Bottom-Sweep Accumulation (3\u201324 months). Price below EMA-50.",
+      "backtest": {
+        "btEvents": 45,
+        "btWinRate": 13.3,
+        "btProfitFactor": 0.458,
+        "btExpectancy": -2.0893,
+        "btMaxDrawdown": 11.22,
+        "btAvgMAE": 7.091,
+        "btAvgMFE": 4.546,
+        "btAvgWin": 13.195,
+        "btAvgLoss": 4.434,
+        "btMedT5": -1.167,
+        "btMedT20": -2.887,
+        "btMeetsRR": false,
+        "btNote": "45 events (ATR stop) | 36-month window",
+        "btStopComparison": {
+          "fixed2pct": {
+            "events": 45,
+            "wins": 2,
+            "losses": 43,
+            "winRate": 4.4,
+            "avgWin": 15.013,
+            "avgLoss": 2.0,
+            "profitFactor": 0.349,
+            "expectancy": -1.2514
+          },
+          "atr1_5x": {
+            "events": 45,
+            "wins": 6,
+            "losses": 39,
+            "winRate": 13.3,
+            "avgWin": 13.195,
+            "avgLoss": 4.434,
+            "profitFactor": 0.458,
+            "expectancy": -2.0893
+          },
+          "ema20": {
+            "events": 45,
+            "wins": 0,
+            "losses": 45,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 1.856,
+            "profitFactor": 0.0,
+            "expectancy": -1.856
+          },
+          "swingLow": {
+            "events": 45,
+            "wins": 6,
+            "losses": 39,
+            "winRate": 13.3,
+            "avgWin": 13.195,
+            "avgLoss": 3.884,
+            "profitFactor": 0.523,
+            "expectancy": -1.6125
+          }
+        },
+        "btRSIBuckets": {
+          "RSI <40": {
+            "events": 2,
+            "wins": 0,
+            "losses": 2,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 2.0,
+            "profitFactor": 0.0,
+            "expectancy": -2.0
+          },
+          "RSI 40\u201350": {
+            "events": 30,
+            "wins": 0,
+            "losses": 30,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 4.445,
+            "profitFactor": 0.0,
+            "expectancy": -4.445
+          },
+          "RSI 50\u201355": {
+            "events": 9,
+            "wins": 3,
+            "losses": 6,
+            "winRate": 33.3,
+            "avgWin": 14.563,
+            "avgLoss": 5.143,
+            "profitFactor": 1.416,
+            "expectancy": 1.4191
+          },
+          "RSI 55\u201360": {
+            "events": 4,
+            "wins": 3,
+            "losses": 1,
+            "winRate": 75.0,
+            "avgWin": 11.826,
+            "avgLoss": 4.688,
+            "profitFactor": 7.568,
+            "expectancy": 7.6975
+          }
+        },
+        "btMomBuckets": {
+          "Move <3%": {
+            "events": 42,
+            "wins": 6,
+            "losses": 36,
+            "winRate": 14.3,
+            "avgWin": 13.195,
+            "avgLoss": 4.515,
+            "profitFactor": 0.487,
+            "expectancy": -1.9825
+          },
+          "Move 3\u20134%": {
+            "events": 1,
+            "wins": 0,
+            "losses": 1,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 2.0,
+            "profitFactor": 0.0,
+            "expectancy": -2.0
+          },
+          "Move 5\u20136%": {
+            "events": 2,
+            "wins": 0,
+            "losses": 2,
+            "winRate": 0.0,
+            "avgWin": 0,
+            "avgLoss": 4.191,
+            "profitFactor": 0.0,
+            "expectancy": -4.191
+          }
+        },
+        "btRegimeSplit": {
+          "weak": {
+            "events": 45,
+            "wins": 6,
+            "losses": 39,
+            "winRate": 13.3,
+            "avgWin": 13.195,
+            "avgLoss": 4.434,
+            "profitFactor": 0.458,
+            "expectancy": -2.0893
           }
         }
       },
