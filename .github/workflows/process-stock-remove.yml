@@ -1,0 +1,137 @@
+name: Process Stock Remove Request
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  remove-stock:
+    # Triggers when the 'remove-approved' label is applied by admin
+    if: github.event.label.name == 'remove-approved'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Parse issue and remove stock
+        id: parse
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          python3 << 'PYTHON_EOF'
+          import json
+          import os
+          import re
+
+          issue_title = os.environ['ISSUE_TITLE']
+          issue_body  = os.environ['ISSUE_BODY']
+
+          print(f"Processing remove request: {issue_title}")
+
+          # ── Extract ticker from issue body (Ticker: INFY.NS) ──────────────
+          ticker = None
+          for line in issue_body.splitlines():
+              m = re.search(r'Ticker[:\s]+([A-Z0-9\.\-]+)', line, re.IGNORECASE)
+              if m:
+                  ticker = m.group(1).strip().upper()
+                  break
+
+          # Fallback: parse from title [REMOVE] INFY.NS — Infosys
+          if not ticker:
+              m = re.search(r'\[REMOVE\]\s+([A-Z0-9\.\-]+)', issue_title, re.IGNORECASE)
+              if m:
+                  ticker = m.group(1).strip().upper()
+
+          if not ticker:
+              print("ERROR: Could not parse ticker from issue title or body.")
+              exit(1)
+
+          print(f"Ticker to remove: {ticker}")
+
+          # ── Load stocks.json ───────────────────────────────────────────────
+          stocks_file = 'data/stocks.json'
+          try:
+              with open(stocks_file, 'r', encoding='utf-8') as f:
+                  data = json.load(f)
+          except FileNotFoundError:
+              print("ERROR: data/stocks.json not found.")
+              exit(1)
+
+          stocks = data.get('stocks', [])
+          before = len(stocks)
+          stocks_new = [s for s in stocks if s.get('ticker', '').upper() != ticker]
+          after = len(stocks_new)
+
+          if before == after:
+              print(f"WARNING: {ticker} was not found in stocks.json — nothing to remove.")
+              removed_name = ticker
+          else:
+              removed = [s for s in stocks if s.get('ticker','').upper() == ticker]
+              removed_name = removed[0].get('name', ticker) if removed else ticker
+              print(f"Removed: {removed_name} ({ticker})")
+
+          data['stocks'] = stocks_new
+          with open(stocks_file, 'w', encoding='utf-8') as f:
+              json.dump(data, f, indent=2, ensure_ascii=False)
+
+          print(f"stocks.json updated: {before} → {after} stocks")
+
+          # Write outputs
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"ticker={ticker}\n")
+              f.write(f"name={removed_name}\n")
+              f.write(f"removed_count={before - after}\n")
+
+          PYTHON_EOF
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/stocks.json
+          git diff --staged --quiet || git commit -m "Remove stock: ${{ steps.parse.outputs.ticker }} (${{ steps.parse.outputs.name }}) via Issue #${{ github.event.issue.number }}"
+          git push
+
+      - name: Comment on issue confirming removal
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const removed = '${{ steps.parse.outputs.removed_count }}';
+            const ticker  = '${{ steps.parse.outputs.ticker }}';
+            const name    = '${{ steps.parse.outputs.name }}';
+            const body = removed === '1'
+              ? `✅ **Stock Removed Successfully!**\n\n**${name} (${ticker})** has been removed from \`data/stocks.json\`.\n\nThe dashboard and scanner will reflect this change on the next automated run (4:15 PM IST) or you can trigger it manually via Actions.\n\nThis issue is now closed.`
+              : `⚠️ **${ticker} was not found** in \`data/stocks.json\`. It may have already been removed, or the ticker format is different. Please check the file manually.\n\nNo changes were made.`;
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Add completed label and close issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.issues.addLabels({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: ['completed']
+              });
+            } catch(e) { /* completed label may not exist yet */ }
+            await github.rest.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed'
+            });
