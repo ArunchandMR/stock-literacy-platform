@@ -1,20 +1,20 @@
-name: Daily Swing Squeeze Scanner
+name: Automated Convergence Engine Scanner
 
 on:
   schedule:
-    # 4:00 PM IST = 10:30 UTC, Mon-Fri
-    - cron: '30 10 * * 1-5'
+    # 4:15 PM IST = 10:45 AM UTC, Monday - Friday
+    - cron: '45 10 * * 1-5'
 
-  # Run manually anytime from Actions tab
+  # Allow manual execution anytime via GitHub Actions UI
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  scan:
+  run-convergence-scanner:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repository
@@ -33,21 +33,33 @@ jobs:
           pip install --upgrade pip
           pip install -r scripts/requirements.txt
 
-      - name: Run Squeeze Scanner
+      - name: Run Squeeze & Convergence Scanner (swing-dashboard.html)
         run: python scripts/scanner.py
+
+      - name: Run Convergence Evidence Engine (convergence-dashboard.html)
+        run: python scripts/convergence_engine.py
 
       - name: Check for changes
         id: git-check
         run: |
-          git diff --exit-code data/swing_scanner.json swing-dashboard.html || echo "changed=true" >> $GITHUB_OUTPUT
+          git diff --exit-code \
+            data/swing_scanner.json \
+            swing-dashboard.html \
+            data/convergence.json \
+            convergence-dashboard.html \
+            || echo "changed=true" >> $GITHUB_OUTPUT
 
-      - name: Commit and push updated dashboard
+      - name: Commit and push updated dashboards
         if: steps.git-check.outputs.changed == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add data/swing_scanner.json swing-dashboard.html
-          git commit -m "🤖 Auto-scan: Swing squeeze dashboard ($(date +'%Y-%m-%d %H:%M IST'))"
+          git add \
+            data/swing_scanner.json \
+            swing-dashboard.html \
+            data/convergence.json \
+            convergence-dashboard.html
+          git commit -m "🤖 Auto-scan: Convergence Engine ($(date +'%Y-%m-%d %H:%M IST')) [skip ci]"
           git push
 
       - name: No changes detected
@@ -56,4 +68,4 @@ jobs:
 
       - name: Scan complete
         run: |
-          echo "✅ Squeeze scanner finished. GitHub Pages will auto-deploy within 1-2 minutes."
+          echo "✅ Convergence scanner finished. GitHub Pages will auto-deploy within 1-2 minutes."
