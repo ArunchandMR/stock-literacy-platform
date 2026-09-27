@@ -200,26 +200,46 @@ jobs:
 
       - name: Comment on issue
         uses: actions/github-script@v7
+        env:
+          TICKER:       ${{ steps.parse.outputs.ticker }}
+          STOCK_NAME:   ${{ steps.parse.outputs.name }}
+          ENTRY_PRICE:  ${{ steps.parse.outputs.entry_price }}
+          TARGET_PRICE: ${{ steps.parse.outputs.target_price }}
+          ATR_STOP:     ${{ steps.parse.outputs.atr_stop }}
+          STRATEGY:     ${{ steps.parse.outputs.strategy }}
         with:
           script: |
+            const ticker      = process.env.TICKER;
+            const stockName   = process.env.STOCK_NAME;
+            const entryPrice  = process.env.ENTRY_PRICE;
+            const targetPrice = process.env.TARGET_PRICE;
+            const atrStop     = process.env.ATR_STOP;
+            const strategy    = process.env.STRATEGY;
+            const dashUrl     = `https://${context.repo.owner}.github.io/${context.repo.repo}/dashboard.html`;
+
+            const body = [
+              '### \u{1F4C8} Stock Added Successfully!',
+              '',
+              `**${ticker}** \u2014 ${stockName} has been added to the dashboard.`,
+              '',
+              '| Field | Value |',
+              '|---|---|',
+              `| **Ticker** | \`${ticker}\` |`,
+              `| **Entry Price** | \u20B9${entryPrice} |`,
+              `| **Target Price** | \u20B9${targetPrice} |`,
+              `| **ATR Stop-Loss** | \u20B9${atrStop} *(1.5\u00D7 ATR \u2014 more protective than a fixed 2%)* |`,
+              `| **Strategy** | \`${strategy}\` *(auto-detected from EMA compression)* |`,
+              '',
+              'The quantitative background robot will sync this asset into tonight\u2019s post-market strategy scan loop.',
+              '',
+              `[View Dashboard \u2192](${dashUrl})`
+            ].join('\n');
+
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `✅ **Stock Added Successfully!**
-
-**${{ steps.parse.outputs.ticker }}** — ${{ steps.parse.outputs.name }} has been added to the dashboard.
-
-| Field | Value |
-|---|---|
-| Entry Price | ₹${{ steps.parse.outputs.entry_price }} |
-| Target Price | ₹${{ steps.parse.outputs.target_price }} |
-| ATR Stop-Loss | ₹${{ steps.parse.outputs.atr_stop }} *(auto-calculated at 1.5× ATR — more protective than a fixed 2%)* |
-| Strategy | ${{ steps.parse.outputs.strategy }} *(auto-detected from EMA compression)* |
-
-The scanner will include this stock in tonight's automated run (4:15 PM IST).
-
-[View Dashboard →](https://${context.repo.owner}.github.io/${context.repo.repo}/dashboard.html)`
+              body: body
             });
 
       - name: Add completed label and close issue
