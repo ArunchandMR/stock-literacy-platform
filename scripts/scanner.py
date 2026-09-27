@@ -59,6 +59,7 @@ DATA_DIR       = ROOT / "data"
 DATA_DIR.mkdir(exist_ok=True)
 SCANNER_JSON   = DATA_DIR / "swing_scanner.json"
 DASHBOARD_HTML = ROOT / "swing-dashboard.html"
+STOCKS_JSON    = DATA_DIR / "stocks.json"   # Stock Manager source of truth
 
 # ── Strategy A — Compression thresholds (BRD §1) ─────────────────────────────
 EMA_SPREAD_MAX    = 1.5    # % — EMAs must be pinched tighter than this
@@ -173,6 +174,42 @@ def get_nse_tickers() -> list[str]:
 
     print(f"  ℹ Using backup list ({len(BACKUP_TICKERS)} tickers)")
     return BACKUP_TICKERS
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STEP 1b: Load stocks from Stock Manager (data/stocks.json)
+# ─────────────────────────────────────────────────────────────────────────────
+def load_stocks_json() -> list[dict]:
+    """
+    Reads data/stocks.json (the Stock Manager's source of truth) and returns
+    a list of meta dicts compatible with SEED_META format:
+      { "ticker": "X.NS", "name": "...", "sector": "..." }
+
+    These are merged with SEED_WATCHLIST so every stock added via the
+    Stock Manager page is automatically included in the daily scan.
+    """
+    result = []
+    try:
+        with open(STOCKS_JSON, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for s in data.get("stocks", []):
+            ticker = s.get("ticker", "").strip()
+            if not ticker:
+                continue
+            # Normalise — ensure .NS suffix
+            if not ticker.endswith(".NS"):
+                ticker = ticker + ".NS"
+            result.append({
+                "ticker": ticker,
+                "name":   s.get("name", ticker.replace(".NS", "")),
+                "sector": s.get("sector", "Portfolio"),
+            })
+        print(f"  ✅ Loaded {len(result)} stocks from Stock Manager (stocks.json)")
+    except FileNotFoundError:
+        print("  ℹ stocks.json not found — using seed watchlist only")
+    except Exception as e:
+        print(f"  ⚠ stocks.json load failed: {e}")
+    return result
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1137,6 +1174,20 @@ def main() -> int:
     print("  Fetching market regime (Nifty 200-SMA)...")
     regime_info = get_market_regime()
     print(f"  Regime: {regime_info['regime']} | Nifty: {regime_info.get('nifty_price')} | 200-SMA: {regime_info.get('nifty_sma200')}\n")
+
+    # ── 1b. Load Stock Manager stocks (stocks.json) and merge into seed universe
+    print("  Loading Stock Manager watchlist (data/stocks.json)...")
+    portfolio_stocks = load_stocks_json()
+    # Merge portfolio stocks into the meta lookup — they get "isSeed=True" treatment
+    # so they always appear in the dashboard even if no signal fires on them
+    portfolio_tickers: set[str] = set()
+    for s in portfolio_stocks:
+        t = s["ticker"]
+        portfolio_tickers.add(t)
+        if t not in SEED_META:          # don't overwrite existing seed metadata
+            SEED_META[t]    = s
+            SEED_TICKERS.add(t)
+    print(f"  Portfolio stocks added to scan: {len(portfolio_tickers)}\n")
 
     # ── 2. Build full ticker universe ───────────────────────────────────────
     live_tickers = get_nse_tickers()
