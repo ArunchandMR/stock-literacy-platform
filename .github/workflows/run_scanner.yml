@@ -44,6 +44,7 @@ jobs:
         run: |
           git diff --exit-code \
             data/swing_scanner.json \
+            data/stocks.json \
             swing-dashboard.html \
             data/convergence.json \
             convergence-dashboard.html \
@@ -56,10 +57,11 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add \
             data/swing_scanner.json \
+            data/stocks.json \
             swing-dashboard.html \
             data/convergence.json \
             convergence-dashboard.html
-          git commit -m "🤖 Auto-scan: Convergence Engine ($(date +'%Y-%m-%d %H:%M IST')) [skip ci]"
+          git commit -m "🤖 Auto-scan: Convergence Engine + P&L update ($(date +'%Y-%m-%d %H:%M IST')) [skip ci]"
           git push
 
       - name: No changes detected
