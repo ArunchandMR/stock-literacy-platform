@@ -74,116 +74,284 @@
     </div>
   </section>
 
-  <!-- Awaiting First Scan -->
+  <!-- Main: watchlist loaded from stocks.json + scan state from swing_scanner.json -->
   <main class="max-w-6xl mx-auto px-4 py-4 pb-12">
 
-    <div class="bg-white rounded-lg shadow-sm border border-blue-100 p-10 text-center">
-      <div class="text-5xl mb-4">⏳</div>
-      <h2 class="text-xl font-bold text-gray-800 mb-2">Awaiting First Automated Scan</h2>
-      <p class="text-gray-500 text-sm max-w-lg mx-auto mb-6">
-        The scanner runs automatically every Monday–Friday at <strong>4:30 PM IST</strong> after NSE market close.
-        It will analyse the 7 stocks in the mentor's watchlist and update this page with live results.
-      </p>
-
-      <div class="grid md:grid-cols-3 gap-4 text-left mt-6 max-w-2xl mx-auto text-sm">
-        <div class="bg-gray-50 rounded-lg p-4">
-          <p class="font-bold text-gray-700 mb-1"><i class="fas fa-compress-arrows-alt mr-1 text-blue-500"></i> EMA Squeeze</p>
-          <p class="text-gray-500">20 &amp; 50 EMA spread &lt; 1.5% — coiled spring, breakout loading</p>
-        </div>
-        <div class="bg-gray-50 rounded-lg p-4">
-          <p class="font-bold text-gray-700 mb-1"><i class="fas fa-chart-bar mr-1 text-green-500"></i> Volume Dry-Up</p>
-          <p class="text-gray-500">Volume &lt; 75% of 20-day average — selling exhaustion complete</p>
-        </div>
-        <div class="bg-gray-50 rounded-lg p-4">
-          <p class="font-bold text-gray-700 mb-1"><i class="fas fa-tachometer-alt mr-1 text-purple-500"></i> RSI Neutral</p>
-          <p class="text-gray-500">RSI 40–55 — not overextended, entry window still open</p>
-        </div>
-      </div>
-
-      <div class="mt-8 text-xs text-gray-400">
-        To trigger a manual scan now: go to your GitHub repo →
-        <strong>Actions</strong> → <strong>Daily Swing Squeeze Scanner</strong> → <strong>Run workflow</strong>
-      </div>
+    <!-- Status banner -->
+    <div id="scan-status-banner" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 text-sm text-blue-800 flex items-center gap-3">
+      <i class="fas fa-info-circle text-blue-500 text-lg flex-shrink-0"></i>
+      <span id="scan-status-text">Loading scan data…</span>
     </div>
 
-    <!-- Watchlist preview -->
-    <div class="mt-6 bg-white rounded-lg shadow-sm overflow-hidden">
-      <div class="bg-slate-700 text-white px-5 py-3 text-sm font-semibold">
-        <i class="fas fa-list mr-2"></i>Mentor's Watchlist — 7 Stocks
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SECTION 1 — FULL NSE UNIVERSE ANALYSIS
+         All ~500 stocks the scanner ran on, sorted by signal strength.
+         This is the global scan — not limited to your watchlist.
+    ════════════════════════════════════════════════════════════════════ -->
+    <div class="mb-2 flex items-center justify-between">
+      <h2 class="text-base font-bold text-gray-800">
+        <i class="fas fa-globe text-blue-500 mr-2"></i>
+        Full NSE Universe Analysis
+        <span class="text-xs font-normal text-gray-400 ml-2" id="universe-count"></span>
+      </h2>
+      <span class="text-xs text-gray-400">Sorted: A∩B → A Only → B Only → Watch → Normal</span>
+    </div>
+    <div id="scan-cards"></div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SECTION 2 — YOUR PERSONAL WATCHLIST
+         Seed stocks + anything you added in Stock Manager.
+         Always visible even before the first workflow run.
+    ════════════════════════════════════════════════════════════════════ -->
+    <div class="mt-8 bg-white rounded-lg shadow-sm overflow-hidden">
+      <div class="bg-slate-700 text-white px-5 py-3 text-sm font-semibold flex items-center justify-between">
+        <span>
+          <i class="fas fa-bookmark mr-2"></i>Your Watchlist — <span id="watchlist-count">…</span> Stocks
+          <span class="text-xs font-normal text-slate-300 ml-2">(Seed + Stock Manager)</span>
+        </span>
+        <a href="discussions.html" class="text-xs bg-blue-500 hover:bg-blue-400 text-white px-3 py-1 rounded transition">
+          <i class="fas fa-plus mr-1"></i>Add via Stock Manager
+        </a>
       </div>
       <table class="w-full text-sm">
         <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
           <tr>
             <th class="px-5 py-3 text-left">Stock</th>
             <th class="px-5 py-3 text-left">Sector</th>
+            <th class="px-5 py-3 text-left">Strategy</th>
+            <th class="px-5 py-3 text-center">Entry Price</th>
             <th class="px-5 py-3 text-center">EMA Spread</th>
-            <th class="px-5 py-3 text-center">Vol Dry-Up</th>
-            <th class="px-5 py-3 text-center">RSI Zone</th>
+            <th class="px-5 py-3 text-center">Cohort</th>
             <th class="px-5 py-3 text-center">Signal</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-100">
-          <tr class="hover:bg-gray-50">
-            <td class="px-5 py-3 font-semibold text-gray-800">Larsen &amp; Toubro <span class="text-xs text-gray-400 font-normal ml-1">LT</span></td>
-            <td class="px-5 py-3 text-gray-500">Infra / Capital Goods</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center"><span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">Pending scan</span></td>
-          </tr>
-          <tr class="hover:bg-gray-50">
-            <td class="px-5 py-3 font-semibold text-gray-800">Acme Solar <span class="text-xs text-gray-400 font-normal ml-1">ACMESOLAR</span></td>
-            <td class="px-5 py-3 text-gray-500">Renewable Energy</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center"><span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">Pending scan</span></td>
-          </tr>
-          <tr class="hover:bg-gray-50">
-            <td class="px-5 py-3 font-semibold text-gray-800">Cyient DLM <span class="text-xs text-gray-400 font-normal ml-1">CYIENTDLM</span></td>
-            <td class="px-5 py-3 text-gray-500">Electronics / Defence</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center"><span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">Pending scan</span></td>
-          </tr>
-          <tr class="hover:bg-gray-50">
-            <td class="px-5 py-3 font-semibold text-gray-800">Techno Electric <span class="text-xs text-gray-400 font-normal ml-1">TECHNOE</span></td>
-            <td class="px-5 py-3 text-gray-500">Power / EPC</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center"><span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">Pending scan</span></td>
-          </tr>
-          <tr class="hover:bg-gray-50">
-            <td class="px-5 py-3 font-semibold text-gray-800">SRF Limited <span class="text-xs text-gray-400 font-normal ml-1">SRF</span></td>
-            <td class="px-5 py-3 text-gray-500">Chemicals / Films</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center"><span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">Pending scan</span></td>
-          </tr>
-          <tr class="hover:bg-gray-50">
-            <td class="px-5 py-3 font-semibold text-gray-800">Coal India <span class="text-xs text-gray-400 font-normal ml-1">COALINDIA</span></td>
-            <td class="px-5 py-3 text-gray-500">Mining / PSU</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center"><span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">Pending scan</span></td>
-          </tr>
-          <tr class="hover:bg-gray-50">
-            <td class="px-5 py-3 font-semibold text-gray-800">Hindustan Copper <span class="text-xs text-gray-400 font-normal ml-1">HINDCOPPER</span></td>
-            <td class="px-5 py-3 text-gray-500">Metals / PSU</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center text-gray-400">—</td>
-            <td class="px-5 py-3 text-center"><span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">Pending scan</span></td>
-          </tr>
+        <tbody id="watchlist-tbody" class="divide-y divide-gray-100">
+          <tr><td colspan="7" class="px-5 py-8 text-center text-gray-400 text-sm">Loading watchlist…</td></tr>
         </tbody>
       </table>
     </div>
 
   </main>
+
+  <script>
+  async function loadJSON(url) {
+    try {
+      const r = await fetch(url + '?_=' + Date.now());
+      if (!r.ok) return null;
+      return await r.json();
+    } catch { return null; }
+  }
+
+  function cohortBadge(cohort) {
+    if (!cohort || cohort === 'NONE') return '<span class="text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded">—</span>';
+    if (cohort === 'A_AND_B') return '<span class="text-xs bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded">💎 A∩B</span>';
+    if (cohort === 'A_ONLY')  return '<span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">⚡ A Only</span>';
+    if (cohort === 'B_ONLY')  return '<span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">📐 B Only</span>';
+    return '<span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded">' + cohort + '</span>';
+  }
+
+  function alertBadge(level) {
+    const map = {
+      critical:    '<span class="text-xs bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded">🎯 Critical</span>',
+      setup:       '<span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">⚡ Setup</span>',
+      watch:       '<span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">🔄 Watch</span>',
+      overextended:'<span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">🚫 Overextended</span>',
+    };
+    return map[level] || '<span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded">Pending scan</span>';
+  }
+
+  // ── Seed watchlist (always shown even before first workflow run) ──────────
+  const seedMeta = [
+    {ticker:'LT.NS',         name:'Larsen & Toubro',   sector:'Infra/Capital Goods', strategy:'swing'},
+    {ticker:'ACMESOLAR.NS',  name:'Acme Solar',        sector:'Renewable Energy',    strategy:'swing'},
+    {ticker:'CYIENTDLM.NS',  name:'Cyient DLM',        sector:'Electronics/Defence', strategy:'swing'},
+    {ticker:'TECHNOE.NS',    name:'Techno Electric',   sector:'Power/EPC',           strategy:'swing'},
+    {ticker:'SRF.NS',        name:'SRF Limited',       sector:'Chemicals/Films',     strategy:'swing'},
+    {ticker:'COALINDIA.NS',  name:'Coal India',        sector:'Mining/PSU',          strategy:'swing'},
+    {ticker:'HINDCOPPER.NS', name:'Hindustan Copper',  sector:'Metals/PSU',          strategy:'swing'},
+  ];
+  const seedTickers = new Set(seedMeta.map(s => s.ticker));
+
+  async function init() {
+    const [stocksData, scanData] = await Promise.all([
+      loadJSON('data/stocks.json'),
+      loadJSON('data/swing_scanner.json'),
+    ]);
+
+    // ── Scan lookup map: ticker → result object ───────────────────────────
+    const scanMap = {};
+    if (scanData && scanData.results) {
+      for (const r of scanData.results) scanMap[r.ticker] = r;
+    }
+
+    // ── Status banner ─────────────────────────────────────────────────────
+    const banner = document.getElementById('scan-status-text');
+    if (scanData && scanData.runTimeIST) {
+      const cs = scanData.cohortSummary || {};
+      banner.innerHTML =
+        '<i class="fas fa-check-circle text-green-600 mr-1"></i>Last scan: <strong>' + scanData.runTimeIST + '</strong>' +
+        ' · <strong>' + (scanData.totalScanned||0) + '</strong> stocks analysed' +
+        ' · 💎 ' + (cs.A_AND_B||0) + ' A∩B' +
+        ' · ⚡ ' + (cs.A_ONLY||0) + ' A Only' +
+        ' · 📐 ' + (cs.B_ONLY||0) + ' B Only' +
+        ' · <span class="text-gray-500">Next: 4:15 PM IST auto or trigger via GitHub Actions</span>';
+      const b = document.getElementById('scan-status-banner');
+      b.className = b.className.replace('bg-blue-50','bg-green-50').replace('border-blue-200','border-green-200').replace('text-blue-800','text-green-800');
+    } else {
+      banner.innerHTML =
+        '<i class="fas fa-clock text-blue-500 mr-1"></i>No scan data yet. ' +
+        '<strong>To run manually:</strong> GitHub repo → Actions → <strong>Automated Convergence Engine Scanner</strong> → Run workflow.';
+    }
+
+    // ── SECTION 1: Full NSE universe cards ───────────────────────────────
+    // Shows ALL results from swing_scanner.json — the complete global analysis.
+    // Stocks with no signal (cohort=NONE) are shown in a compact table below the cards.
+    const cardsEl = document.getElementById('scan-cards');
+    const portfolio = (stocksData && stocksData.stocks) ? stocksData.stocks : [];
+    const portfolioTickers = new Set(portfolio.map(s => s.ticker));
+
+    if (!scanData || !scanData.results || scanData.results.length === 0) {
+      document.getElementById('universe-count').textContent = '';
+      cardsEl.innerHTML =
+        '<div class="bg-white rounded-lg border border-gray-200 p-10 text-center text-gray-400">' +
+        '<div class="text-4xl mb-3">⏳</div>' +
+        '<p class="font-semibold text-gray-600 mb-1">Awaiting first automated scan</p>' +
+        '<p class="text-sm">Trigger manually: GitHub repo → Actions → <strong>Automated Convergence Engine Scanner</strong> → Run workflow</p>' +
+        '</div>';
+    } else {
+      const allResults = scanData.results;  // already sorted by scanner: critical→setup→watch→normal
+      const signalling = allResults.filter(r => r.cohort !== 'NONE');
+      const nonSignal  = allResults.filter(r => r.cohort === 'NONE');
+
+      document.getElementById('universe-count').textContent =
+        allResults.length + ' stocks · ' + signalling.length + ' with signals';
+
+      const BORDER = {
+        critical:    'border-green-500 bg-green-50',
+        setup:       'border-yellow-400 bg-yellow-50',
+        watch:       'border-blue-400 bg-blue-50',
+        overextended:'border-red-400 bg-red-50',
+        normal:      'border-gray-200 bg-white',
+        error:       'border-gray-200 bg-gray-50',
+      };
+      const ICON = {critical:'💎', setup:'⚡', watch:'📐', overextended:'🚫', normal:'⏳', error:'⚠️'};
+
+      // Render signal cards (all stocks with an active signal)
+      const cardHTML = signalling.map(r => {
+        const cls  = BORDER[r.alertLevel] || BORDER.normal;
+        const icon = ICON[r.alertLevel]   || '⏳';
+        const p    = v => v != null ? '₹' + Number(v).toLocaleString('en-IN', {minimumFractionDigits:2}) : '—';
+        const isSd = seedTickers.has(r.ticker);
+        const isPt = portfolioTickers.has(r.ticker);
+        const src  = isSd ? '<span class="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded">Seed</span>'
+                   : isPt ? '<span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">Portfolio</span>'
+                   :        '<span class="text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">Universe</span>';
+        return `<div class="rounded-lg shadow-sm p-5 border-l-4 ${cls} mb-3">
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+            <div class="flex-1">
+              <div class="flex flex-wrap items-center gap-2 mb-1">
+                <span class="text-xl">${icon}</span>
+                <span class="font-bold text-gray-900">${r.name}</span>
+                <span class="text-xs text-gray-400 font-mono">${r.ticker.replace('.NS','')}</span>
+                <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">${r.sector}</span>
+                ${src} ${cohortBadge(r.cohort)}
+              </div>
+              <p class="text-sm text-gray-700">${r.alert}</p>
+              <p class="text-xs text-gray-500 mt-0.5">RSI bucket: <b>${r.rsiBucket||'—'}</b> · Momentum: <b>${r.momBucket||'—'}</b> · Regime: <b>${r.marketRegime||'—'}</b></p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <p class="text-2xl font-bold text-gray-900">${p(r.currentPrice)}</p>
+              <p class="text-xs text-gray-400">Current Price</p>
+            </div>
+          </div>
+          <div class="mt-3 grid grid-cols-3 md:grid-cols-6 gap-2 text-xs text-center">
+            <div class="bg-white rounded p-2 shadow-sm"><p class="text-gray-400">EMA Spread</p><p class="font-semibold ${r.isCompressed?'text-green-700':''}">${r.emaSpread!=null?r.emaSpread.toFixed(2)+'%':'—'}</p></div>
+            <div class="bg-white rounded p-2 shadow-sm"><p class="text-gray-400">RSI</p><p class="font-semibold">${r.rsi!=null?r.rsi:'—'}</p></div>
+            <div class="bg-white rounded p-2 shadow-sm"><p class="text-gray-400">Vol Ratio</p><p class="font-semibold ${r.isVolumeDryUp?'text-green-700':''}">${r.volumeRatio!=null?r.volumeRatio.toFixed(2)+'x':'—'}</p></div>
+            <div class="bg-white rounded p-2 shadow-sm"><p class="text-gray-400">ATR Stop</p><p class="font-semibold text-red-600">${p(r.atrStopFloor)}</p></div>
+            <div class="bg-white rounded p-2 shadow-sm"><p class="text-gray-400">EMA20 Stop</p><p class="font-semibold text-orange-600">${p(r.ema20StopFloor)}</p></div>
+            <div class="bg-white rounded p-2 shadow-sm"><p class="text-gray-400">Swing Low</p><p class="font-semibold text-purple-700">${p(r.swingLowFloor)}</p></div>
+          </div>
+        </div>`;
+      }).join('');
+
+      // Compact table for non-signalling stocks (cohort=NONE) — collapsed by default
+      const noSigRows = nonSignal.map(r => {
+        const p = v => v != null ? '₹' + Number(v).toLocaleString('en-IN', {minimumFractionDigits:2}) : '—';
+        return `<tr class="hover:bg-gray-50 text-xs">
+          <td class="px-4 py-2 font-medium text-gray-700">${r.name} <span class="text-gray-400 font-mono">${r.ticker.replace('.NS','')}</span></td>
+          <td class="px-4 py-2 text-gray-500">${r.sector}</td>
+          <td class="px-4 py-2 text-center text-gray-500">${r.emaSpread!=null?r.emaSpread.toFixed(2)+'%':'—'}</td>
+          <td class="px-4 py-2 text-center text-gray-500">${r.rsi!=null?r.rsi:'—'}</td>
+          <td class="px-4 py-2 text-center">${p(r.currentPrice)}</td>
+        </tr>`;
+      }).join('');
+
+      cardsEl.innerHTML = cardHTML +
+        (nonSignal.length > 0 ? `
+        <details class="mt-4">
+          <summary class="cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-lg px-5 py-3 text-sm font-semibold text-gray-600 select-none">
+            <i class="fas fa-chevron-right mr-2 text-xs"></i>
+            ${nonSignal.length} stocks with no active signal (no A or B conditions met) — click to expand
+          </summary>
+          <div class="mt-2 bg-white rounded-lg border border-gray-200 overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                <tr>
+                  <th class="px-4 py-2 text-left">Stock</th>
+                  <th class="px-4 py-2 text-left">Sector</th>
+                  <th class="px-4 py-2 text-center">EMA Spread</th>
+                  <th class="px-4 py-2 text-center">RSI</th>
+                  <th class="px-4 py-2 text-center">Price</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">${noSigRows}</tbody>
+            </table>
+          </div>
+        </details>` : '');
+    }
+
+    // ── SECTION 2: Personal watchlist (seed + Stock Manager) ─────────────
+    // Merge seed + portfolio, seed stocks first
+    const allWatchlist = [
+      ...seedMeta,
+      ...portfolio.filter(s => !seedTickers.has(s.ticker)).map(s => ({
+        ticker:     s.ticker,
+        name:       s.name,
+        sector:     s.sector || '—',
+        strategy:   s.strategy || '—',
+        entryPrice: s.entryPrice,
+      })),
+    ];
+    document.getElementById('watchlist-count').textContent = allWatchlist.length;
+
+    const tbody = document.getElementById('watchlist-tbody');
+    tbody.innerHTML = allWatchlist.map(s => {
+      const scan   = scanMap[s.ticker] || {};
+      const spread = scan.emaSpread != null ? scan.emaSpread.toFixed(2) + '%' : '—';
+      const isSeed = seedTickers.has(s.ticker);
+      const src    = isSeed
+        ? '<span class="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded ml-1">Seed</span>'
+        : '<span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded ml-1">Portfolio</span>';
+      const sym    = s.ticker.replace('.NS','');
+      const entry  = s.entryPrice ? '₹' + Number(s.entryPrice).toLocaleString('en-IN') : '—';
+      return `<tr class="hover:bg-gray-50">
+        <td class="px-5 py-3">
+          <span class="font-semibold text-gray-800">${s.name}</span>
+          <span class="text-xs text-gray-400 font-mono ml-1">${sym}</span>${src}
+        </td>
+        <td class="px-5 py-3 text-gray-500">${s.sector}</td>
+        <td class="px-5 py-3 text-gray-500 capitalize">${s.strategy}</td>
+        <td class="px-5 py-3 text-center text-gray-600">${entry}</td>
+        <td class="px-5 py-3 text-center ${scan.isCompressed?'text-green-700 font-semibold':'text-gray-400'}">${spread}</td>
+        <td class="px-5 py-3 text-center">${cohortBadge(scan.cohort)}</td>
+        <td class="px-5 py-3 text-center">${alertBadge(scan.alertLevel)}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  init();
+  </script>
 
   <!-- Mentor's Philosophy -->
   <section class="max-w-6xl mx-auto px-4 pb-10">
