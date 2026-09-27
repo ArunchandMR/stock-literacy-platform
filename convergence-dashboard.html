@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Institutional Convergence &amp; Evidence Dashboard</title>
+<style>
+  :root {
+    --bg: #f8fafc; --card: #ffffff; --border: #e5e7eb;
+    --title: #0f172a; --body: #334155; --muted: #64748b;
+    --green: #16a34a; --yellow: #ca8a04; --red: #dc2626; --blue: #2563eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system,"Segoe UI",system-ui,sans-serif; background:var(--bg); color:var(--body); font-size:14px; line-height:1.6; padding:0; }
+  .disclaimer { background:#fefce8; border-bottom:1px solid #fbbf24; padding:8px 24px; font-size:12px; color:#92400e; text-align:center; }
+  .disclaimer a { color:#92400e; }
+  nav { background:#fff; border-bottom:1px solid var(--border); padding:0 24px; height:56px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50; }
+  nav .brand { font-weight:700; font-size:16px; color:var(--title); text-decoration:none; }
+  nav .links { display:flex; gap:24px; font-size:13px; }
+  nav .links a { color:var(--muted); text-decoration:none; }
+  nav .links a.active { color:var(--blue); font-weight:600; border-bottom:2px solid var(--blue); padding-bottom:2px; }
+  .hero { background:linear-gradient(135deg,#1e293b 0%,#1e3a8a 100%); color:#fff; padding:32px 24px; }
+  .hero h1 { font-size:26px; font-weight:700; margin-bottom:8px; }
+  .hero p { color:#94a3b8; font-size:14px; max-width:640px; margin-bottom:16px; }
+  .page { max-width:1200px; margin:0 auto; padding:32px 24px; }
+  .pending { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:48px; text-align:center; }
+  .pending h2 { color:var(--title); font-size:20px; margin-bottom:12px; }
+  .pending p { color:var(--muted); font-size:14px; max-width:480px; margin:0 auto 16px; }
+  .pending .badge { display:inline-block; background:#eff6ff; color:#1d4ed8; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; }
+  footer { background:#1e293b; color:#94a3b8; text-align:center; padding:24px; font-size:12px; border-top:1px solid #334155; }
+</style>
+</head>
+<body>
+
+<div class="disclaimer">
+  ⚠️ <strong>Educational research only.</strong> Not investment advice. Back-test results do not guarantee future performance.
+  <a href="disclaimer.html">Full Disclaimer</a>
+</div>
+
+<nav>
+  <a href="index.html" class="brand">📊 Financial Literacy Hub</a>
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="swing-dashboard.html">Convergence Scanner</a>
+    <a href="convergence-dashboard.html" class="active">Evidence Engine</a>
+    <a href="box-dashboard.html">Box Scanner</a>
+    <a href="discussions.html">Stock Manager</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>📊 Institutional Convergence &amp; Evidence Dashboard</h1>
+  <p>Three strict layers: Scanner → Trade Rules → Evidence. Profit Factor, Expectancy, MAE &amp; MFE are the hero metrics. All 4 stop-loss methods tested side-by-side.</p>
+</div>
+
+<div class="page">
+  <div class="pending">
+    <div style="font-size:48px; margin-bottom:16px;">⏳</div>
+    <h2>Awaiting First Automated Run</h2>
+    <p>
+      This page is populated by the <strong>Automated Convergence Engine Scanner</strong> workflow.
+      Trigger a manual run to generate the first evidence report.
+    </p>
+    <p>
+      Go to your GitHub repository → <strong>Actions</strong> →
+      <strong>Automated Convergence Engine Scanner</strong> → <strong>Run workflow</strong>.
+    </p>
+    <span class="badge">Runs automatically at 4:15 PM IST on trading days</span>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Financial Literacy Platform — Educational research only. Not SEBI registered investment advice.</p>
+</footer>
+</body>
+</html>
