@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-10-01T17:23:21.575256Z",
-  "runTimeIST": "01 Oct 2026, 10:52 PM IST",
+  "lastUpdated": "2026-10-02T16:39:17.983426Z",
+  "runTimeIST": "02 Oct 2026, 10:08 PM IST",
   "totalScanned": 490,
   "totalBreakouts": 1,
   "brdConfig": {
@@ -28,8 +28,8 @@
       "emaSpreadPct": 2.351,
       "compStreak": 21,
       "rsi": 60.88,
-      "volume": 560219,
-      "avgVolume": 542472,
+      "volume": 560330,
+      "avgVolume": 542478,
       "volumeRatio": 1.03,
       "volSurge": false,
       "boxHigh": 1755.0,
