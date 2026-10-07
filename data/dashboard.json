@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-06T17:02:52.398057Z",
+  "lastUpdated": "2026-10-07T10:30:32.938956Z",
   "marketStatus": "Closed",
   "yahooStatus": {
     "status": "Partial",
@@ -15,16 +15,16 @@
       "strategy": "long-term",
       "entryDate": "2026-01-10",
       "entryPrice": 2450.0,
-      "currentPrice": 1218.0,
+      "currentPrice": 1207.7,
       "targetExitMin": 2800.0,
       "targetExitMax": 3200.0,
       "stopLoss": 2200.0,
-      "performance": -50.29,
+      "performance": -50.71,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/1",
       "notes": "Strong fundamentals, diversified business model",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "TATA001",
@@ -43,7 +43,7 @@
       "fetchStatus": "Cached",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/2",
       "notes": "Technical breakout pattern, short-term momentum",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "INFY001",
@@ -53,16 +53,16 @@
       "strategy": "long-term",
       "entryDate": "2026-03-01",
       "entryPrice": 1600.0,
-      "currentPrice": 1013.85,
+      "currentPrice": 992.0,
       "targetExitMin": 1850.0,
       "targetExitMax": 2100.0,
       "stopLoss": 1450.0,
-      "performance": -36.63,
+      "performance": -38.0,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/3",
       "notes": "IT sector leader, consistent dividend payer",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "HDFC001",
@@ -72,16 +72,16 @@
       "strategy": "long-term",
       "entryDate": "2026-01-15",
       "entryPrice": 1650.0,
-      "currentPrice": 711.45,
+      "currentPrice": 702.75,
       "targetExitMin": 1900.0,
       "targetExitMax": 2200.0,
       "stopLoss": 1500.0,
-      "performance": -56.88,
+      "performance": -57.41,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/4",
       "notes": "Banking sector heavyweight, stable growth",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "TCS001",
@@ -91,16 +91,16 @@
       "strategy": "long-term",
       "entryDate": "2026-02-20",
       "entryPrice": 3500.0,
-      "currentPrice": 2100.0,
+      "currentPrice": 2080.3,
       "targetExitMin": 3900.0,
       "targetExitMax": 4300.0,
       "stopLoss": 3200.0,
-      "performance": -40.0,
+      "performance": -40.56,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/5",
       "notes": "IT giant, strong order book",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "BAJFIN001",
@@ -110,16 +110,16 @@
       "strategy": "swing",
       "entryDate": "2026-03-10",
       "entryPrice": 6800.0,
-      "currentPrice": 963.1,
+      "currentPrice": 963.85,
       "targetExitMin": 7200.0,
       "targetExitMax": 7600.0,
       "stopLoss": 6500.0,
-      "performance": -85.84,
+      "performance": -85.83,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/6",
       "notes": "NBFC leader, technical setup for short-term gain",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "ASIAN001",
@@ -129,16 +129,16 @@
       "strategy": "long-term",
       "entryDate": "2026-01-25",
       "entryPrice": 3200.0,
-      "currentPrice": 2424.2,
+      "currentPrice": 2372.1,
       "targetExitMin": 3600.0,
       "targetExitMax": 4000.0,
       "stopLoss": 2950.0,
-      "performance": -24.24,
+      "performance": -25.87,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/7",
       "notes": "Paint sector leader, strong brand",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "MARUTI001",
@@ -148,16 +148,16 @@
       "strategy": "swing",
       "entryDate": "2026-03-15",
       "entryPrice": 10500.0,
-      "currentPrice": 11625.0,
+      "currentPrice": 11450.0,
       "targetExitMin": 11200.0,
       "targetExitMax": 11800.0,
       "stopLoss": 10100.0,
-      "performance": 10.71,
+      "performance": 9.05,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/8",
       "notes": "Auto sector recovery play, momentum trade",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "ICICI001",
@@ -167,16 +167,16 @@
       "strategy": "long-term",
       "entryDate": "2026-02-10",
       "entryPrice": 1050.0,
-      "currentPrice": 1342.8,
+      "currentPrice": 1357.5,
       "targetExitMin": 1200.0,
       "targetExitMax": 1400.0,
       "stopLoss": 950.0,
-      "performance": 27.89,
+      "performance": 29.29,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/9",
       "notes": "Private bank with strong retail franchise",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "WIPRO001",
@@ -186,16 +186,16 @@
       "strategy": "swing",
       "entryDate": "2026-03-20",
       "entryPrice": 450.0,
-      "currentPrice": 161.84,
+      "currentPrice": 159.6,
       "targetExitMin": 485.0,
       "targetExitMax": 520.0,
       "stopLoss": 430.0,
-      "performance": -64.04,
+      "performance": -64.53,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/10",
       "notes": "IT sector value play, technical bounce expected",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "BHARTI001",
@@ -205,16 +205,16 @@
       "strategy": "long-term",
       "entryDate": "2026-01-20",
       "entryPrice": 1100.0,
-      "currentPrice": 1810.5,
+      "currentPrice": 1833.9,
       "targetExitMin": 1300.0,
       "targetExitMax": 1500.0,
       "stopLoss": 1000.0,
-      "performance": 64.59,
+      "performance": 66.72,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/11",
       "notes": "Telecom leader, 5G rollout beneficiary",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "SUNPHARMA001",
@@ -224,16 +224,16 @@
       "strategy": "swing",
       "entryDate": "2026-03-05",
       "entryPrice": 1450.0,
-      "currentPrice": 1804.1,
+      "currentPrice": 1781.0,
       "targetExitMin": 1550.0,
       "targetExitMax": 1650.0,
       "stopLoss": 1380.0,
-      "performance": 24.42,
+      "performance": 22.83,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/12",
       "notes": "Pharma sector momentum, short-term trade",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "HIND001",
@@ -243,16 +243,16 @@
       "strategy": "long-term",
       "entryDate": "2026-02-01",
       "entryPrice": 2600.0,
-      "currentPrice": 1895.2,
+      "currentPrice": 1865.4,
       "targetExitMin": 2900.0,
       "targetExitMax": 3200.0,
       "stopLoss": 2400.0,
-      "performance": -27.11,
+      "performance": -28.25,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/13",
       "notes": "FMCG giant, defensive stock",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "AXIS001",
@@ -262,16 +262,16 @@
       "strategy": "swing",
       "entryDate": "2026-03-12",
       "entryPrice": 1080.0,
-      "currentPrice": 1248.0,
+      "currentPrice": 1242.5,
       "targetExitMin": 1150.0,
       "targetExitMax": 1220.0,
       "stopLoss": 1030.0,
-      "performance": 15.56,
+      "performance": 15.05,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/14",
       "notes": "Banking sector technical breakout",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "COAL001",
@@ -281,16 +281,16 @@
       "strategy": "long-term",
       "entryDate": "2026-01-30",
       "entryPrice": 420.0,
-      "currentPrice": 411.65,
+      "currentPrice": 414.5,
       "targetExitMin": 480.0,
       "targetExitMax": 550.0,
       "stopLoss": 380.0,
-      "performance": -1.99,
+      "performance": -1.31,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/15",
       "notes": "PSU with high dividend yield",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "TECH001",
@@ -300,16 +300,16 @@
       "strategy": "swing",
       "entryDate": "2026-03-18",
       "entryPrice": 1250.0,
-      "currentPrice": 1504.5,
+      "currentPrice": 1491.1,
       "targetExitMin": 1330.0,
       "targetExitMax": 1410.0,
       "stopLoss": 1190.0,
-      "performance": 20.36,
+      "performance": 19.29,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/16",
       "notes": "IT sector recovery play, 5G exposure",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "ULTRA001",
@@ -319,16 +319,16 @@
       "strategy": "long-term",
       "entryDate": "2026-02-15",
       "entryPrice": 8500.0,
-      "currentPrice": 10750.0,
+      "currentPrice": 10658.0,
       "targetExitMin": 9500.0,
       "targetExitMax": 10500.0,
       "stopLoss": 7800.0,
-      "performance": 26.47,
+      "performance": 25.39,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/17",
       "notes": "Cement sector leader, infrastructure play",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "TITAN001",
@@ -338,16 +338,16 @@
       "strategy": "swing",
       "entryDate": "2026-03-08",
       "entryPrice": 3200.0,
-      "currentPrice": 4550.0,
+      "currentPrice": 4377.0,
       "targetExitMin": 3400.0,
       "targetExitMax": 3600.0,
       "stopLoss": 3050.0,
-      "performance": 42.19,
+      "performance": 36.78,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/18",
       "notes": "Jewelry sector leader, festive season play",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "NTPC001",
@@ -357,16 +357,16 @@
       "strategy": "long-term",
       "entryDate": "2026-01-12",
       "entryPrice": 280.0,
-      "currentPrice": 321.45,
+      "currentPrice": 316.75,
       "targetExitMin": 320.0,
       "targetExitMax": 360.0,
       "stopLoss": 255.0,
-      "performance": 14.8,
+      "performance": 13.12,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/19",
       "notes": "Power sector PSU, dividend stock",
-      "runId": 1791306168
+      "runId": 1791369029
     },
     {
       "id": "ADANI001",
@@ -376,16 +376,16 @@
       "strategy": "swing",
       "entryDate": "2026-03-22",
       "entryPrice": 2800.0,
-      "currentPrice": 2849.9,
+      "currentPrice": 2743.0,
       "targetExitMin": 3000.0,
       "targetExitMax": 3200.0,
       "stopLoss": 2650.0,
-      "performance": 1.78,
+      "performance": -2.04,
       "priceSource": "Yahoo",
       "fetchStatus": "Live",
       "discussionUrl": "https://github.com/ArunchandMR/stock-literacy-platform/discussions/20",
       "notes": "High beta stock, momentum trade",
-      "runId": 1791306168
+      "runId": 1791369029
     }
   ]
 }
