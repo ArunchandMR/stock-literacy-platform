@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-10-19T17:29:59.302235Z",
-  "runTimeIST": "19 Oct 2026, 10:59 PM IST",
+  "lastUpdated": "2026-10-20T15:40:18.526962Z",
+  "runTimeIST": "20 Oct 2026, 09:09 PM IST",
   "totalScanned": 491,
   "totalBreakouts": 2,
   "brdConfig": {
@@ -28,7 +28,7 @@
       "emaSpreadPct": 0.652,
       "compStreak": 39,
       "rsi": 59.92,
-      "volume": 1023834,
+      "volume": 1023837,
       "avgVolume": 2191924,
       "volumeRatio": 0.47,
       "volSurge": false,
@@ -57,8 +57,8 @@
       "emaSpreadPct": 0.936,
       "compStreak": 36,
       "rsi": 63.05,
-      "volume": 78107320,
-      "avgVolume": 17046559,
+      "volume": 78115490,
+      "avgVolume": 17046967,
       "volumeRatio": 4.58,
       "volSurge": true,
       "boxHigh": 119.64,
