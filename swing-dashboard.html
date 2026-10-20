@@ -42,10 +42,10 @@
         it is bucketed empirically. Stop-loss tested across 4 methods. MAE/MFE tracked per signal.
       </p>
       <div class="flex flex-wrap gap-5 text-xs text-blue-300">
-        <span><i class="fas fa-clock mr-1"></i>Scan: <strong class="text-white">19 Oct 2026, 10:40 PM IST</strong></span>
+        <span><i class="fas fa-clock mr-1"></i>Scan: <strong class="text-white">20 Oct 2026, 08:52 PM IST</strong></span>
         <span><i class="fas fa-database mr-1"></i>Universe: <strong class="text-white">500</strong> stocks</span>
         <span class="text-green-400"><i class="fas fa-gem mr-1"></i>4 A∩B Convergent</span>
-        <span class="text-yellow-400"><i class="fas fa-bolt mr-1"></i>105 Strategy A</span>
+        <span class="text-yellow-400"><i class="fas fa-bolt mr-1"></i>104 Strategy A</span>
         <span class="text-blue-300"><i class="fas fa-th-large mr-1"></i>7 Strategy B</span>
         <span><i class="fas fa-seedling text-blue-200 mr-1"></i>25 mentor seeds</span>
       </div>
@@ -2792,6 +2792,90 @@
             <div class="flex-1">
               <div class="flex flex-wrap items-center gap-2 mb-1">
                 <span class="text-xl">⚡</span>
+                <h3 class="text-base font-bold text-gray-900">EMBASSY</h3>
+                <span class="text-xs text-gray-400 font-mono">EMBASSY</span>
+                <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
+                <span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">Universe</span> <span class="text-xs bg-amber-100  text-amber-700  px-2 py-0.5 rounded font-semibold">FW-B Bottom</span> <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-semibold">A Only</span>
+              </div>
+              <p class="text-sm text-gray-700 font-medium">Strategy A: EMA compressed (0.37%) + Vol dry-up (0.39x). RSI 51.15 [RSI 50–55]</p>
+              <p class="text-xs text-gray-500 mt-0.5">
+                RSI bucket: <b>RSI 50–55</b> &nbsp;|&nbsp; Momentum: <b>Move <3%</b>
+                &nbsp;|&nbsp; Regime: <b>weak</b>
+              </p>
+              <p class='text-xs text-gray-400 mt-0.5 italic'>Range too narrow: 5.0% < 20.0% required</p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <p class="text-2xl font-bold text-gray-900">₹435.93</p>
+              <p class="text-xs text-gray-400">Current Price</p>
+            </div>
+          </div>
+
+          <!-- Indicator row -->
+          <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-sm">
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">EMA Spread</p>
+              <p class="font-semibold text-green-700">0.37%</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">RSI (14)</p>
+              <p class="font-semibold text-gray-700">51.15</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">Vol Ratio</p>
+              <p class="font-semibold text-green-700">0.39x</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">ATR Stop</p>
+              <p class="font-semibold text-red-600">₹426.96</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">EMA20 Stop</p>
+              <p class="font-semibold text-orange-600">₹434.78</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">Swing Low</p>
+              <p class="font-semibold text-purple-700">₹425.35</p>
+            </div>
+          </div>
+
+          <!-- Evidence row -->
+          <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs text-center">
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Profit Factor</p>
+              <p class="font-bold text-gray-800">—</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Expectancy</p>
+              <p class="font-bold text-gray-800">-2.311</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Med T+5</p>
+              <p class="font-bold text-gray-800">0.197%</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Avg MAE</p>
+              <p class="font-bold text-red-700">3.029%</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Avg MFE</p>
+              <p class="font-bold text-green-700">3.783%</p>
+            </div>
+          </div>
+
+          <!-- Conditions badges -->
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ EMA ≤1.5%</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ Vol &lt; SMA</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800">✅ Strategy A</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Strategy B</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Divergent</span>
+          </div>
+        </div>
+        <div class="rounded-lg shadow-sm p-5 border-l-4 border-yellow-400 bg-yellow-50 mb-4">
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+            <div class="flex-1">
+              <div class="flex flex-wrap items-center gap-2 mb-1">
+                <span class="text-xl">⚡</span>
                 <h3 class="text-base font-bold text-gray-900">MRPL</h3>
                 <span class="text-xs text-gray-400 font-mono">MRPL</span>
                 <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
@@ -3133,7 +3217,7 @@
                 <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
                 <span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">Universe</span> <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-semibold">FW-A Swing</span> <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-semibold">A Only</span>
               </div>
-              <p class="text-sm text-gray-700 font-medium">Strategy A: EMA compressed (0.79%) + Vol dry-up (0.67x). RSI 50.42 [RSI 50–55]</p>
+              <p class="text-sm text-gray-700 font-medium">Strategy A: EMA compressed (0.79%) + Vol dry-up (0.68x). RSI 50.42 [RSI 50–55]</p>
               <p class="text-xs text-gray-500 mt-0.5">
                 RSI bucket: <b>RSI 50–55</b> &nbsp;|&nbsp; Momentum: <b>Move 4–5%</b>
                 &nbsp;|&nbsp; Regime: <b>weak</b>
@@ -3158,7 +3242,7 @@
             </div>
             <div class="bg-white rounded p-3 shadow-sm text-center">
               <p class="text-xs text-gray-400 mb-1">Vol Ratio</p>
-              <p class="font-semibold text-green-700">0.67x</p>
+              <p class="font-semibold text-green-700">0.68x</p>
             </div>
             <div class="bg-white rounded p-3 shadow-sm text-center">
               <p class="text-xs text-gray-400 mb-1">ATR Stop</p>
@@ -3195,90 +3279,6 @@
             <div class="bg-slate-50 rounded p-2">
               <p class="text-gray-400">Avg MFE</p>
               <p class="font-bold text-green-700">15.945%</p>
-            </div>
-          </div>
-
-          <!-- Conditions badges -->
-          <div class="mt-3 flex flex-wrap gap-2 text-xs">
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ EMA ≤1.5%</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ Vol &lt; SMA</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800">✅ Strategy A</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Strategy B</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Divergent</span>
-          </div>
-        </div>
-        <div class="rounded-lg shadow-sm p-5 border-l-4 border-yellow-400 bg-yellow-50 mb-4">
-          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
-            <div class="flex-1">
-              <div class="flex flex-wrap items-center gap-2 mb-1">
-                <span class="text-xl">⚡</span>
-                <h3 class="text-base font-bold text-gray-900">EMBASSY</h3>
-                <span class="text-xs text-gray-400 font-mono">EMBASSY</span>
-                <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
-                <span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">Universe</span> <span class="text-xs bg-amber-100  text-amber-700  px-2 py-0.5 rounded font-semibold">FW-B Bottom</span> <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-semibold">A Only</span>
-              </div>
-              <p class="text-sm text-gray-700 font-medium">Strategy A: EMA compressed (0.40%) + Vol dry-up (0.17x). RSI 50.21 [RSI 50–55]</p>
-              <p class="text-xs text-gray-500 mt-0.5">
-                RSI bucket: <b>RSI 50–55</b> &nbsp;|&nbsp; Momentum: <b>Move <3%</b>
-                &nbsp;|&nbsp; Regime: <b>weak</b>
-              </p>
-              <p class='text-xs text-gray-400 mt-0.5 italic'>Range too narrow: 5.0% < 20.0% required</p>
-            </div>
-            <div class="text-right flex-shrink-0">
-              <p class="text-2xl font-bold text-gray-900">₹435.40</p>
-              <p class="text-xs text-gray-400">Current Price</p>
-            </div>
-          </div>
-
-          <!-- Indicator row -->
-          <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-sm">
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">EMA Spread</p>
-              <p class="font-semibold text-green-700">0.40%</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">RSI (14)</p>
-              <p class="font-semibold text-gray-700">50.21</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">Vol Ratio</p>
-              <p class="font-semibold text-green-700">0.17x</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">ATR Stop</p>
-              <p class="font-semibold text-red-600">₹426.44</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">EMA20 Stop</p>
-              <p class="font-semibold text-orange-600">₹434.66</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">Swing Low</p>
-              <p class="font-semibold text-purple-700">₹425.35</p>
-            </div>
-          </div>
-
-          <!-- Evidence row -->
-          <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs text-center">
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Profit Factor</p>
-              <p class="font-bold text-gray-800">—</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Expectancy</p>
-              <p class="font-bold text-gray-800">-2.311</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Med T+5</p>
-              <p class="font-bold text-gray-800">0.197%</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Avg MAE</p>
-              <p class="font-bold text-red-700">3.029%</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Avg MFE</p>
-              <p class="font-bold text-green-700">3.783%</p>
             </div>
           </div>
 
@@ -4808,90 +4808,6 @@
             <div class="flex-1">
               <div class="flex flex-wrap items-center gap-2 mb-1">
                 <span class="text-xl">⚡</span>
-                <h3 class="text-base font-bold text-gray-900">NAUKRI</h3>
-                <span class="text-xs text-gray-400 font-mono">NAUKRI</span>
-                <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
-                <span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">Universe</span> <span class="text-xs bg-amber-100  text-amber-700  px-2 py-0.5 rounded font-semibold">FW-B Bottom</span> <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-semibold">A Only</span>
-              </div>
-              <p class="text-sm text-gray-700 font-medium">Strategy A: EMA compressed (0.38%) + Vol dry-up (0.48x). RSI 45.98 [RSI 40–50]</p>
-              <p class="text-xs text-gray-500 mt-0.5">
-                RSI bucket: <b>RSI 40–50</b> &nbsp;|&nbsp; Momentum: <b>Move 3–4%</b>
-                &nbsp;|&nbsp; Regime: <b>weak</b>
-              </p>
-              <p class='text-xs text-gray-400 mt-0.5 italic'>Range too narrow: 12.1% < 20.0% required</p>
-            </div>
-            <div class="text-right flex-shrink-0">
-              <p class="text-2xl font-bold text-gray-900">₹1,220.00</p>
-              <p class="text-xs text-gray-400">Current Price</p>
-            </div>
-          </div>
-
-          <!-- Indicator row -->
-          <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-sm">
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">EMA Spread</p>
-              <p class="font-semibold text-green-700">0.38%</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">RSI (14)</p>
-              <p class="font-semibold text-gray-700">45.98</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">Vol Ratio</p>
-              <p class="font-semibold text-green-700">0.48x</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">ATR Stop</p>
-              <p class="font-semibold text-red-600">₹1160.42</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">EMA20 Stop</p>
-              <p class="font-semibold text-orange-600">₹1237.41</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">Swing Low</p>
-              <p class="font-semibold text-purple-700">₹1180.30</p>
-            </div>
-          </div>
-
-          <!-- Evidence row -->
-          <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs text-center">
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Profit Factor</p>
-              <p class="font-bold text-gray-800">0.813</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Expectancy</p>
-              <p class="font-bold text-gray-800">-0.5112</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Med T+5</p>
-              <p class="font-bold text-gray-800">-0.261%</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Avg MAE</p>
-              <p class="font-bold text-red-700">5.04%</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Avg MFE</p>
-              <p class="font-bold text-green-700">7.264%</p>
-            </div>
-          </div>
-
-          <!-- Conditions badges -->
-          <div class="mt-3 flex flex-wrap gap-2 text-xs">
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ EMA ≤1.5%</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ Vol &lt; SMA</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800">✅ Strategy A</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Strategy B</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Divergent</span>
-          </div>
-        </div>
-        <div class="rounded-lg shadow-sm p-5 border-l-4 border-yellow-400 bg-yellow-50 mb-4">
-          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
-            <div class="flex-1">
-              <div class="flex flex-wrap items-center gap-2 mb-1">
-                <span class="text-xl">⚡</span>
                 <h3 class="text-base font-bold text-gray-900">NETWEB</h3>
                 <span class="text-xs text-gray-400 font-mono">NETWEB</span>
                 <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
@@ -4959,6 +4875,90 @@
             <div class="bg-slate-50 rounded p-2">
               <p class="text-gray-400">Avg MFE</p>
               <p class="font-bold text-green-700">19.142%</p>
+            </div>
+          </div>
+
+          <!-- Conditions badges -->
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ EMA ≤1.5%</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ Vol &lt; SMA</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800">✅ Strategy A</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Strategy B</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Divergent</span>
+          </div>
+        </div>
+        <div class="rounded-lg shadow-sm p-5 border-l-4 border-yellow-400 bg-yellow-50 mb-4">
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+            <div class="flex-1">
+              <div class="flex flex-wrap items-center gap-2 mb-1">
+                <span class="text-xl">⚡</span>
+                <h3 class="text-base font-bold text-gray-900">NAUKRI</h3>
+                <span class="text-xs text-gray-400 font-mono">NAUKRI</span>
+                <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
+                <span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">Universe</span> <span class="text-xs bg-amber-100  text-amber-700  px-2 py-0.5 rounded font-semibold">FW-B Bottom</span> <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-semibold">A Only</span>
+              </div>
+              <p class="text-sm text-gray-700 font-medium">Strategy A: EMA compressed (0.38%) + Vol dry-up (0.48x). RSI 45.98 [RSI 40–50]</p>
+              <p class="text-xs text-gray-500 mt-0.5">
+                RSI bucket: <b>RSI 40–50</b> &nbsp;|&nbsp; Momentum: <b>Move 3–4%</b>
+                &nbsp;|&nbsp; Regime: <b>weak</b>
+              </p>
+              <p class='text-xs text-gray-400 mt-0.5 italic'>Range too narrow: 12.1% < 20.0% required</p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <p class="text-2xl font-bold text-gray-900">₹1,220.00</p>
+              <p class="text-xs text-gray-400">Current Price</p>
+            </div>
+          </div>
+
+          <!-- Indicator row -->
+          <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-sm">
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">EMA Spread</p>
+              <p class="font-semibold text-green-700">0.38%</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">RSI (14)</p>
+              <p class="font-semibold text-gray-700">45.98</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">Vol Ratio</p>
+              <p class="font-semibold text-green-700">0.48x</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">ATR Stop</p>
+              <p class="font-semibold text-red-600">₹1160.42</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">EMA20 Stop</p>
+              <p class="font-semibold text-orange-600">₹1237.41</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">Swing Low</p>
+              <p class="font-semibold text-purple-700">₹1180.30</p>
+            </div>
+          </div>
+
+          <!-- Evidence row -->
+          <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs text-center">
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Profit Factor</p>
+              <p class="font-bold text-gray-800">0.813</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Expectancy</p>
+              <p class="font-bold text-gray-800">-0.5112</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Med T+5</p>
+              <p class="font-bold text-gray-800">-0.261%</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Avg MAE</p>
+              <p class="font-bold text-red-700">5.04%</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Avg MFE</p>
+              <p class="font-bold text-green-700">7.264%</p>
             </div>
           </div>
 
@@ -6152,90 +6152,6 @@
             <div class="flex-1">
               <div class="flex flex-wrap items-center gap-2 mb-1">
                 <span class="text-xl">⚡</span>
-                <h3 class="text-base font-bold text-gray-900">ZYDUSLIFE</h3>
-                <span class="text-xs text-gray-400 font-mono">ZYDUSLIFE</span>
-                <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
-                <span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">Universe</span> <span class="text-xs bg-amber-100  text-amber-700  px-2 py-0.5 rounded font-semibold">FW-B Bottom</span> <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-semibold">A Only</span>
-              </div>
-              <p class="text-sm text-gray-700 font-medium">Strategy A: EMA compressed (0.18%) + Vol dry-up (0.16x). RSI 42.73 [RSI 40–50]</p>
-              <p class="text-xs text-gray-500 mt-0.5">
-                RSI bucket: <b>RSI 40–50</b> &nbsp;|&nbsp; Momentum: <b>Move <3%</b>
-                &nbsp;|&nbsp; Regime: <b>weak</b>
-              </p>
-              <p class='text-xs text-gray-400 mt-0.5 italic'>Range too narrow: 11.5% < 20.0% required</p>
-            </div>
-            <div class="text-right flex-shrink-0">
-              <p class="text-2xl font-bold text-gray-900">₹1,113.90</p>
-              <p class="text-xs text-gray-400">Current Price</p>
-            </div>
-          </div>
-
-          <!-- Indicator row -->
-          <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-sm">
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">EMA Spread</p>
-              <p class="font-semibold text-green-700">0.18%</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">RSI (14)</p>
-              <p class="font-semibold text-gray-700">42.73</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">Vol Ratio</p>
-              <p class="font-semibold text-green-700">0.16x</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">ATR Stop</p>
-              <p class="font-semibold text-red-600">₹1064.40</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">EMA20 Stop</p>
-              <p class="font-semibold text-orange-600">₹1139.70</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">Swing Low</p>
-              <p class="font-semibold text-purple-700">₹1105.40</p>
-            </div>
-          </div>
-
-          <!-- Evidence row -->
-          <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs text-center">
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Profit Factor</p>
-              <p class="font-bold text-gray-800">0.308</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Expectancy</p>
-              <p class="font-bold text-gray-800">-2.0028</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Med T+5</p>
-              <p class="font-bold text-gray-800">0.228%</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Avg MAE</p>
-              <p class="font-bold text-red-700">5.305%</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Avg MFE</p>
-              <p class="font-bold text-green-700">6.136%</p>
-            </div>
-          </div>
-
-          <!-- Conditions badges -->
-          <div class="mt-3 flex flex-wrap gap-2 text-xs">
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ EMA ≤1.5%</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ Vol &lt; SMA</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800">✅ Strategy A</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Strategy B</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Divergent</span>
-          </div>
-        </div>
-        <div class="rounded-lg shadow-sm p-5 border-l-4 border-yellow-400 bg-yellow-50 mb-4">
-          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
-            <div class="flex-1">
-              <div class="flex flex-wrap items-center gap-2 mb-1">
-                <span class="text-xl">⚡</span>
                 <h3 class="text-base font-bold text-gray-900">USHAMART</h3>
                 <span class="text-xs text-gray-400 font-mono">USHAMART</span>
                 <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
@@ -6303,6 +6219,90 @@
             <div class="bg-slate-50 rounded p-2">
               <p class="text-gray-400">Avg MFE</p>
               <p class="font-bold text-green-700">10.793%</p>
+            </div>
+          </div>
+
+          <!-- Conditions badges -->
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ EMA ≤1.5%</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ Vol &lt; SMA</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800">✅ Strategy A</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Strategy B</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Divergent</span>
+          </div>
+        </div>
+        <div class="rounded-lg shadow-sm p-5 border-l-4 border-yellow-400 bg-yellow-50 mb-4">
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+            <div class="flex-1">
+              <div class="flex flex-wrap items-center gap-2 mb-1">
+                <span class="text-xl">⚡</span>
+                <h3 class="text-base font-bold text-gray-900">ZYDUSLIFE</h3>
+                <span class="text-xs text-gray-400 font-mono">ZYDUSLIFE</span>
+                <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
+                <span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">Universe</span> <span class="text-xs bg-amber-100  text-amber-700  px-2 py-0.5 rounded font-semibold">FW-B Bottom</span> <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-semibold">A Only</span>
+              </div>
+              <p class="text-sm text-gray-700 font-medium">Strategy A: EMA compressed (0.18%) + Vol dry-up (0.16x). RSI 42.73 [RSI 40–50]</p>
+              <p class="text-xs text-gray-500 mt-0.5">
+                RSI bucket: <b>RSI 40–50</b> &nbsp;|&nbsp; Momentum: <b>Move <3%</b>
+                &nbsp;|&nbsp; Regime: <b>weak</b>
+              </p>
+              <p class='text-xs text-gray-400 mt-0.5 italic'>Range too narrow: 11.5% < 20.0% required</p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <p class="text-2xl font-bold text-gray-900">₹1,113.90</p>
+              <p class="text-xs text-gray-400">Current Price</p>
+            </div>
+          </div>
+
+          <!-- Indicator row -->
+          <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-sm">
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">EMA Spread</p>
+              <p class="font-semibold text-green-700">0.18%</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">RSI (14)</p>
+              <p class="font-semibold text-gray-700">42.73</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">Vol Ratio</p>
+              <p class="font-semibold text-green-700">0.16x</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">ATR Stop</p>
+              <p class="font-semibold text-red-600">₹1064.40</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">EMA20 Stop</p>
+              <p class="font-semibold text-orange-600">₹1139.70</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">Swing Low</p>
+              <p class="font-semibold text-purple-700">₹1105.40</p>
+            </div>
+          </div>
+
+          <!-- Evidence row -->
+          <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs text-center">
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Profit Factor</p>
+              <p class="font-bold text-gray-800">0.308</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Expectancy</p>
+              <p class="font-bold text-gray-800">-2.0028</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Med T+5</p>
+              <p class="font-bold text-gray-800">0.228%</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Avg MAE</p>
+              <p class="font-bold text-red-700">5.305%</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Avg MFE</p>
+              <p class="font-bold text-green-700">6.136%</p>
             </div>
           </div>
 
@@ -7160,90 +7160,6 @@
             <div class="flex-1">
               <div class="flex flex-wrap items-center gap-2 mb-1">
                 <span class="text-xl">⚡</span>
-                <h3 class="text-base font-bold text-gray-900">PPLPHARMA</h3>
-                <span class="text-xs text-gray-400 font-mono">PPLPHARMA</span>
-                <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
-                <span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">Universe</span> <span class="text-xs bg-amber-100  text-amber-700  px-2 py-0.5 rounded font-semibold">FW-B Bottom</span> <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-semibold">A Only</span>
-              </div>
-              <p class="text-sm text-gray-700 font-medium">Strategy A: EMA compressed (0.44%) + Vol dry-up (0.52x). RSI 40.66 [RSI 40–50]</p>
-              <p class="text-xs text-gray-500 mt-0.5">
-                RSI bucket: <b>RSI 40–50</b> &nbsp;|&nbsp; Momentum: <b>Move <3%</b>
-                &nbsp;|&nbsp; Regime: <b>weak</b>
-              </p>
-              <p class='text-xs text-gray-400 mt-0.5 italic'>Range too narrow: 13.2% < 20.0% required</p>
-            </div>
-            <div class="text-right flex-shrink-0">
-              <p class="text-2xl font-bold text-gray-900">₹194.44</p>
-              <p class="text-xs text-gray-400">Current Price</p>
-            </div>
-          </div>
-
-          <!-- Indicator row -->
-          <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-sm">
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">EMA Spread</p>
-              <p class="font-semibold text-green-700">0.44%</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">RSI (14)</p>
-              <p class="font-semibold text-gray-700">40.66</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">Vol Ratio</p>
-              <p class="font-semibold text-green-700">0.52x</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">ATR Stop</p>
-              <p class="font-semibold text-red-600">₹185.32</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">EMA20 Stop</p>
-              <p class="font-semibold text-orange-600">₹200.43</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">Swing Low</p>
-              <p class="font-semibold text-purple-700">₹191.41</p>
-            </div>
-          </div>
-
-          <!-- Evidence row -->
-          <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs text-center">
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Profit Factor</p>
-              <p class="font-bold text-gray-800">0.541</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Expectancy</p>
-              <p class="font-bold text-gray-800">-1.6802</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Med T+5</p>
-              <p class="font-bold text-gray-800">-0.807%</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Avg MAE</p>
-              <p class="font-bold text-red-700">8.044%</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Avg MFE</p>
-              <p class="font-bold text-green-700">7.53%</p>
-            </div>
-          </div>
-
-          <!-- Conditions badges -->
-          <div class="mt-3 flex flex-wrap gap-2 text-xs">
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ EMA ≤1.5%</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ Vol &lt; SMA</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800">✅ Strategy A</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Strategy B</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Divergent</span>
-          </div>
-        </div>
-        <div class="rounded-lg shadow-sm p-5 border-l-4 border-yellow-400 bg-yellow-50 mb-4">
-          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
-            <div class="flex-1">
-              <div class="flex flex-wrap items-center gap-2 mb-1">
-                <span class="text-xl">⚡</span>
                 <h3 class="text-base font-bold text-gray-900">LICHSGFIN</h3>
                 <span class="text-xs text-gray-400 font-mono">LICHSGFIN</span>
                 <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
@@ -7311,6 +7227,90 @@
             <div class="bg-slate-50 rounded p-2">
               <p class="text-gray-400">Avg MFE</p>
               <p class="font-bold text-green-700">6.0%</p>
+            </div>
+          </div>
+
+          <!-- Conditions badges -->
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ EMA ≤1.5%</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ Vol &lt; SMA</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800">✅ Strategy A</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Strategy B</span>
+            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Divergent</span>
+          </div>
+        </div>
+        <div class="rounded-lg shadow-sm p-5 border-l-4 border-yellow-400 bg-yellow-50 mb-4">
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+            <div class="flex-1">
+              <div class="flex flex-wrap items-center gap-2 mb-1">
+                <span class="text-xl">⚡</span>
+                <h3 class="text-base font-bold text-gray-900">PPLPHARMA</h3>
+                <span class="text-xs text-gray-400 font-mono">PPLPHARMA</span>
+                <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
+                <span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">Universe</span> <span class="text-xs bg-amber-100  text-amber-700  px-2 py-0.5 rounded font-semibold">FW-B Bottom</span> <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-semibold">A Only</span>
+              </div>
+              <p class="text-sm text-gray-700 font-medium">Strategy A: EMA compressed (0.44%) + Vol dry-up (0.52x). RSI 40.66 [RSI 40–50]</p>
+              <p class="text-xs text-gray-500 mt-0.5">
+                RSI bucket: <b>RSI 40–50</b> &nbsp;|&nbsp; Momentum: <b>Move <3%</b>
+                &nbsp;|&nbsp; Regime: <b>weak</b>
+              </p>
+              <p class='text-xs text-gray-400 mt-0.5 italic'>Range too narrow: 13.2% < 20.0% required</p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <p class="text-2xl font-bold text-gray-900">₹194.44</p>
+              <p class="text-xs text-gray-400">Current Price</p>
+            </div>
+          </div>
+
+          <!-- Indicator row -->
+          <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-sm">
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">EMA Spread</p>
+              <p class="font-semibold text-green-700">0.44%</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">RSI (14)</p>
+              <p class="font-semibold text-gray-700">40.66</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">Vol Ratio</p>
+              <p class="font-semibold text-green-700">0.52x</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">ATR Stop</p>
+              <p class="font-semibold text-red-600">₹185.32</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">EMA20 Stop</p>
+              <p class="font-semibold text-orange-600">₹200.43</p>
+            </div>
+            <div class="bg-white rounded p-3 shadow-sm text-center">
+              <p class="text-xs text-gray-400 mb-1">Swing Low</p>
+              <p class="font-semibold text-purple-700">₹191.41</p>
+            </div>
+          </div>
+
+          <!-- Evidence row -->
+          <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs text-center">
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Profit Factor</p>
+              <p class="font-bold text-gray-800">0.541</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Expectancy</p>
+              <p class="font-bold text-gray-800">-1.6802</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Med T+5</p>
+              <p class="font-bold text-gray-800">-0.807%</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Avg MAE</p>
+              <p class="font-bold text-red-700">8.044%</p>
+            </div>
+            <div class="bg-slate-50 rounded p-2">
+              <p class="text-gray-400">Avg MFE</p>
+              <p class="font-bold text-green-700">7.53%</p>
             </div>
           </div>
 
@@ -9075,90 +9075,6 @@
             <div class="bg-slate-50 rounded p-2">
               <p class="text-gray-400">Avg MFE</p>
               <p class="font-bold text-green-700">9.466%</p>
-            </div>
-          </div>
-
-          <!-- Conditions badges -->
-          <div class="mt-3 flex flex-wrap gap-2 text-xs">
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ EMA ≤1.5%</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">✅ Vol &lt; SMA</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-800">✅ Strategy A</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Strategy B</span>
-            <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-400">— Divergent</span>
-          </div>
-        </div>
-        <div class="rounded-lg shadow-sm p-5 border-l-4 border-yellow-400 bg-yellow-50 mb-4">
-          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
-            <div class="flex-1">
-              <div class="flex flex-wrap items-center gap-2 mb-1">
-                <span class="text-xl">⚡</span>
-                <h3 class="text-base font-bold text-gray-900">BIRET</h3>
-                <span class="text-xs text-gray-400 font-mono">BIRET</span>
-                <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">NSE</span>
-                <span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">Universe</span> <span class="text-xs bg-amber-100  text-amber-700  px-2 py-0.5 rounded font-semibold">FW-B Bottom</span> <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-semibold">A Only</span>
-              </div>
-              <p class="text-sm text-gray-700 font-medium">Strategy A: EMA compressed (1.43%) + Vol dry-up (0.67x). RSI 25.78 [RSI <40]</p>
-              <p class="text-xs text-gray-500 mt-0.5">
-                RSI bucket: <b>RSI <40</b> &nbsp;|&nbsp; Momentum: <b>Move <3%</b>
-                &nbsp;|&nbsp; Regime: <b>weak</b>
-              </p>
-              <p class='text-xs text-gray-400 mt-0.5 italic'>Range too narrow: 6.6% < 20.0% required</p>
-            </div>
-            <div class="text-right flex-shrink-0">
-              <p class="text-2xl font-bold text-gray-900">₹319.98</p>
-              <p class="text-xs text-gray-400">Current Price</p>
-            </div>
-          </div>
-
-          <!-- Indicator row -->
-          <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 text-sm">
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">EMA Spread</p>
-              <p class="font-semibold text-green-700">1.43%</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">RSI (14)</p>
-              <p class="font-semibold text-gray-700">25.78</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">Vol Ratio</p>
-              <p class="font-semibold text-green-700">0.67x</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">ATR Stop</p>
-              <p class="font-semibold text-red-600">₹312.43</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">EMA20 Stop</p>
-              <p class="font-semibold text-orange-600">₹329.19</p>
-            </div>
-            <div class="bg-white rounded p-3 shadow-sm text-center">
-              <p class="text-xs text-gray-400 mb-1">Swing Low</p>
-              <p class="font-semibold text-purple-700">₹319.81</p>
-            </div>
-          </div>
-
-          <!-- Evidence row -->
-          <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs text-center">
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Profit Factor</p>
-              <p class="font-bold text-gray-800">—</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Expectancy</p>
-              <p class="font-bold text-gray-800">-2.274</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Med T+5</p>
-              <p class="font-bold text-gray-800">0.111%</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Avg MAE</p>
-              <p class="font-bold text-red-700">2.503%</p>
-            </div>
-            <div class="bg-slate-50 rounded p-2">
-              <p class="text-gray-400">Avg MFE</p>
-              <p class="font-bold text-green-700">4.297%</p>
             </div>
           </div>
 
@@ -10970,7 +10886,7 @@
             </div>
             <div class="bg-white rounded p-3 shadow-sm text-center">
               <p class="text-xs text-gray-400 mb-1">Vol Ratio</p>
-              <p class="font-semibold text-green-700">0.84x</p>
+              <p class="font-semibold text-green-700">0.85x</p>
             </div>
             <div class="bg-white rounded p-3 shadow-sm text-center">
               <p class="text-xs text-gray-400 mb-1">ATR Stop</p>
@@ -11306,7 +11222,7 @@
             </div>
             <div class="bg-white rounded p-3 shadow-sm text-center">
               <p class="text-xs text-gray-400 mb-1">Vol Ratio</p>
-              <p class="font-semibold text-gray-700">1.14x</p>
+              <p class="font-semibold text-gray-700">1.15x</p>
             </div>
             <div class="bg-white rounded p-3 shadow-sm text-center">
               <p class="text-xs text-gray-400 mb-1">ATR Stop</p>
